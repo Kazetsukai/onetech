@@ -2,6 +2,10 @@
 
 > One Hour One Life Crafting Guide
 
+Current state:
+- Lists items in the world
+- In need of object consolidation, too many web requests
+
 ## Build Setup
 
 ``` bash
