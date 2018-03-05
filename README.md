@@ -2,6 +2,8 @@
 
 > One Hour One Life Crafting Guide
 
+View here: https://kazetsukai.github.io/onetech
+
 Current state:
 - Lists items in the world
 - In need of object consolidation, too many web requests
