@@ -1,0 +1,15 @@
+{
+  "name": "onetech-process",
+  "version": "1.0.0",
+  "description": "Processes files from OneHourOneLife into big JSON blobs",
+  "main": "process.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.17.5",
+    "node-fetch": "^2.1.1"
+  }
+}
