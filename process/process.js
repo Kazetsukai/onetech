@@ -37,10 +37,12 @@ function processData() {
   fetch("https://api.github.com/repos/kazetsukai/onetech/contents/src/assets/objects.json")
     .then(response => response.json())
     .then(response => {
-      console.dir(response);
+      let sha = response.sha;
 
       postData("https://api.github.com/repos/kazetsukai/onetech/contents/src/assets/objects.json", {
-        message: "Updated object data"
+        message: "Updated object data",
+        content: Buffer.from(JSON.stringify(objects)).toString('base64'),
+        sha: sha
       }).then(response => response.json())
         .then(response => {
           console.dir(response);
@@ -53,7 +55,8 @@ function postData (url, obj) {
   return fetch(url, {
     body: JSON.stringify(obj),
     headers: {
-      'content-type': 'application/json'
+      'content-type': 'application/json',
+      'Authorization': 'token ' + process.env.ONETECH_GITHUB_TOKEN
     },
     method: 'PUT', 
     redirect: 'follow',
