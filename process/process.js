@@ -47,27 +47,31 @@ function processData() {
 
   // Convert images to png
   console.log('Converting sprites...');
-  Promise.all(_.map(fs.readdirSync(spriteDir), f => {
-    if (!f.includes('tga'))
-      return "";
+  let files = fs.readdirSync(spriteDir);
 
-    let inPath = spriteDir + '/' + f
-    let outPath = '../static/sprites/' + f.split('.')[0] + '.png';
+  let promise = Promise.resolve();
 
-    return new Promise((resolve, reject) => {
-      imagemagick.convert([inPath, outPath], (err, stdout) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(stdout);
-        }
+  for (let i in files) {
+    let f = files[i];
+    promise = promise.then(() => {
+      if (!f.includes('tga'))
+        return "";
+
+      let inPath = spriteDir + '/' + f
+      let outPath = '../static/sprites/' + f.split('.')[0] + '.png';
+
+      return new Promise((resolve, reject) => {
+        imagemagick.convert([inPath, outPath], (err, stdout) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(stdout);
+          }
+        });
       });
     });
-  })).then(imgs => {
-    console.log('Converted ' + imgs.length + " sprites.");
-  }).catch(error => {
-    console.log(error);
-  });
+  }
+  promise.then(f => { console.log("Converted sprites"); })
 
   //listTransitions(transitions, objectArray);
 
