@@ -5,8 +5,9 @@
 View here: https://kazetsukai.github.io/onetech
 
 Current state:
-- Lists items in the world
-- In need of object consolidation, too many web requests
+- Script for processing objects etc from OneHourOneLife github repo into a consolidated JSON blob, also turns sprites into PNGs
+- Lists items in the world, along with sprites
+- Sprites are in desperate need of proper layout, need to store width and height data on them
 
 ## Build Setup
 

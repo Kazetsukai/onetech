@@ -52,7 +52,7 @@ function processData() {
       return "";
 
     let inPath = spriteDir + '/' + f
-    let outPath = '../src/assets/sprites/' + f.split('.')[0] + '.png';
+    let outPath = '../static/sprites/' + f.split('.')[0] + '.png';
 
     return new Promise((resolve, reject) => {
       imagemagick.convert([inPath, outPath], (err, stdout) => {
@@ -78,7 +78,7 @@ function processData() {
     transitions: transitions
   };
 
-  fs.writeFileSync('../src/assets/gamedata.json', JSON.stringify(gameData));
+  fs.writeFileSync('../static/gamedata.json', JSON.stringify(gameData));
 }
 
 function parseObject (txt, file) {

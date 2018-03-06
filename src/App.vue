@@ -3,12 +3,11 @@
     <h1>{{ msg }}</h1>
 
     <h2 v-if="!gameData">Loading...</h2>
-    <h3 v-if="loadNum && !gameData">Loaded {{loadType}} {{loadNum}}/{{loadTotal}}</h3>
 
     <div v-if="gameData">
       <ul class="object-list">
         <li class="object" v-for="object in notNil(gameData.objects)" >
-          <span >{{object.name}}</span>
+          <ObjectView :object="object" />
         </li>
       </ul>
     </div>
@@ -37,11 +36,8 @@ export default {
       let vue = this;
       vue.gameData = null;
 
-      GameDataService.loadGameData((type, count, total, obj) => {
-        vue.loadType = type;
-        vue.loadTotal = total;
-        vue.loadNum = count;
-      }).then(data => {
+      GameDataService.loadGameData()
+      .then(data => {
         vue.gameData = data;
         console.dir(vue);
       });
@@ -86,5 +82,9 @@ li {
 
 a {
   color: #42b983;
+}
+
+li.object {
+  float: left;
 }
 </style>
