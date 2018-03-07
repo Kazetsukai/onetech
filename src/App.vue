@@ -5,10 +5,11 @@
     <h2 v-if="!gameData">Loading...</h2>
 
     <div v-if="gameData">
+      <ObjectSearch :objects="gameData.objects" />
       <ul class="object-list">
-        <li class="object" v-for="object in notNil(gameData.objects)" >
+        <div class="object" v-for="object in notNil(gameData.objects)" >
           <ObjectView :object="object" />
-        </li>
+        </div>
       </ul>
     </div>
   </div>
@@ -18,7 +19,9 @@
 import _ from 'lodash';
 
 import GameDataService from './services/GameDataService';
+
 import ObjectView from './components/ObjectView';
+import ObjectSearch from './components/ObjectSearch';
 
 export default {
   name: 'app',
@@ -50,7 +53,8 @@ export default {
     this.load();
   },
   components: {
-    ObjectView
+    ObjectView,
+    ObjectSearch
   }
 }
 </script>
@@ -84,7 +88,7 @@ a {
   color: #42b983;
 }
 
-li.object {
+.object {
   float: left;
 }
 </style>
