@@ -1,16 +1,24 @@
 <template>
-  <div class="objectView">
+  <div class="objectView" @click="select">
     <h3>{{object.name}}</h3>
-    <div class="graphic">
-      <img v-if="object.sprites[0]" :src="'./static/sprites/' + object.sprites[0].id + '.png'">
-    </div>
+    <ObjectImage :object="object" />
   </div>
 </template>
 
 <script>
+import ObjectImage from './ObjectImage';
+import EventBus from '../services/EventBus';
 
 export default {
-  props: ['object']
+  props: ['object'],
+  components: {
+    ObjectImage
+  },
+  methods: {
+    select () {
+      EventBus.$emit('object-selected', this.object);
+    }
+  }
 }
 </script>
 
@@ -18,23 +26,24 @@ export default {
   .objectView {
     width: 300px;
     height: 200px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    background-color: #1c1c1c;
+    margin: 10px;
+    border-radius: 5px;
+    border: 1px solid transparent;
+  }
+
+  .objectView:hover {
+    border: 1px solid #eee;
+    background-color: #222;
   }
 
   .objectView h3 {
     text-align: center;
-  }
-
-  .graphic {
-    position: relative;
-    display: flex;
-    box-pack: center;
-    justify-content: center;
-    width: 300px;
-    height: 150px;
-  }
-
-  .graphic img {
-    flex-shrink: 0;
   }
 
 </style>

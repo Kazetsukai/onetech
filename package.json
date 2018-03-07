@@ -13,7 +13,7 @@
     "jade": "^1.11.0",
     "lodash": "^4.17.5",
     "vue": "^2.5.11",
-    "vue-awesomplete": "^0.1.8"
+    "vue-select": "^2.4.0"
   },
   "browserslist": [
     "> 1%",

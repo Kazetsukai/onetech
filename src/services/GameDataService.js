@@ -25,16 +25,20 @@ export default class GameDataService {
         let trans = data.transitions[t];
 
         if (isValidId(trans.targetID)) {
-          objectMap[trans.targetID].transitionsFrom.push(trans);
+          trans.target = objectMap[trans.targetID];
+          trans.target.transitionsFrom.push(trans);
         }
         if (isValidId(trans.actorID)) {
-          objectMap[trans.actorID].transitionsFrom.push(trans);
+          trans.actor = objectMap[trans.actorID];
+          trans.actor.transitionsFrom.push(trans);
         }
         if (isValidId(trans.newTargetID)) {
-          objectMap[trans.newTargetID].transitionsTo.push(trans);
+          trans.newTarget = objectMap[trans.newTargetID];
+          trans.newTarget.transitionsTo.push(trans);
         }
         if (isValidId(trans.newActorID)) {
-          objectMap[trans.newActorID].transitionsTo.push(trans);
+          trans.newActor = objectMap[trans.newActorID];
+          trans.newActor.transitionsTo.push(trans);
         }
       }
 
