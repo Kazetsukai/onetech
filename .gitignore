@@ -10,3 +10,5 @@ yarn-error.log
 *.njsproj
 *.sln
 process/OneLifeData7-master/
+sprites/sprite_*.png
+sprite_*.png
