@@ -134,7 +134,7 @@ function processData() {
         for (let p in points) {
           p = points[p];
           p.x -= details.centerAnchorXOffset;
-          p.y -= details.centerAnchorYOffset;
+          p.y += details.centerAnchorYOffset;
           p.x = p.x * cosA - p.y * sinA;
           p.y = p.y * cosA + p.x * sinA;
           p.x += x;

@@ -9,7 +9,7 @@ export default {
   computed: {
     imageUrl () {
       return this.object.sprites[0]
-        ? './static/sprites/' + this.object.sprites[0].id + '.png'
+        ? './static/sprites/obj_' + this.object.id + '.png'
         : 'about:blank'
     }
   }
@@ -23,5 +23,6 @@ export default {
 
     background-repeat:no-repeat;
     background-position: center center;
+    background-size: contain;
   }
 </style>
