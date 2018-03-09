@@ -32,15 +32,17 @@ export default class GameDataService {
           trans.actor = objectMap[trans.actorID];
           trans.actor.transitionsFrom.push(trans);
         }
-        if (isValidId(trans.newTargetID)) {
+        if (isValidId(trans.newTargetID) && !trans.targetRemains) {
           trans.newTarget = objectMap[trans.newTargetID];
           trans.newTarget.transitionsTo.push(trans);
         }
-        if (isValidId(trans.newActorID)) {
+        if (isValidId(trans.newActorID) && !trans.tool) {
           trans.newActor = objectMap[trans.newActorID];
           trans.newActor.transitionsTo.push(trans);
         }
       }
+
+      markReachable(data.objects);
 
       return data;
     });
@@ -49,4 +51,10 @@ export default class GameDataService {
 
 function isValidId(id) {
   return id && id > 0;
+}
+
+function markReachable(objects) {
+  objects.forEach(o => {
+    if (true);
+  });
 }

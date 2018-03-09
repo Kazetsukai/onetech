@@ -1,26 +1,36 @@
 <template>
+  <!-- :style="{ backgroundColor: transition.hand ? 'blue' : (transition.tool ? 'red' : 'inherit') }" -->
   <div class="transitionView">
+    <!-- What is being used on what -->
     <ObjectImage class="actor transitionObject" 
                 :class="{ current: transition.actor == selectedObject }" 
                 v-if="transition.actor" 
+                hand="true" hover="true"
                 :object="transition.actor"
                 :clickable="transition.actor != selectedObject" />
     <span class="plus">+</span>
     <ObjectImage class="target transitionObject" 
                 :class="{ current: transition.target == selectedObject }" 
                 v-if="transition.target" 
+                hover="true"
                 :object="transition.target" 
                 :clickable="transition.target != selectedObject" />
-    <ObjectImage class="newTarget transitionObject" 
-                :class="{ current: transition.newTarget == selectedObject }" 
-                v-if="transition.newTarget" 
-                :object="transition.newTarget" 
-                :clickable="transition.newTarget != selectedObject" />
+
+    <!-- What does the item used become? -->
     <ObjectImage class="newActor transitionObject" 
                 :class="{ current: transition.newActor == selectedObject }" 
-                v-if="transition.newActor" 
+                v-if="!transition.tool" 
+                hand="true" hover="true" to="true"
                 :object="transition.newActor"
                 :clickable="transition.newActor != selectedObject" />
+
+    <!-- What does the target item become? -->
+    <ObjectImage class="newTarget transitionObject" 
+                :class="{ current: transition.newTarget == selectedObject }" 
+                v-if="!transition.targetRemains" 
+                hover="true" to="true" :usedUp="!transition.newTarget"
+                :object="transition.newTarget" 
+                :clickable="transition.newTarget != selectedObject" />
   </div>
 </template>
 

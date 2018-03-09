@@ -1,5 +1,8 @@
 <template>
-  <div class="image" :style="'background-image: url(' + imageUrl + ');'" @click="select()">
+  <div class="imgContainer">
+    <div v-if="hand" class="hand" />
+    <div class="image" :title="hover ? object.name : ''" :style="'background-image: url(' + imageUrl + ');'" @click="select()">
+    </div>
   </div>
 </template>
 
@@ -7,7 +10,7 @@
 import EventBus from '../services/EventBus';
 
 export default {
-  props: ['object', 'clickable'],
+  props: ['object', 'clickable', 'hand', 'hover'],
   computed: {
     imageUrl () {
       return this.object.sprites[0]
@@ -33,7 +36,27 @@ export default {
     background-position: center center;
     background-size: contain;
 
-    width: 200px;
-    height: 200px;
+    transform: translateZ(0);
+
+    width: 100%;
+    height: 100%;
+  }
+
+  .imgContainer {
+    z-index: 0;
+    position: relative;
+  }
+
+  .hand {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    left: -2px;
+    bottom: -2px;
+
+    transform: translateZ(0);
+
+    background-size: contain;
+    background-image: url('../../static/hand.png');
   }
 </style>

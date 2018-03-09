@@ -2,7 +2,7 @@
   <div class="objectSearch">
     <VueSelect label="name" :options="objects" v-model="tmpSelect" :on-change="selectObject">
       <template slot="option" slot-scope="option">
-        <ObjectImage width="35px" height="35px" :object="option" />
+        <ObjectImage :object="option" />
         {{ option.name }}
       </template>
     </VueSelect>
@@ -63,5 +63,10 @@ export default {
 
   .objectSearch .dropdown.v-select .dropdown-menu li.highlight > a {
     background-color: #333;
+  }
+
+  .objectSearch .dropdown.v-select .image {
+    width: 35px;
+    height: 35px;
   }
 </style>
