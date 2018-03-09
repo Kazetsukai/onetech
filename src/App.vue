@@ -117,4 +117,9 @@ export default {
   .object {
     float: left;
   }
+
+  .objectView .imgContainer {
+    width: 128px;
+    height: 128px;
+  }
 </style>

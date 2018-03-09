@@ -29,9 +29,6 @@ export default {
 
 <style scoped>
   .image {
-    display: inline-block;
-    vertical-align: middle;
-
     background-repeat:no-repeat;
     background-position: center center;
     background-size: contain;
@@ -43,6 +40,9 @@ export default {
   }
 
   .imgContainer {
+    display: inline-block;
+    vertical-align: middle;
+    
     z-index: 0;
     position: relative;
   }
