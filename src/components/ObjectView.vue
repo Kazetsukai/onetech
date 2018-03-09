@@ -17,6 +17,7 @@ export default {
   methods: {
     select () {
       EventBus.$emit('object-selected', this.object);
+      return false;
     }
   }
 }

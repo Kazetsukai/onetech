@@ -87,6 +87,7 @@ export default {
     background-color: #151515;
     margin: 0 auto;
     width: 1024px;
+    padding-left: calc(100vw - 100%);
   }
 
   #app {
