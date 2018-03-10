@@ -42,15 +42,19 @@ export default class GameDataService {
           trans.actor = objectMap[trans.actorID];
           trans.actor.transitionsFrom.push(trans);
         }
-        // Hide new target if target hasn't changed
-        if (isValidId(trans.newTargetID) && !trans.targetRemains) {
+        if (isValidId(trans.newTargetID)) {
           trans.newTarget = objectMap[trans.newTargetID];
-          trans.newTarget.transitionsTo.push(trans);
+          
+          // Hide new target if target hasn't changed
+          if (!trans.targetRemains)
+            trans.newTarget.transitionsTo.push(trans);
         }
-        // Hide new actor if actor hasn't changed
-        if (isValidId(trans.newActorID) && !trans.tool) {
+        if (isValidId(trans.newActorID)) {
           trans.newActor = objectMap[trans.newActorID];
-          trans.newActor.transitionsTo.push(trans);
+
+          // Hide new actor if actor hasn't changed
+          if (!trans.tool)
+            trans.newActor.transitionsTo.push(trans);
         }
       }
 
