@@ -78,7 +78,7 @@ export default {
     transform: translateZ(0);
 
     background-size: contain;
-    background-image: url('../../static/hand.png');
+    background-image: url('../assets/hand.png');
   }
 
   /*.ground {
@@ -98,7 +98,7 @@ export default {
     bottom: -2px;
 
     background-size: contain;
-    background-image: url('../../static/stopwatch.png');
+    background-image: url('../assets/stopwatch.png');
 
     display: flex;
     flex-direction: column;
