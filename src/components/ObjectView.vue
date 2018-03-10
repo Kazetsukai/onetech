@@ -32,7 +32,7 @@ export default {
     flex-direction: column;
     align-items: center;
 
-    background-color: #1c1c1c;
+    background-color: #333;
     margin: 10px;
     border-radius: 5px;
     border: 1px solid transparent;

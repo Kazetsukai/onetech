@@ -10,10 +10,10 @@
 </template>
 
 <script>
-import VueSelect from 'vue-select';
-
+import _ from 'lodash';
 import EventBus from '../services/EventBus';
 
+import VueSelect from './Select';
 import ObjectImage from './ObjectImage';
 
 export default {

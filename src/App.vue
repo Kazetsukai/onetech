@@ -12,11 +12,14 @@
       </div>
       
       <div v-if="!selectedObject">
-        <ul class="object-list">
-          <div class="object" v-for="object in nonNilObjects" >
+        <div class="objectList">
+          <div class="object" v-for="object in firstFewObjects" >
             <ObjectView :object="object" />
           </div>
-        </ul>
+          <div class="showMore">
+            <a href="#" onclick="return false" @click="showAmount = Math.min(nonNilObjects.length, showAmount + 30)" v-if="showAmount < nonNilObjects.length">Show more...</a>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -37,9 +40,10 @@ export default {
   name: 'app',
   data () {
     return {
-      msg: 'Auto-generated crafting guide for One Hour One Life',
+      msg: 'Crafting reference for One Hour One Life',
       gameData: null,
-      selectedObject: null
+      selectedObject: null,
+      showAmount: 30
     }
   },
   methods: {
@@ -58,6 +62,9 @@ export default {
   computed: {
     nonNilObjects () {
       return _.filter(this.gameData.objects, _.negate(_.isNil));
+    },
+    firstFewObjects () {
+      return _.take(this.nonNilObjects, this.showAmount);
     }
   },
   beforeMount () {
@@ -72,6 +79,7 @@ export default {
       else
         console.log("Object cleared");
       vue.selectedObject = object;
+      vue.showAmount = 30;
     });
   },
   components: {
@@ -115,11 +123,36 @@ export default {
   }
 
   .object {
-    float: left;
+  }
+
+  .objectList {
+    background-color: #222;
+    border-radius: 5px;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0px;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .objectView .imgContainer {
     width: 128px;
     height: 128px;
+  }
+
+  .showMore {
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+
+    > a {
+      color: #ccc;
+    }
   }
 </style>

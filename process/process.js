@@ -43,7 +43,7 @@ function processData() {
     if (obj.id)
       objectArray[obj.id] = obj;
 
-    console.dir(_.pick(obj, [ 'numUses', 'name']))
+    //console.dir(_.pick(obj, [ 'numUses', 'name']))
     //console.dir(obj)
   }
 
@@ -96,7 +96,7 @@ function processData() {
   // Composite sprites into object PNGs
   if (!skipGraphics) promise.then(() => processGraphics(objects, spriteDeets));
 
-  //listTransitions(transitions, objectArray);
+  listTransitions(transitions, objectArray);
 
   // Save final game data object
   console.log("Saving gamedata blob...");
@@ -202,14 +202,15 @@ function parseTransition (txt, file) {
 function listTransitions (transitions, objectArray) {
   for (let t in transitions) {
     let trans = transitions[t];
+    
+    if (trans.newTargetID != 0) continue;
 
     let act = (objectArray[trans.actorID] || {}).name || "Nothing";
     let trg = (objectArray[trans.targetID] || {}).name || "Nothing";
     let newAct = (objectArray[trans.newActorID] || {}).name || "Nothing";
     let newTrg = (objectArray[trans.newTargetID] || {}).name || "Nothing";
 
-    if (trans.actorID == -1)
-      console.log(act + " + " + trg + " = " + newAct + " + " + newTrg + "   epoch " + trans.epochAutoDecay + "    secs " + trans.autoDecaySeconds);
+    console.log(act + " + " + trg + " = " + newAct + " + " + newTrg + "   epoch " + trans.epochAutoDecay + "    secs " + trans.autoDecaySeconds);
   }
 }
 

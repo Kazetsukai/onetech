@@ -1,36 +1,48 @@
 <template>
   <!-- :style="{ backgroundColor: transition.hand ? 'blue' : (transition.tool ? 'red' : 'inherit') }" -->
   <div class="transitionView">
+    <div class="arrow"></div>
+
     <!-- What is being used on what -->
-    <ObjectImage class="actor transitionObject" 
-                :class="{ current: transition.actor == selectedObject }" 
-                v-if="transition.actor" 
+    <ObjectImage class="actor transitionObject"
+                v-if="transition.decay"
+                hover="true"
+                :decay="transition.decay" />
+
+    <ObjectImage class="actor transitionObject"
+                v-if="transition.actor || transition.hand" 
                 hand="true" hover="true"
                 :object="transition.actor"
-                :clickable="transition.actor != selectedObject" />
-    <span class="plus">+</span>
-    <ObjectImage class="target transitionObject" 
-                :class="{ current: transition.target == selectedObject }" 
+                :clickable="transition.actor && transition.actor != selectedObject" />
+    <span class="plus" v-if="transition.actor || transition.decay || transition.hand">+</span>
+    <ObjectImage class="target transitionObject"
                 v-if="transition.target" 
                 hover="true"
                 :object="transition.target" 
                 :clickable="transition.target != selectedObject" />
 
+    <ObjectImage class="target transitionObject"
+                v-if="!transition.target" 
+                ground="true"
+                hover="true" />
+
     <!-- What does the item used become? -->
-    <ObjectImage class="newActor transitionObject" 
-                :class="{ current: transition.newActor == selectedObject }" 
-                v-if="!transition.tool" 
-                hand="true" hover="true" to="true"
+    <ObjectImage class="newActor transitionObject"
+                v-if="!transition.tool && !transition.decay" 
+                hand="true" hover="true"
                 :object="transition.newActor"
-                :clickable="transition.newActor != selectedObject" />
+                :clickable="transition.newActor && transition.newActor != selectedObject" />
 
     <!-- What does the target item become? -->
-    <ObjectImage class="newTarget transitionObject" 
-                :class="{ current: transition.newTarget == selectedObject }" 
-                v-if="!transition.targetRemains" 
-                hover="true" to="true" :usedUp="!transition.newTarget"
+    <ObjectImage class="newTarget transitionObject"
+                v-if="!transition.targetRemains && transition.newTarget" 
+                hover="true" :usedUp="!transition.newTarget"
                 :object="transition.newTarget" 
                 :clickable="transition.newTarget != selectedObject" />
+    <ObjectImage class="newTarget transitionObject"
+                v-if="!transition.newTarget" 
+                ground="true"
+                hover="true"  />
   </div>
 </template>
 
@@ -46,11 +58,24 @@ export default {
 </script>
 
 <style scoped>
+  .arrow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    background-color: #2e2e2e;
+
+    z-index: 0;
+
+    transform: translateY(-57%) rotateX(100deg) scale(5) rotateZ(45deg);
+  }
+
   .transitionView {
     width: 200px;
     height: 200px;
 
     position: relative;
+    overflow: hidden;
 
     background-color: #333;
     margin: 10px;
@@ -63,7 +88,6 @@ export default {
     background-color: #444;
     width: 64px;
     height: 64px;
-    border-radius: 5px;
   }
   .transitionObject:hover {
     border: 1px solid #aaa;
