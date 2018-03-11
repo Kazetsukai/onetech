@@ -5,6 +5,14 @@ let Canvas = require('canvas')
 let Image = Canvas.Image;
 let _ = require('lodash');
 
+let biomes = {
+  0: 'grassland',
+  1: 'swamp',
+  2: 'prairie',
+  3: 'rocky',
+  4: 'snow'
+}
+
 let baseDir = "OneLifeData7-master/"
 
 let download = process.argv[2] === 'download'
@@ -43,8 +51,17 @@ function processData() {
     if (obj.id)
       objectArray[obj.id] = obj;
 
-    //console.dir(_.pick(obj, [ 'numUses', 'name']))
-    //console.dir(obj)
+    if (obj.mapChance) {
+      let bits = obj.mapChance.split('#');
+      obj.mapChance = bits[0];
+
+      if (bits[1].includes('_')) {
+        obj.biomes = _.map(bits[1].split('_')[1].split(','), s => biomes[s]);
+      } else console.log(bits[1]);
+
+    }
+
+    //console.dir(_.pick(obj, [ 'mapChance', 'name', 'biomes']))
   }
 
   // Load transitions from files
@@ -52,6 +69,8 @@ function processData() {
     let file = transDir + '/' + f;
     return parseTransition(fs.readFileSync(file, 'utf8'), f);
   });
+
+  markNaturalObjects(objectArray, transitions);
 
   // Convert images to png
   console.log('Converting sprites to PNG...');
@@ -96,7 +115,7 @@ function processData() {
   // Composite sprites into object PNGs
   if (!skipGraphics) promise.then(() => processGraphics(objects, spriteDeets));
 
-  listTransitions(transitions, objectArray);
+  //listTransitions(transitions, objectArray);
 
   // Save final game data object
   console.log("Saving gamedata blob...");
@@ -106,7 +125,14 @@ function processData() {
   };
 
   fs.writeFileSync('../static/gamedata.json', JSON.stringify(gameData));
+  fs.writeFileSync('../static/gamedata-pretty.json', JSON.stringify(gameData, null, 2));
 }
+
+
+
+
+
+
 
 function parseObject (txt, file) {
   let lines = txt.split('\n');
@@ -299,3 +325,103 @@ function processGraphics(objects, spriteDeets) {
     fs.writeFileSync('../static/sprites/obj_' + obj.id + '.png', tmpCanvas.toBuffer());
   }
 }
+
+function markNaturalObjects(objectArray, transitions) {
+  // Mark all the natural objects
+  
+  /*let toExplore = [];
+
+  targetToMap = []
+  actorToMap = []
+
+  for (let i = -2; i < 1; i++) {
+    targetToMap[i] = [];
+    actorToMap[i] = [];
+  }
+
+  let expand = function(o) {
+    let targTo = targetToMap[o.id];
+    if (!targTo) return;
+    let actTo = actorToMap[o.id];
+
+    console.log("Expanding " + o.name);
+
+    targTo.forEach(obj => {
+      toExplore.push([obj, true, o])
+    });
+    actTo.forEach(obj => {
+      toExplore.push([obj, false, o])
+    });
+  }*/
+
+  objectArray.forEach(o => {
+    if (!o) return;
+
+    if (o.mapChance > 0) {
+      o.natural = true;
+    }
+
+    /*targetToMap[o.id] = [];
+    actorToMap[o.id] = [];*/
+  });
+
+
+  /*transitions.forEach(t => {
+    if (t.actorID < 1) {
+      toExplore.push([objectArray[t.newTargetID], false, undefined]);
+      toExplore.push([objectArray[t.newActorID], false, undefined]);
+    }
+    if (t.targetID < 1) {
+      toExplore.push([objectArray[t.newTargetID], true, undefined]);
+      toExplore.push([objectArray[t.newActorID], true, undefined]);
+    }
+    actorToMap[t.actorID].push(objectArray[t.newTargetID]);
+    actorToMap[t.actorID].push(objectArray[t.newActorID]);
+    targetToMap[t.targetID].push(objectArray[t.newTargetID]);
+    targetToMap[t.targetID].push(objectArray[t.newActorID]);
+  })
+
+  // Expand the top level objects to get started
+  objectArray.forEach(o => {
+    if (o && o.natural) {
+      expand(o);
+    }
+  });
+
+  while (toExplore.length > 0) {
+    let [obj, target, pred] = toExplore.shift();
+
+    if (!obj) continue;
+
+    // If we have paths to both sides of this, then stop
+    if (obj.targetPredecessor && obj.actorPredecessor) continue;
+
+    console.log("Exploring " + obj.name + " (" + obj.depth + ", " + target + ", " + (pred || {name: '*'}).name + ")");
+
+    if (obj.targetPredecessor === undefined && target)
+      obj.targetPredecessor = pred || { depth: 0 };
+    if (obj.actorPredecessor === undefined && !target)
+      obj.actorPredecessor = pred || { depth: 0 };
+
+    // If one of the two above depths completed this object, then expand
+    if (obj.targetPredecessor && obj.actorPredecessor) {
+      console.log("#############################################");
+      obj.depth = Math.max(obj.targetPredecessor.depth + 1, obj.actorPredecessor.depth + 1);
+      expand(obj);
+    }
+  }
+
+  objectArray.forEach(o => {
+    if (o && o.depth > -1) {
+      console.dir(_.pick(o, [ 'depth', 'name', 'targetPredecessor.name']));
+    }
+    if (o && o.depth === undefined) {
+      console.log("UNREACHABLE:");
+      console.dir(_.pick(o, [ 'depth', 'name', 'targetPredecessor.name']));
+    }
+  });*/
+
+}
+
+
+

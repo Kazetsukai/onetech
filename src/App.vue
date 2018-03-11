@@ -42,8 +42,9 @@ export default {
     return {
       msg: 'Crafting reference for One Hour One Life',
       gameData: null,
+      showAmount: 30,
       selectedObject: null,
-      showAmount: 30
+      currentRoute: window.location.hash
     }
   },
   methods: {
@@ -55,8 +56,17 @@ export default {
       GameDataService.loadGameData()
       .then(data => {
         vue.gameData = data;
-        console.dir(vue);
+        vue.objectFromUrl();
       });
+    },
+    objectFromUrl () {
+      if (!this.gameData) return;
+      if (!window.location.hash) {
+        this.selectedObject = null;  
+      } else {
+        let objid = window.location.hash.split('#')[1].split('/')[0];
+        this.selectedObject = this.gameData.objectMap[objid];
+      }
     }
   },
   computed: {
@@ -74,13 +84,18 @@ export default {
     let vue = this;
 
     EventBus.$on('object-selected', object => {
-      if (object)
+      if (object) {
         console.log("Object selected: " + object.name);
-      else
+        window.location.hash = '#' + object.id + '/' + encodeURIComponent(object.name.split(' ').join('-'));
+      }
+      else {
         console.log("Object cleared");
-      vue.selectedObject = object;
+        window.location.hash = '#';
+      }
       vue.showAmount = 30;
     });
+
+    window.onhashchange = () => vue.objectFromUrl();
   },
   components: {
     ObjectView,

@@ -62,7 +62,6 @@ export default {
     vertical-align: middle;
 
     z-index: 0;
-    position: relative;
 
     border-radius: 5px;
     overflow: hidden;

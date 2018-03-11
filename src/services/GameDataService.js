@@ -11,6 +11,7 @@ export default class GameDataService {
       let objectMap = [];
 
       data.objects = _.filter(data.objects, o => o.name && !o.name.toLowerCase().includes('attacking'));
+      data.objects = _.sortBy(data.objects, o => 1 - o.mapChance);
 
       for (let o in data.objects) {
         let obj = data.objects[o];
@@ -59,6 +60,8 @@ export default class GameDataService {
       }
 
       markReachable(data.objects);
+
+      data.objectMap = objectMap;
 
       return data;
     });

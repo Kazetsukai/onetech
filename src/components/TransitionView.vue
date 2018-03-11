@@ -62,8 +62,9 @@ export default {
     position: absolute;
     width: 100%;
     height: 100%;
+    
 
-    background-color: #2e2e2e;
+    background-color: #2b2b2b;
 
     z-index: 0;
 
@@ -77,7 +78,7 @@ export default {
     position: relative;
     overflow: hidden;
 
-    background-color: #333;
+    background-color: #333733;
     margin: 10px;
     border-radius: 5px;
   }
@@ -85,17 +86,17 @@ export default {
   .transitionObject {
     position: absolute;
     border: 1px solid transparent;
-    background-color: #444;
+    background-color: #555;
     width: 64px;
     height: 64px;
   }
   .transitionObject:hover {
     border: 1px solid #aaa;
-    background-color: #494949;
+    background-color: #666;
   }
 
   .transitionObject.current {
-    background-color: #393939;
+    background-color: #444;
   }
   .transitionObject.current:hover {
     border: 1px solid transparent;
