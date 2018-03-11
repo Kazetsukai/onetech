@@ -17,7 +17,7 @@
             <ObjectView :object="object" />
           </div>
           <div class="showMore">
-            <a href="#" onclick="return false" @click="showAmount = Math.min(nonNilObjects.length, showAmount + 30)" v-if="showAmount < nonNilObjects.length">Show more...</a>
+            <a href="#" onclick="return false" @click="showAmount = Math.min(nonNilObjects.length, showAmount + 90)" v-if="showAmount < nonNilObjects.length">Show more...</a>
           </div>
         </div>
       </div>
@@ -42,7 +42,7 @@ export default {
     return {
       msg: 'Crafting reference for One Hour One Life',
       gameData: null,
-      showAmount: 30,
+      showAmount: 90,
       selectedObject: null,
       currentRoute: window.location.hash
     }
@@ -92,7 +92,7 @@ export default {
         console.log("Object cleared");
         window.location.hash = '#';
       }
-      vue.showAmount = 30;
+      vue.showAmount = 90;
     });
 
     window.onhashchange = () => vue.objectFromUrl();
