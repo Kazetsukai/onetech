@@ -168,6 +168,8 @@ function parseObject (txt, file) {
       sprite.x = pos[0];
       sprite.y = pos[1];
       sprite.rot = lines[i+2].split('=')[1];
+      sprite.hFlip = lines[i+3].split('=')[1];
+      sprite.color = lines[i+4].split('=')[1].split(',');
       sprite.ageRange = _.map(lines[i+5].split('=')[1].split(','), parseFloat);
 
       obj.sprites.push(sprite);
@@ -265,9 +267,28 @@ function processGraphics(objects, spriteDeets) {
       if ((ages[0] > -1 || ages[1] > -1) && (ages[0] > targetAge || ages[1] < targetAge)) continue;
 
       let details = spriteDeets[sprite.id];
+      let [r, g, b] = sprite.color;
 
       let img = new Image;
       img.src = fs.readFileSync('../static/sprites/sprite_' + sprite.id + '.png');
+
+      /*var cnv2 = new Canvas(img.width, img.height);
+      var ctx2 = cnv2.getContext('2d');
+      ctx2.clearRect(0, 0, cnv2.width, cnv2.height);
+      ctx2.drawImage(img, 0, 0);
+
+      if (details.multiplicativeBlending) {
+          console.dir([r, g, b]);
+        var imageData = ctx2.getImageData(0, 0, cnv2.width, cnv2.height);
+        var data = imageData.data;
+        
+        for (var i = 0; i < data.length; i += 4) {
+          data[i]     = data[i]     * r; // red
+          data[i + 1] = data[i + 1] * g; // green
+          data[i + 2] = data[i + 2] * b; // blue
+        }
+        ctx2.putImageData(imageData, 0, 0);
+      }*/
 
       let angleRads = parseFloat(sprite.rot) * Math.PI * 2;
       let x = parseFloat(sprite.x);
@@ -300,6 +321,8 @@ function processGraphics(objects, spriteDeets) {
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.translate(x + canvas.width / 2, -y + canvas.height / 2);
       ctx.rotate(angleRads);
+      if (sprite.hFlip == 1) 
+        ctx.scale(-1, 1);
       ctx.drawImage(img, -img.width / 2 - details.centerAnchorXOffset, -img.height / 2 - details.centerAnchorYOffset, img.width, img.height);
     }
 
