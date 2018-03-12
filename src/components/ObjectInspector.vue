@@ -42,8 +42,6 @@ export default {
 
 <style scoped>
   .objectInspector {
-    width: 100%;
-
     display: flex;
     flex-direction: column;
     align-content: center;
@@ -59,6 +57,7 @@ export default {
 
   .info {
     flex: 1 1 0;
+    min-width: 220px;
 
     background-color: #333;
     margin: 10px;
@@ -104,5 +103,18 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: center;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .panels {
+      flex-direction: column;
+    }
+    .panels .transitions {
+      width: 100%;
+    }
+
+    .info {
+      order: -1;
+    }
   }
 </style>
