@@ -1,13 +1,14 @@
 # onetech
 
-> One Hour One Life Crafting Guide
+> One Hour One Life Crafting Reference
 
 View here: https://kazetsukai.github.io/onetech
 
-Current state:
-- Script for processing objects etc from OneHourOneLife github repo into a consolidated JSON blob, also turns sprites into PNGs
-- Lists items in the world, along with sprites
-- Sprites are in desperate need of proper layout, need to store width and height data on them
+This site is built using the game data directly from https://github.com/jasonrohrer/OneLifeData7
+It shows the relationships between items, and let's you explore how things are crafted.
+
+Unlike the wiki, which contains "wisdom" about the game, this site contains only "knowledge".
+This is a reference. For a better guide, go to the game wiki.
 
 ## Build Setup
 
