@@ -25,7 +25,6 @@ export default {
 
 <style scoped>
   .objectView {
-    width: 300px;
     height: 200px;
 
     display: flex;
@@ -46,5 +45,4 @@ export default {
   .objectView h3 {
     text-align: center;
   }
-
 </style>

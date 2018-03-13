@@ -6,11 +6,11 @@
 
     <div v-if="gameData">
       <ObjectSearch :objects="nonNilObjects" :selectedObject="selectedObject" />
-      
+
       <div v-if="selectedObject">
         <ObjectInspector :object="selectedObject" />
       </div>
-      
+
       <div v-if="!selectedObject">
         <div class="objectList">
           <div class="object" v-for="object in firstFewObjects" >
@@ -62,7 +62,7 @@ export default {
     objectFromUrl () {
       if (!this.gameData) return;
       if (!window.location.hash) {
-        this.selectedObject = null;  
+        this.selectedObject = null;
       } else {
         let objid = window.location.hash.split('#')[1].split('/')[0];
         this.selectedObject = this.gameData.objectMap[objid];
@@ -93,6 +93,7 @@ export default {
         window.location.hash = '#';
       }
       vue.showAmount = 90;
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
     });
 
     window.onhashchange = () => vue.objectFromUrl();
@@ -106,10 +107,11 @@ export default {
 </script>
 
 <style lang="scss">
-  body { 
+  body {
     background-color: #151515;
     margin: 0 auto;
-    width: 1024px;
+    padding: 0 20px;
+    max-width: 1024px;
     padding-left: calc(100vw - 100%);
   }
 
@@ -138,6 +140,15 @@ export default {
   }
 
   .object {
+    min-width: 200px;
+    width: 33.3333%;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .object {
+      min-width: 150px;
+      width: 50%;
+    }
   }
 
   .objectList {
