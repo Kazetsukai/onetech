@@ -20,7 +20,7 @@ export default {
   props: ['objects', 'selectedObject'],
   data () {
     return {
-      tmpSelect: null
+      tmpSelect: this.selectedObject
     };
   },
   watch: {
