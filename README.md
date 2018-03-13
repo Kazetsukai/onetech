@@ -5,7 +5,7 @@
 View here: https://kazetsukai.github.io/onetech
 
 This site is built using the game data directly from [the game data repository](https://github.com/jasonrohrer/OneLifeData7).
-It shows the relationships between items, and let's you explore how things are crafted.
+It shows the relationships between items, and lets you explore how things are crafted.
 
 Unlike the wiki, which contains "wisdom" about the game, this site contains only "knowledge".
 This is a reference. For a better guide, go to the game wiki.
