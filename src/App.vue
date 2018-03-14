@@ -6,11 +6,12 @@
 
     <div v-if="gameData">
       <ObjectSearch :objects="nonNilObjects" :selectedObject="selectedObject" />
-      
+
       <div v-if="selectedObject">
-        <ObjectInspector :object="selectedObject" />
+        <TechTree :object="selectedObject" v-if="showTechTree" />
+        <ObjectInspector :object="selectedObject" v-else />
       </div>
-      
+
       <div v-if="!selectedObject">
         <div class="objectList">
           <div class="object" v-for="object in firstFewObjects" >
@@ -35,6 +36,7 @@ import EventBus from './services/EventBus';
 import ObjectView from './components/ObjectView';
 import ObjectSearch from './components/ObjectSearch';
 import ObjectInspector from './components/ObjectInspector';
+import TechTree from './components/TechTree';
 
 export default {
   name: 'app',
@@ -60,12 +62,15 @@ export default {
       });
     },
     objectFromUrl () {
+      console.log("OBJECT FROM URL");
       if (!this.gameData) return;
       if (!window.location.hash) {
-        this.selectedObject = null;  
+        this.selectedObject = null;
       } else {
-        let objid = window.location.hash.split('#')[1].split('/')[0];
-        this.selectedObject = this.gameData.objectMap[objid];
+        console.log(window.location.hash);
+        let path = window.location.hash.split('#')[1].split('/');
+        this.selectedObject = this.gameData.objectMap[path[0]];
+        this.showTechTree = (path[2] == "tech-tree");
       }
     }
   },
@@ -95,18 +100,23 @@ export default {
       vue.showAmount = 90;
     });
 
+    EventBus.$on('visit-tech-tree', object => {
+      window.location.hash = window.location.hash + '/tech-tree';
+    });
+
     window.onhashchange = () => vue.objectFromUrl();
   },
   components: {
     ObjectView,
     ObjectSearch,
-    ObjectInspector
+    ObjectInspector,
+    TechTree
   }
 }
 </script>
 
 <style lang="scss">
-  body { 
+  body {
     background-color: #151515;
     margin: 0 auto;
     width: 1024px;

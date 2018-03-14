@@ -14,6 +14,9 @@
           <li v-if="object.foodValue > 0">Food: {{object.foodValue}}</li>
           <li v-if="object.heatValue > 0">Heat: {{object.heatValue}}</li>
         </ul>
+        <div class="techTree" v-if="object.transitionsTo.length > 0">
+          <div class="button" @click="goToTechTree()">Tech Tree</div>
+        </div>
       </div>
       <div class="to transitions">
         <div v-for="trans in object.transitionsFrom">
@@ -27,6 +30,7 @@
 <script>
 import ObjectImage from './ObjectImage';
 import TransitionView from './TransitionView';
+import EventBus from '../services/EventBus';
 
 export default {
   props: ['object'],
@@ -37,6 +41,11 @@ export default {
   beforeMount () {
     console.dir(this.object);
   },
+  methods: {
+    goToTechTree () {
+      EventBus.$emit('visit-tech-tree', this.object);
+    }
+  }
 }
 </script>
 
@@ -82,9 +91,31 @@ export default {
     height: 256px;
   }
   .info > ul {
-    margin: 5px 30px 5px 30px;
+    padding: 0;
+    margin: 5px 30px;
     font-size: 1.3rem;
     list-style-type: none;
+  }
+  .info li {
+    text-align: center;
+  }
+
+  .info .techTree {
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .info .button {
+    padding: 3px 10px;
+    background-color: #505050;
+    border-radius: 5px;
+    display: inline;
+    font-size: 1.2rem;
+  }
+  .info .button:hover {
+    border: 1px solid #eee;
+    background-color: #666;
+    cursor: pointer;
   }
 
   .panels {

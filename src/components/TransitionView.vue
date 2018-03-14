@@ -10,37 +10,37 @@
                 :decay="transition.decay" />
 
     <ObjectImage class="actor transitionObject"
-                v-if="transition.actor || transition.hand" 
+                v-if="transition.actor || transition.hand"
                 hand="true" hover="true"
                 :object="transition.actor"
                 :clickable="transition.actor && transition.actor != selectedObject" />
     <span class="plus" v-if="transition.actor || transition.decay || transition.hand">+</span>
     <ObjectImage class="target transitionObject"
-                v-if="transition.target" 
+                v-if="transition.target"
                 hover="true"
-                :object="transition.target" 
+                :object="transition.target"
                 :clickable="transition.target != selectedObject" />
 
     <ObjectImage class="target transitionObject"
-                v-if="!transition.target" 
+                v-if="!transition.target"
                 ground="true"
                 hover="true" />
 
     <!-- What does the item used become? -->
     <ObjectImage class="newActor transitionObject"
-                v-if="!transition.tool && !transition.decay" 
+                v-if="!transition.tool && !transition.decay"
                 hand="true" hover="true"
                 :object="transition.newActor"
                 :clickable="transition.newActor && transition.newActor != selectedObject" />
 
     <!-- What does the target item become? -->
     <ObjectImage class="newTarget transitionObject"
-                v-if="transition.newTarget && (!transition.targetRemains || transition.target.numUses > 0)" 
+                v-if="transition.newTarget && (!transition.targetRemains || transition.target.numUses > 0)"
                 hover="true" :usedUp="!transition.newTarget"
-                :object="transition.newTarget" 
+                :object="transition.newTarget"
                 :clickable="transition.newTarget != selectedObject" />
     <ObjectImage class="newTarget transitionObject"
-                v-if="!transition.targetRemains && !transition.newTarget" 
+                v-if="!transition.targetRemains && !transition.newTarget"
                 ground="true"
                 hover="true"  />
   </div>
@@ -62,7 +62,7 @@ export default {
     position: absolute;
     width: 100%;
     height: 100%;
-    
+
 
     background-color: #2b2b2b;
 
