@@ -66,63 +66,6 @@ class GameObject {
     this.sprites.push(new Sprite(lines));
   }
 
-  processSprites(spritesDir, pngDir) {
-    const canvas = new Canvas(512, 1024);
-    const context = canvas.getContext('2d');
-
-    for (var sprite of this.sprites) {
-      sprite.parseSpriteFile(spritesDir);
-      sprite.draw(pngDir, canvas, context);
-    }
-
-    const bounds = this.bounds();
-    const width = bounds.maxX - bounds.minX;
-    const height = bounds.maxY - bounds.minY;
-
-    const newCanvas = new Canvas(Math.max(width, 128), Math.max(height, 128));
-    const newContext = newCanvas.getContext('2d');
-
-    newContext.setTransform(1, 0, 0, 1, 0, 0);
-
-    newContext.drawImage(
-      canvas,
-      bounds.minX + canvas.width / 2,
-      -bounds.maxY + canvas.height / 2,
-      width,
-      height,
-      (newCanvas.width - width) / 2,
-      (newCanvas.height - height) / 2,
-      width,
-      height
-    );
-
-    // Debug
-    context.beginPath(); //
-    context.rect(bounds.minX + canvas.width / 2, -bounds.maxY + canvas.height / 2, width, height);
-    context.stroke();
-    context.closePath(); //
-
-    fs.writeFileSync(pngDir + "/obj_" + this.data.id + ".png", newCanvas.toBuffer());
-  }
-
-  bounds() {
-    var maxX = 0;
-    var maxY = 0;
-    var minX = 0;
-    var minY = 0;
-
-    for (var sprite of this.sprites) {
-      for (var point of sprite.boundaryPoints()) {
-        if (point.x > maxX) maxX = point.x + 2;
-        if (point.x < minX) minX = point.x - 2;
-        if (point.y > maxY) maxY = point.y + 2;
-        if (point.y < minY) minY = point.y - 2;
-      }
-    }
-
-    return {minX, minY, maxX, maxY};
-  }
-
   fullData() {
     const transitionsToward = this.transitionsToward.map(t => t.data());
     const transitionsAway = this.transitionsAway.map(t => t.data());

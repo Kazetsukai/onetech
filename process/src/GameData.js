@@ -6,6 +6,7 @@ const _ = require('lodash');
 
 const GameObject = require('./GameObject');
 const Transition = require('./Transition');
+const SpriteProcessor = require('./SpriteProcessor');
 
 class GameData {
   constructor() {
@@ -59,11 +60,8 @@ class GameData {
   }
 
   processSprites() {
-    const spritesDir = this.baseDir + "/sprites";
-    const pngDir = "../static/sprites";
-    for (var id in this.objects) {
-      this.objects[id].processSprites(spritesDir, pngDir);
-    }
+    const processor = new SpriteProcessor(this.baseDir + "/sprites", "../static/sprites")
+    processor.process(this.objects)
   }
 
   eachFileInDir(dirName, callback) {
