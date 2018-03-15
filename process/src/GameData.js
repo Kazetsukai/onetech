@@ -2,6 +2,7 @@
 
 const { execSync, spawnSync } = require('child_process');
 const fs = require('fs');
+const _ = require('lodash');
 
 const GameObject = require('./GameObject');
 const Transition = require('./Transition');
@@ -44,12 +45,17 @@ class GameData {
 
   exportObjects() {
     var list = [];
-    for (var id in this.objects) {
-      const path = "../static/objects/" + id + ".json";
-      list.push(this.objects[id].simpleData());
-      fs.writeFileSync(path, JSON.stringify(this.objects[id].fullData()));
+    var objects = this.sortedObjects();
+    for (var object of objects) {
+      const path = "../static/objects/" + object.data.id + ".json";
+      list.push(object.simpleData());
+      fs.writeFileSync(path, JSON.stringify(object.fullData()));
     }
     fs.writeFileSync("../static/objects.json", JSON.stringify(list));
+  }
+
+  sortedObjects() {
+    return _.sortBy(this.objects, o => o.sortWeight()).reverse();
   }
 
   processSprites() {

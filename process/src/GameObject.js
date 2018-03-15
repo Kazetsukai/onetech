@@ -140,6 +140,14 @@ class GameObject {
   hasSprite() {
     return this.sprites.length > 0;
   }
+
+  sortWeight() {
+    if (this.data.name.includes('@')) {
+      return 0;
+    } else {
+      return this.transitionsToward.length + this.transitionsAway.length;
+    }
+  }
 }
 
 module.exports = GameObject;
