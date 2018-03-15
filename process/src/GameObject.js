@@ -1,6 +1,5 @@
 "use strict";
 
-const Canvas = require('canvas');
 const fs = require('fs');
 
 const Sprite = require('./Sprite');

@@ -1,6 +1,5 @@
 "use strict";
 
-const Image = require('canvas').Image;
 const fs = require('fs');
 
 class Sprite {

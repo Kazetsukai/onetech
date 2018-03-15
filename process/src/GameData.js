@@ -45,14 +45,28 @@ class GameData {
   }
 
   exportObjects() {
+    this.staticDir("objects");
+    this.staticDir("pretty-json");
+    this.staticDir("pretty-json/objects");
     var list = [];
-    var objects = this.sortedObjects();
+    const objects = this.sortedObjects();
     for (var object of objects) {
-      const path = "../static/objects/" + object.data.id + ".json";
       list.push(object.simpleData());
-      fs.writeFileSync(path, JSON.stringify(object.fullData()));
+      this.saveJSON("objects/" + object.data.id + ".json", object.fullData());
     }
-    fs.writeFileSync("../static/objects.json", JSON.stringify(list));
+    this.saveJSON("objects.json", list);
+  }
+
+  staticDir(dir) {
+    const path = "../static/" + dir;
+    if (!fs.existsSync(path)) fs.mkdirSync(path);
+  }
+
+  saveJSON(path, data) {
+    const minPath = "../static/" + path;
+    const prettyPath = "../static/pretty-json/" + path;
+    fs.writeFileSync(minPath, JSON.stringify(data));
+    fs.writeFileSync(prettyPath, JSON.stringify(data, null, 2));
   }
 
   sortedObjects() {
