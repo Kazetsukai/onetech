@@ -30,7 +30,6 @@
 <script>
 import _ from 'lodash';
 
-import GameDataService from './services/GameDataService';
 import EventBus from './services/EventBus';
 
 import ObjectView from './components/ObjectView';
