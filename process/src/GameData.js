@@ -45,10 +45,9 @@ class GameData {
   exportObjects() {
     var list = [];
     for (var id in this.objects) {
-      const object = this.objects[id];
-      list.push({id: object.data.id, name: object.data.name})
       const path = "../static/objects/" + id + ".json";
-      fs.writeFileSync(path, JSON.stringify(object.exportData()));
+      list.push(this.objects[id].simpleData());
+      fs.writeFileSync(path, JSON.stringify(this.objects[id].fullData()));
     }
     fs.writeFileSync("../static/objects.json", JSON.stringify(list));
   }

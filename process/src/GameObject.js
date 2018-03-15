@@ -123,14 +123,22 @@ class GameObject {
     return {minX, minY, maxX, maxY};
   }
 
-  exportData() {
-    const transitionsToward = this.transitionsToward.map(t => t.exportData());
-    const transitionsAway = this.transitionsAway.map(t => t.exportData());
+  fullData() {
+    const transitionsToward = this.transitionsToward.map(t => t.data());
+    const transitionsAway = this.transitionsAway.map(t => t.data());
     return {...this.data,
-      hasSprite: (this.sprites.length > 0),
+      hasSprite: this.hasSprite(),
       transitionsToward,
       transitionsAway,
     };
+  }
+
+  simpleData() {
+    return {id: this.data.id, name: this.data.name, hasSprite: this.hasSprite()};
+  }
+
+  hasSprite() {
+    return this.sprites.length > 0;
   }
 }
 

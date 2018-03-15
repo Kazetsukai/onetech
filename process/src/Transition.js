@@ -60,12 +60,12 @@ class Transition {
     }
   }
 
-  exportData() {
+  data() {
     return {
-      actor: this.exportObject(this.actor),
-      target: this.exportObject(this.target),
-      newActor: this.exportObject(this.newActor),
-      newTarget: this.exportObject(this.newTarget),
+      actor: this.objectData(this.actor),
+      target: this.objectData(this.target),
+      newActor: this.objectData(this.newActor),
+      newTarget: this.objectData(this.newTarget),
       targetRemains: this.targetRemains,
       hand: this.hand,
       tool: this.tool,
@@ -73,10 +73,8 @@ class Transition {
     }
   }
 
-  exportObject(object) {
-    if (object) {
-      return {id: object.data.id, name: object.data.name};
-    }
+  objectData(object) {
+    if (object) return object.simpleData();
   }
 }
 

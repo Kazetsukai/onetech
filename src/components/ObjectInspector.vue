@@ -1,9 +1,9 @@
 <template>
   <div class="objectInspector">
     <div class="panels">
-      <div class="from transitions">
-        <div v-for="trans in object.transitionsTo">
-          <TransitionView :transition="trans" :selectedObject="object" />
+      <div class="toward transitions">
+        <div v-for="trans in object.transitionsToward">
+          <TransitionView :transition="trans" :selectedObjectID="object.id" />
         </div>
       </div>
       <div class="info">
@@ -15,9 +15,9 @@
           <li v-if="object.heatValue > 0">Heat: {{object.heatValue}}</li>
         </ul>
       </div>
-      <div class="to transitions">
-        <div v-for="trans in object.transitionsFrom">
-          <TransitionView :transition="trans" :selectedObject="object" />
+      <div class="away transitions">
+        <div v-for="trans in object.transitionsAway">
+          <TransitionView :transition="trans" :selectedObjectID="object.id" />
         </div>
       </div>
     </div>
