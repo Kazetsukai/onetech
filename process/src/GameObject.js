@@ -1,6 +1,7 @@
 "use strict";
 
 const fs = require('fs');
+const _ = require('lodash');
 
 const Sprite = require('./Sprite');
 
@@ -18,6 +19,7 @@ class GameObject {
     this.sprites = [];
     this.transitionsToward = [];
     this.transitionsAway = [];
+    this.categories = [];
     this.parseData(dataText);
   }
 
@@ -65,29 +67,93 @@ class GameObject {
     this.sprites.push(new Sprite(lines));
   }
 
+  simpleData() {
+    return {id: this.data.id, name: this.data.name, hasSprite: this.hasSprite()};
+  }
+
   fullData() {
-    const transitionsToward = this.transitionsToward.map(t => t.data());
-    const transitionsAway = this.transitionsAway.map(t => t.data());
+    const transitionsToward = this.transitionsData(this.transitionsToward);
+    const transitionsAway = this.transitionsData(this.transitionsAway);
     return {...this.data,
       hasSprite: this.hasSprite(),
+      complexity: this.complexity,
       transitionsToward,
       transitionsAway,
     };
   }
 
-  simpleData() {
-    return {id: this.data.id, name: this.data.name, hasSprite: this.hasSprite()};
+  transitionsData(transitions) {
+    return _.sortBy(transitions, (t) => t.complexity ? t.complexity : 100000).map(t => t.data());
   }
 
   hasSprite() {
     return this.sprites.length > 0;
   }
 
-  sortWeight() {
-    if (this.data.name.includes('@')) {
-      return 0;
+  sortWeight() { // TODO: Improve object sorting
+    return this.sortTypeWeight() * 100000 +
+           this.sortComplexityWeight() * 100 +
+           this.sortUsefullnessWeight();
+  }
+
+  sortTypeWeight() {
+    if (this.category) {
+      return 9;
+    } else if (this.isNatural() || this.complexity == 1) {
+      return 8;
+    } else if (this.clothing == "y") {
+      return 4;
+    } else if (this.isTool()) {
+      return 3;
     } else {
-      return this.transitionsToward.length + this.transitionsAway.length;
+      return 5;
+    }
+  }
+
+  sortComplexityWeight() {
+    return this.complexity > 0 ? this.complexity : 100000;
+  }
+
+  sortUsefullnessWeight() {
+    return -this.transitionsAway.length;
+  }
+
+  isTool() {
+    for (var transition of this.transitionsAway) {
+      if (transition.actor == this && transition.tool) return true;
+    }
+    return false;
+  }
+
+  isNatural() {
+    return this.data.mapChance > 0;
+  }
+
+  calculateComplexity(parentObjects) {
+    if (!this.calculatedComplexity) {
+      this.complexity = this.calculateComplexityWithTransitions(parentObjects);
+      // Circular references should be recalculated later
+      this.calculatedComplexity = (this.complexity != -1);
+    }
+    return this.complexity;
+  }
+
+  calculateComplexityWithTransitions(parentObjects) {
+    if (parentObjects.length > 20 || parentObjects.includes(this)) {
+      return -1; // We are in too deep or have a circular reference
+    }
+    if (this.isNatural()) {
+      return 1; // Natural objects have 1 complexity for itself
+    }
+    const parents = [...parentObjects, this];
+    const complexities = this.transitionsToward.map(t => t.calculateComplexity(parents));
+    const validComplexities = complexities.filter(c => c > 0);
+    if (validComplexities.length) {
+      return Math.min(...validComplexities);
+    } else if (complexities.find(c => c == -1)) {
+      return -1; // Pass circular reference up the chain
+    } else {
+      return null; // Not craftable
     }
   }
 }

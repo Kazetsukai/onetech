@@ -5,6 +5,7 @@ const fs = require('fs');
 const _ = require('lodash');
 
 const GameObject = require('./GameObject');
+const Category = require('./Category');
 const Transition = require('./Transition');
 const SpriteProcessor = require('./SpriteProcessor');
 
@@ -37,11 +38,24 @@ class GameData {
     });
   }
 
+  importCategories() {
+    this.eachFileInDir("categories", (content, _filename) => {
+      const category = new Category(content);
+      category.addToObjects(this.objects);
+    });
+  }
+
   importTransitions() {
     this.eachFileInDir("transitions", (content, filename) => {
       const transition = new Transition(content, filename);
       transition.addToObjects(this.objects);
     });
+  }
+
+  calculateObjectComplexity() {
+    for (var id in this.objects) {
+      this.objects[id].calculateComplexity([]);
+    }
   }
 
   exportObjects() {
@@ -70,7 +84,7 @@ class GameData {
   }
 
   sortedObjects() {
-    return _.sortBy(this.objects, o => o.sortWeight()).reverse();
+    return _.sortBy(this.objects, o => o.sortWeight());
   }
 
   processSprites() {

@@ -2,7 +2,7 @@ const GameData = require('./src/GameData');
 
 const gameData = new GameData();
 
-if (process.argv[2] == 'download') {
+if (process.argv.includes('download')) {
   console.log("Downloading data...");
   gameData.download();
 
@@ -12,14 +12,16 @@ if (process.argv[2] == 'download') {
 
 console.log("Importing objects...");
 gameData.importObjects();
-
-console.log("Importing transitions...");
+gameData.importCategories();
 gameData.importTransitions();
+
+console.log("Calculating object complexity...");
+gameData.calculateObjectComplexity();
 
 console.log("Exporting objects...");
 gameData.exportObjects();
 
-if (process.argv[2] != 'skip') {
+if (!process.argv.includes('skip')) {
   console.log("Processing sprites...");
   gameData.processSprites();
 }
