@@ -2,7 +2,7 @@
   <div class="objectInspector">
     <div class="panels">
       <div class="toward transitions">
-        <div v-for="trans in object.transitionsToward">
+        <div v-for="trans in objectData.transitionsToward">
           <TransitionView :transition="trans" :selectedObjectID="object.id" />
         </div>
       </div>
@@ -10,13 +10,14 @@
         <h2>{{object.name.split(' - ')[0]}}</h2>
         <h3>{{object.name.split(' - ')[1]}}</h3>
         <ObjectImage :object="object" />
+        <h3 v-if="objectData.loading">Loading...</h3>
         <ul>
-          <li v-if="object.foodValue > 0">Food: {{object.foodValue}}</li>
-          <li v-if="object.heatValue > 0">Heat: {{object.heatValue}}</li>
+          <li v-if="objectData.foodValue > 0">Food: {{objectData.foodValue}}</li>
+          <li v-if="objectData.heatValue > 0">Heat: {{objectData.heatValue}}</li>
         </ul>
       </div>
       <div class="away transitions">
-        <div v-for="trans in object.transitionsAway">
+        <div v-for="trans in objectData.transitionsAway">
           <TransitionView :transition="trans" :selectedObjectID="object.id" />
         </div>
       </div>
@@ -29,7 +30,7 @@ import ObjectImage from './ObjectImage';
 import TransitionView from './TransitionView';
 
 export default {
-  props: ['object'],
+  props: ['object', 'objectData'],
   components: {
     ObjectImage,
     TransitionView

@@ -5,14 +5,13 @@
     <h2 v-if="!objects">Loading...</h2>
 
     <div v-if="objects">
-      <ObjectSearch :objects="nonNilObjects" :selectedObjectID="selectedObjectID" />
+      <ObjectSearch :objects="nonNilObjects" :selectedObject="selectedObject" />
 
-      <div v-if="selectedObjectID">
-        <h2 v-if="!selectedObject">Loading...</h2>
-        <ObjectInspector v-if="selectedObject" :object="selectedObject" />
+      <div v-if="selectedObject">
+        <ObjectInspector :object="selectedObject" :objectData="selectedObjectData || {loading: true}" />
       </div>
 
-      <div v-if="!selectedObjectID">
+      <div v-if="!selectedObject">
         <div class="objectList">
           <div class="object" v-for="object in firstFewObjects" >
             <ObjectView :object="object" />
@@ -43,8 +42,8 @@ export default {
       msg: 'Crafting reference for One Hour One Life',
       objects: null,
       showAmount: 90,
-      selectedObjectID: null,
       selectedObject: null,
+      selectedObjectData: null,
       currentRoute: window.location.hash
     }
   },
@@ -55,26 +54,29 @@ export default {
         return data.json();
       }).then(data => {
         vue.objects = data;
+        vue.parseHash();
       });
     },
-    loadSelectedObject () {
+    loadSelectedObjectData () {
       let vue = this;
-      fetch("./static/objects/" + this.selectedObjectID + ".json").then(data => {
-        return data.json();
-      }).then(data => {
-        vue.selectedObject = data;
-      });
+      if (this.selectedObject) {
+        vue.selectedObjectData = null;
+        fetch("./static/objects/" + this.selectedObject.id + ".json").then(data => {
+          return data.json();
+        }).then(data => {
+          vue.selectedObjectData = data;
+        });
+      }
     },
     parseHash () {
+      if (!this.objects) return;
       if (!window.location.hash) {
-        this.selectedObjectID = null;
         this.selectedObject = null;
       } else {
-        let objectID = window.location.hash.split('#')[1].split('/')[0];
-        if (objectID != this.selectedObjectID) {
-          this.selectedObjectID = objectID;
-          this.selectedObject = null;
-          this.loadSelectedObject();
+        let id = window.location.hash.split('#')[1].split('/')[0];
+        if (!this.selectedObject || id != this.selectedObject.id) {
+          this.selectedObject = _.find(this.objects, o => o.id == id);
+          this.loadSelectedObjectData();
         }
       }
     }

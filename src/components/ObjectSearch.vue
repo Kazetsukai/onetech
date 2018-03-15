@@ -17,16 +17,8 @@ import VueSelect from './Select';
 import ObjectImage from './ObjectImage';
 
 export default {
-  props: ['objects', 'selectedObjectID'],
-  data () {
-    return {
-      tmpSelect: this.selectedObject
-    };
-  },
+  props: ['objects', 'selectedObject'],
   computed: {
-    selectedObject () {
-      return _.find(this.objects, o => o.id === this.selectedObjectID);
-    },
     sortedObjects () {
       return _.sortBy(this.objects, o => o.name.length);
     }
