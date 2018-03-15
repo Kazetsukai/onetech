@@ -1,6 +1,6 @@
 <template>
   <div class="objectSearch">
-    <VueSelect label="name" :options="objects" v-model="selectedObject" :on-change="selectObject">
+    <VueSelect label="name" :options="sortedObjects" v-model="selectedObject" :on-change="selectObject">
       <template slot="option" slot-scope="option">
         <ObjectImage :object="option" />
         {{ option.name }}
@@ -26,6 +26,9 @@ export default {
   computed: {
     selectedObject () {
       return _.find(this.objects, o => o.id === this.selectedObjectID);
+    },
+    sortedObjects () {
+      return _.sortBy(this.objects, o => o.name.length);
     }
   },
   components: {
