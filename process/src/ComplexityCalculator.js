@@ -44,10 +44,11 @@ class ComplexityCalculator {
 
     } else if (actorComplexity.calculated && targetComplexity.calculated) {
       transition.complexity = actorComplexity.combine(targetComplexity)
-      if (transition.tool)
-        transition.complexity.addTool(transition.actor);
-      if (transition.targetRemains)
-        transition.complexity.addTool(transition.target);
+
+      if (transition.newActor && transition.newActor.complexity.calculated)
+        transition.complexity.addTool(transition.newActor);
+      if (transition.newTarget && transition.newTarget.complexity.calculated)
+        transition.complexity.addTool(transition.newTarget);
     }
 
     if (transition.complexity.calculated) {

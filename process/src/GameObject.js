@@ -78,6 +78,7 @@ class GameObject {
     return {...this.data,
       hasSprite: this.hasSprite(),
       complexity: this.complexity.value,
+      tools: this.complexity.toolsData(),
       transitionsToward,
       transitionsAway,
     };

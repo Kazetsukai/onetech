@@ -13,15 +13,38 @@ class Complexity {
   // Returns a new complexity by adding the values of the two
   combine(complexity) {
     const newComplexity = new Complexity({});
-    if (this.value && complexity.value)
+    if (this.value && complexity.value) {
       newComplexity.value = this.value + complexity.value;
+      newComplexity.value -= this.overlappingToolValue(complexity.tools);
+    }
     newComplexity.calculated = this.calculated && complexity.calculated;
-    newComplexity.tools = this.tools.concat(complexity.tools);
+    newComplexity.addTools(this.tools);
+    newComplexity.addTools(complexity.tools);
     return newComplexity;
   }
 
+  overlappingToolValue(otherTools) {
+    var value = 0;
+    for (var tool of this.tools) {
+      if (otherTools.includes(tool))
+        value += tool.complexity.value - tool.complexity.overlappingToolValue(this.tools);
+    }
+    return value;
+  }
+
+  addTools(tools) {
+    for (var tool of tools) {
+      this.addTool(tool);
+    }
+  }
+
   addTool(tool) {
-    if (!this.tools.includes(tool)) this.tools.push(tool);
+    if (tool.complexity.value < this.value && !this.tools.includes(tool))
+      this.tools.push(tool);
+  }
+
+  toolsData() {
+    return this.tools.map(t => t.simpleData());
   }
 
   // For use in an array sort function, returns 1, -1 or 0 depending
