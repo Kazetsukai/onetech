@@ -1,9 +1,9 @@
 "use strict";
 
 const fs = require('fs');
-const _ = require('lodash');
 
 const Sprite = require('./Sprite');
+const Complexity = require('./Complexity');
 
 const BIOMES = {
   0: 'grassland',
@@ -21,6 +21,7 @@ class GameObject {
     this.transitionsAway = [];
     this.categories = [];
     this.parseData(dataText);
+    this.complexity = new Complexity({});
   }
 
   parseData(dataText) {
@@ -76,14 +77,15 @@ class GameObject {
     const transitionsAway = this.transitionsData(this.transitionsAway);
     return {...this.data,
       hasSprite: this.hasSprite(),
-      complexity: this.complexity,
+      complexity: this.complexity.value,
       transitionsToward,
       transitionsAway,
     };
   }
 
   transitionsData(transitions) {
-    return _.sortBy(transitions, (t) => t.complexity ? t.complexity : 100000).map(t => t.data());
+    transitions.sort((a,b) => a.complexity.compare(b.complexity));
+    return transitions.map(t => t.data());
   }
 
   hasSprite() {
@@ -99,7 +101,7 @@ class GameObject {
   sortTypeWeight() {
     if (this.category) {
       return 9;
-    } else if (this.isNatural() || this.complexity == 1) {
+    } else if (this.isNatural() || this.complexity.value == 1) {
       return 8;
     } else if (this.clothing == "y") {
       return 4;
@@ -111,7 +113,7 @@ class GameObject {
   }
 
   sortComplexityWeight() {
-    return this.complexity > 0 ? this.complexity : 100000;
+    return this.complexity.value > 0 ? this.complexity.value : 100000;
   }
 
   sortUsefullnessWeight() {
@@ -127,34 +129,6 @@ class GameObject {
 
   isNatural() {
     return this.data.mapChance > 0;
-  }
-
-  calculateComplexity(parentObjects) {
-    if (!this.calculatedComplexity) {
-      this.complexity = this.calculateComplexityWithTransitions(parentObjects);
-      // Circular references should be recalculated later
-      this.calculatedComplexity = (this.complexity != -1);
-    }
-    return this.complexity;
-  }
-
-  calculateComplexityWithTransitions(parentObjects) {
-    if (parentObjects.length > 20 || parentObjects.includes(this)) {
-      return -1; // We are in too deep or have a circular reference
-    }
-    if (this.isNatural()) {
-      return 1; // Natural objects have 1 complexity for itself
-    }
-    const parents = [...parentObjects, this];
-    const complexities = this.transitionsToward.map(t => t.calculateComplexity(parents));
-    const validComplexities = complexities.filter(c => c > 0);
-    if (validComplexities.length) {
-      return Math.min(...validComplexities);
-    } else if (complexities.find(c => c == -1)) {
-      return -1; // Pass circular reference up the chain
-    } else {
-      return null; // Not craftable
-    }
   }
 }
 

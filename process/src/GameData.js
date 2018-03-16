@@ -7,6 +7,7 @@ const _ = require('lodash');
 const GameObject = require('./GameObject');
 const Category = require('./Category');
 const Transition = require('./Transition');
+const ComplexityCalculator = require('./ComplexityCalculator');
 const SpriteProcessor = require('./SpriteProcessor');
 
 class GameData {
@@ -53,9 +54,8 @@ class GameData {
   }
 
   calculateObjectComplexity() {
-    for (var id in this.objects) {
-      this.objects[id].calculateComplexity([]);
-    }
+    var calculator = new ComplexityCalculator();
+    calculator.calculate(Object.values(this.objects));
   }
 
   exportObjects() {

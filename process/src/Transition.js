@@ -1,7 +1,10 @@
 "use strict";
 
+const Complexity = require('./Complexity');
+
 class Transition {
   constructor(dataText, filename) {
+    this.complexity = new Complexity({});
     this.parseFilename(filename);
     this.parseData(dataText);
   }
@@ -107,20 +110,6 @@ class Transition {
 
   objectData(object) {
     if (object) return object.simpleData();
-  }
-
-  calculateComplexity(parentObjects) {
-    if (this.complexity) return this.complexity;
-    const actorComplexity = this.actor ? this.actor.calculateComplexity(parentObjects) : 0;
-    const targetComplexity = this.target ? this.target.calculateComplexity(parentObjects) : 0;
-    if (actorComplexity == -1 || targetComplexity == -1) {
-      return -1;
-    } else if (actorComplexity !== null && targetComplexity !== null) {
-      this.complexity = actorComplexity + targetComplexity;
-      return this.complexity;
-    } else {
-      return null; // Uncraftable
-    }
   }
 }
 
