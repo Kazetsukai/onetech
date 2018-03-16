@@ -93,31 +93,7 @@ class GameObject {
   }
 
   sortWeight() { // TODO: Improve object sorting
-    return this.sortTypeWeight() * 100000 +
-           this.sortComplexityWeight() * 100 +
-           this.sortUsefullnessWeight();
-  }
-
-  sortTypeWeight() {
-    if (this.category) {
-      return 9;
-    } else if (this.isNatural() || this.complexity.value == 1) {
-      return 8;
-    } else if (this.clothing == "y") {
-      return 4;
-    } else if (this.isTool()) {
-      return 3;
-    } else {
-      return 5;
-    }
-  }
-
-  sortComplexityWeight() {
-    return this.complexity.value > 0 ? this.complexity.value : 100000;
-  }
-
-  sortUsefullnessWeight() {
-    return -this.transitionsAway.length;
+    return -this.complexity.value;
   }
 
   isTool() {

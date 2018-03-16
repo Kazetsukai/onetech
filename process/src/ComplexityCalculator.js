@@ -3,7 +3,7 @@
 const Complexity = require('./Complexity');
 
 class ComplexityCalculator {
-  // Calculates the complexity for the given objects.
+  // Calculates the complexity starting with natural and uncraftable objects.
   calculate(objects) {
     for (var object of objects) {
       if (object.isNatural()) {
@@ -15,11 +15,10 @@ class ComplexityCalculator {
     this.reportUncalculated(objects.filter(o => !o.complexity.calculated));
   }
 
-  // Sets the complexity value, marks it as calculated, and attempts
-  // to calculate the transition, queuing the result if calculated
+  // Sets the object complexity if it is lower than previously set
+  // It then calculates the complexity for each "away" transition
   setObjectComplexity(object, complexity) {
     if (!object.complexity.calculated || complexity.compare(object.complexity) < 0) {
-      // if (object.data.id == '445') debugger;
       object.complexity = complexity;
       for (var transition of object.transitionsAway) {
         this.calculateTransition(transition);
@@ -28,16 +27,21 @@ class ComplexityCalculator {
   }
 
   // Calculates the transition complexity by combining the actor and target complexities
+  // Tools are no counted toward complexity if used in previous complexity
+  // If the complexity was calculated, it sets it to the resulting object
   calculateTransition(transition) {
     const actorComplexity = transition.actor && transition.actor.complexity;
     const targetComplexity = transition.target && transition.target.complexity;
 
     if (!actorComplexity || !targetComplexity) {
       transition.complexity = actorComplexity || targetComplexity;
+
     } else if (actorComplexity.tools.includes(transition.target)) {
       transition.complexity = actorComplexity;
+
     } else if (targetComplexity.tools.includes(transition.actor)) {
       transition.complexity = targetComplexity;
+
     } else if (actorComplexity.calculated && targetComplexity.calculated) {
       transition.complexity = actorComplexity.combine(targetComplexity)
       if (transition.tool)
