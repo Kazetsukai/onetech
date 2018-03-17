@@ -2,7 +2,8 @@
   <div class="techTree">
     <h2>{{object.name}}</h2>
     <h3>Tech Tree</h3>
-    <TechTreeNode :object="object" :parentObjects="[]" />
+    <TechTreeNode :object="object" :parents="objectData.techTree" />
+    <h3 v-if="objectData.loading">Loading...</h3>
   </div>
 </template>
 
@@ -10,7 +11,7 @@
 import TechTreeNode from './TechTreeNode';
 
 export default {
-  props: ['object'],
+  props: ['object', 'objectData'],
   components: {
     TechTreeNode
   }

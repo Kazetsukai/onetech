@@ -58,6 +58,11 @@ class GameData {
     calculator.calculate(Object.values(this.objects));
   }
 
+  generateTechTree() {
+    var generator = new TechTreeGenerator();
+    generator.generate(Object.values(this.objects));
+  }
+
   exportObjects() {
     this.staticDir("objects");
     this.staticDir("pretty-json");

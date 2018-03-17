@@ -16,7 +16,7 @@
           <li v-if="objectData.heatValue > 0">Heat: {{objectData.heatValue}}</li>
           <!-- <li v-if="objectData.complexity > 0">Complexity: {{objectData.complexity}}</li> -->
         </ul>
-        <div class="techTree" v-if="object.transitionsTo.length > 0">
+        <div class="techTree" v-if="objectData.techTree">
           <div class="button" @click="goToTechTree()">Tech Tree</div>
         </div>
       </div>

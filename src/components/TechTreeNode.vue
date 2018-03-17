@@ -1,60 +1,21 @@
 <template>
   <div class="node">
     <ObjectImage :object="object" clickable="true" hover="true" class="object" />
-    <div class="children" v-if="leftChild || rightChild">
-      <TechTreeNode v-if="leftChild" :object="leftChild" :parentObjects="[...parentObjects, object]" />
-      <TechTreeNode v-if="rightChild" :object="rightChild" :parentObjects="[...parentObjects, object]" />
+    <div class="parents" v-if="parents">
+      <TechTreeNode v-for="parent in parents" :object="parent" :parents="parent.parents" />
+    </div>
     </div>
   </div>
 </template>
 
 <script>
-import _ from 'lodash';
 import ObjectImage from './ObjectImage';
 
 export default {
   name: 'TechTreeNode',
-  props: ['object', 'parentObjects'],
+  props: ['object', 'parents'],
   components: {
     ObjectImage
-  },
-  computed: {
-    leftChild () {
-      if (this.preferredTransition && !this.isParentObject(this.preferredTransition.actor)) {
-        return this.preferredTransition.actor;
-      }
-    },
-    rightChild () {
-      if (this.preferredTransition && !this.isParentObject(this.preferredTransition.target)) {
-        return this.preferredTransition.target;
-      }
-    },
-    preferredTransition () {
-      if (this.parentObjects.length < 5 && !this.object.natural) {
-        let object = this.object;
-        return _.sortBy(this.object.transitionsTo, function(transition) {
-          var weight = 0;
-          if (!transition.actor || !transition.target) {
-            weight += 1;
-          }
-          if (transition.newActor) {
-            weight += 1;
-          }
-          if (transition.decay) {
-            weight += 1;
-          }
-          if (transition.newTarget != object) {
-            weight += 1;
-          }
-          return weight;
-        })[0];
-      }
-    },
-  },
-  methods: {
-    isParentObject (object) {
-      return _.indexOf(this.parentObjects, object) >= 0;
-    }
   }
 }
 </script>
@@ -83,12 +44,6 @@ export default {
     left: 50%;
     border-left: 1px solid #555;
   }
-  .node .node:only-child::after, .node .node:only-child::before {
-    display: none;
-  }
-  .node .node:only-child {
-    padding-top: 0;
-  }
   .node .node:first-child::before, .node .node:last-child::after {
     border: 0 none;
   }
@@ -96,23 +51,30 @@ export default {
     border-right: 1px solid #555;
     border-radius: 0 5px 0 0;
   }
-  .node .node:first-child::after{
+  .node .node:first-child::after {
     border-radius: 5px 0 0 0;
   }
+  .node .node:only-child::before {
+    border-radius: 0;
+    right: 49.5%;
+  }
+  .node .node:only-child::after {
+    display: none;
+  }
 
-  .children {
+  .parents {
     position: relative;
     padding: 1em 0;
     white-space: nowrap;
     margin: 0 auto;
     text-align: center;
   }
-  .children::after {
+  .parents::after {
     content: '';
     display: table;
     clear: both;
   }
-  .children::before {
+  .parents::before {
     content: '';
     position: absolute;
     top: 0;
@@ -135,7 +97,3 @@ export default {
     background-color: #666;
   }
 </style>
-
-
-
-

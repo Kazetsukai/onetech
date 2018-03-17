@@ -19,7 +19,7 @@
                 v-if="transition.target"
                 hover="true"
                 :object="transition.target"
-                :clickable="transition.target != selectedObject" />
+                :clickable="transition.targetID != selectedObjectID" />
 
     <ObjectImage class="target transitionObject"
                 v-if="!transition.target"
@@ -38,7 +38,7 @@
                 v-if="transition.newTarget && (!transition.targetRemains || transition.target.numUses > 0)"
                 hover="true" :usedUp="!transition.newTarget"
                 :object="transition.newTarget"
-                :clickable="transition.newTarget != selectedObject" />
+                :clickable="transition.newTargetID != selectedObjectID" />
     <ObjectImage class="newTarget transitionObject"
                 v-if="!transition.targetRemains && !transition.newTarget"
                 ground="true"
