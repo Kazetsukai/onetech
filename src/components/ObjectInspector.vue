@@ -1,26 +1,28 @@
 <template>
   <div class="objectInspector">
     <div class="panels">
-      <div class="from transitions">
-        <div v-for="trans in object.transitionsTo">
-          <TransitionView :transition="trans" :selectedObject="object" />
+      <div class="toward transitions">
+        <div v-for="trans in objectData.transitionsToward">
+          <TransitionView :transition="trans" :selectedObjectID="object.id" />
         </div>
       </div>
       <div class="info">
         <h2>{{object.name.split(' - ')[0]}}</h2>
         <h3>{{object.name.split(' - ')[1]}}</h3>
         <ObjectImage :object="object" />
+        <h3 v-if="objectData.loading">Loading...</h3>
         <ul>
-          <li v-if="object.foodValue > 0">Food: {{object.foodValue}}</li>
-          <li v-if="object.heatValue > 0">Heat: {{object.heatValue}}</li>
+          <li v-if="objectData.foodValue > 0">Food: {{objectData.foodValue}}</li>
+          <li v-if="objectData.heatValue > 0">Heat: {{objectData.heatValue}}</li>
+          <!-- <li v-if="objectData.complexity > 0">Complexity: {{objectData.complexity}}</li> -->
         </ul>
         <div class="techTree" v-if="object.transitionsTo.length > 0">
           <div class="button" @click="goToTechTree()">Tech Tree</div>
         </div>
       </div>
-      <div class="to transitions">
-        <div v-for="trans in object.transitionsFrom">
-          <TransitionView :transition="trans" :selectedObject="object" />
+      <div class="away transitions">
+        <div v-for="trans in objectData.transitionsAway">
+          <TransitionView :transition="trans" :selectedObjectID="object.id" />
         </div>
       </div>
     </div>
@@ -33,7 +35,7 @@ import TransitionView from './TransitionView';
 import EventBus from '../services/EventBus';
 
 export default {
-  props: ['object'],
+  props: ['object', 'objectData'],
   components: {
     ObjectImage,
     TransitionView
@@ -51,8 +53,6 @@ export default {
 
 <style scoped>
   .objectInspector {
-    width: 100%;
-
     display: flex;
     flex-direction: column;
     align-content: center;
@@ -68,6 +68,7 @@ export default {
 
   .info {
     flex: 1 1 0;
+    min-width: 220px;
 
     background-color: #333;
     margin: 10px;
@@ -135,5 +136,18 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: center;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .panels {
+      flex-direction: column;
+    }
+    .panels .transitions {
+      width: 100%;
+    }
+
+    .info {
+      order: -1;
+    }
   }
 </style>

@@ -2,14 +2,14 @@
   <div id="app">
     <h1>{{ msg }}</h1>
 
-    <h2 v-if="!gameData">Loading...</h2>
+    <h2 v-if="!objects">Loading...</h2>
 
-    <div v-if="gameData">
+    <div v-if="objects">
       <ObjectSearch :objects="nonNilObjects" :selectedObject="selectedObject" />
 
       <div v-if="selectedObject">
-        <TechTree :object="selectedObject" v-if="showTechTree" />
-        <ObjectInspector :object="selectedObject" v-else />
+        <TechTree :object="selectedObject" :objectData="selectedObjectData" v-if="showTechTree" />
+        <ObjectInspector :object="selectedObject" :objectData="selectedObjectData" v-else />
       </div>
 
       <div v-if="!selectedObject">
@@ -30,7 +30,6 @@
 <script>
 import _ from 'lodash';
 
-import GameDataService from './services/GameDataService';
 import EventBus from './services/EventBus';
 
 import ObjectView from './components/ObjectView';
@@ -43,47 +42,61 @@ export default {
   data () {
     return {
       msg: 'Crafting reference for One Hour One Life',
-      gameData: null,
+      objects: null,
       showAmount: 90,
       selectedObject: null,
+      selectedObjectData: null,
       currentRoute: window.location.hash
     }
   },
   methods: {
-    load () {
+    loadObjects () {
       let vue = this;
-
-      vue.gameData = null;
-
-      GameDataService.loadGameData()
-      .then(data => {
-        vue.gameData = data;
-        vue.objectFromUrl();
+      fetch("./static/objects.json").then(data => {
+        return data.json();
+      }).then(data => {
+        vue.objects = data;
+        vue.parseHash();
       });
     },
-    objectFromUrl () {
-      console.log("OBJECT FROM URL");
-      if (!this.gameData) return;
+    loadSelectedObjectData () {
+      let vue = this;
+      if (this.selectedObject) {
+        vue.selectedObjectData = null;
+        fetch("./static/objects/" + this.selectedObject.id + ".json").then(data => {
+          return data.json();
+        }).then(data => {
+          vue.selectedObjectData = data;
+        });
+      }
+    },
+    parseHash () {
+      if (!this.objects) return;
       if (!window.location.hash) {
         this.selectedObject = null;
+        this.showTechTree = false;
       } else {
-        console.log(window.location.hash);
         let path = window.location.hash.split('#')[1].split('/');
-        this.selectedObject = this.gameData.objectMap[path[0]];
-        this.showTechTree = (path[2] == "tech-tree");
+        if (!this.selectedObject || path[0] != this.selectedObject.id) {
+          this.selectedObject = _.find(this.objects, o => o.id == path[0]);
+          this.selectedObjectData = {loading: true};
+          this.showTechTree = (path[2] == "tech-tree");
+          this.loadSelectedObjectData();
+        }
       }
     }
   },
   computed: {
     nonNilObjects () {
-      return _.filter(this.gameData.objects, _.negate(_.isNil));
+      return _.filter(this.objects, _.negate(_.isNil));
     },
     firstFewObjects () {
       return _.take(this.nonNilObjects, this.showAmount);
     }
   },
   beforeMount () {
-    this.load();
+    this.loadObjects();
+    this.parseHash();
   },
   created () {
     let vue = this;
@@ -92,19 +105,19 @@ export default {
       if (object) {
         console.log("Object selected: " + object.name);
         window.location.hash = '#' + object.id + '/' + encodeURIComponent(object.name.split(' ').join('-'));
-      }
-      else {
+      } else {
         console.log("Object cleared");
         window.location.hash = '#';
       }
       vue.showAmount = 90;
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
     });
 
     EventBus.$on('visit-tech-tree', object => {
       window.location.hash = window.location.hash + '/tech-tree';
     });
 
-    window.onhashchange = () => vue.objectFromUrl();
+    window.onhashchange = () => vue.parseHash();
   },
   components: {
     ObjectView,
@@ -119,7 +132,8 @@ export default {
   body {
     background-color: #151515;
     margin: 0 auto;
-    width: 1024px;
+    padding: 0 20px;
+    max-width: 1024px;
     padding-left: calc(100vw - 100%);
   }
 
@@ -148,6 +162,15 @@ export default {
   }
 
   .object {
+    min-width: 200px;
+    width: 33.3333%;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .object {
+      min-width: 150px;
+      width: 50%;
+    }
   }
 
   .objectList {

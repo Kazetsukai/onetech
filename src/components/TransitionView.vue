@@ -13,7 +13,7 @@
                 v-if="transition.actor || transition.hand"
                 hand="true" hover="true"
                 :object="transition.actor"
-                :clickable="transition.actor && transition.actor != selectedObject" />
+                :clickable="transition.actor && transition.actor.id != selectedObjectID" />
     <span class="plus" v-if="transition.actor || transition.decay || transition.hand">+</span>
     <ObjectImage class="target transitionObject"
                 v-if="transition.target"
@@ -31,7 +31,7 @@
                 v-if="!transition.tool && !transition.decay"
                 hand="true" hover="true"
                 :object="transition.newActor"
-                :clickable="transition.newActor && transition.newActor != selectedObject" />
+                :clickable="transition.newActor && transition.newActor.id != selectedObjectID" />
 
     <!-- What does the target item become? -->
     <ObjectImage class="newTarget transitionObject"
@@ -50,7 +50,7 @@
 import ObjectImage from './ObjectImage';
 
 export default {
-  props: ['transition', 'selectedObject'],
+  props: ['transition', 'selectedObjectID'],
   components: {
     ObjectImage
   }
