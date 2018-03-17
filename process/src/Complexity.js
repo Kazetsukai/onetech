@@ -14,7 +14,7 @@ class Complexity {
   combine(complexity) {
     const newComplexity = new Complexity({});
     if (this.value && complexity.value) {
-      newComplexity.value = this.value + complexity.value;
+      newComplexity.value = this.value + complexity.value + 1;
       newComplexity.value -= this.overlappingToolValue(complexity.tools);
     }
     newComplexity.calculated = this.calculated && complexity.calculated;
