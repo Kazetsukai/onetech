@@ -76,7 +76,7 @@ export default {
   }
   .node .node:only-child::before {
     border-radius: 0;
-    right: 49.5%;
+    right: 50%;
   }
   .node .node:only-child::after {
     display: none;
@@ -98,7 +98,7 @@ export default {
     content: '';
     position: absolute;
     top: 0;
-    left: 50%;
+    left: calc(50% - 1px);
     border-left: 1px solid #555;
     width: 0;
     height: 12px;
