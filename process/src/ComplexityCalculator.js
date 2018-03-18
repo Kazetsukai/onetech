@@ -12,6 +12,7 @@ class ComplexityCalculator {
         this.setObjectComplexity(object, new Complexity({calculated: true})); // Uncraftable
       }
     }
+    this.sortObjectTransitions(objects);
     this.reportUncalculated(objects.filter(o => !o.complexity.calculated));
   }
 
@@ -62,6 +63,13 @@ class ComplexityCalculator {
   reportUncalculated(objects) {
     for (var object of objects) {
       console.log(object.data.id, object.data.name, "- Unable to calculate complexity");
+    }
+  }
+
+  sortObjectTransitions(objects) {
+    for (var object of objects) {
+      object.transitionsToward.sort((a,b) => a.complexity.compare(b.complexity));
+      object.transitionsAway.sort((a,b) => a.complexity.compare(b.complexity));
     }
   }
 }

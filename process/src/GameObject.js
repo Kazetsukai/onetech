@@ -73,20 +73,14 @@ class GameObject {
   }
 
   fullData() {
-    const transitionsToward = this.transitionsData(this.transitionsToward);
-    const transitionsAway = this.transitionsData(this.transitionsAway);
     return {...this.data,
       hasSprite: this.hasSprite(),
       complexity: this.complexity.value,
       tools: this.complexity.toolsData(),
-      transitionsToward,
-      transitionsAway,
+      techTree: this.techTreeParentsData(3),
+      transitionsToward: this.transitionsToward.map(t => t.data()),
+      transitionsAway: this.transitionsAway.map(t => t.data()),
     };
-  }
-
-  transitionsData(transitions) {
-    transitions.sort((a,b) => a.complexity.compare(b.complexity));
-    return transitions.map(t => t.data());
   }
 
   hasSprite() {
@@ -106,6 +100,27 @@ class GameObject {
 
   isNatural() {
     return this.data.mapChance > 0;
+  }
+
+  techTreeData(depth) {
+    return {
+      ...this.simpleData(),
+      parents: this.techTreeParentsData(depth - 1)
+    };
+  }
+
+  techTreeParentsData(depth) {
+    const transition = this.transitionsToward[0];
+    if (this.isNatural() || !transition)
+      return null;
+    if (depth == 0)
+      return []; // Empty array means tree goes deeper
+    var parents = [];
+    if (transition.actor)
+      parents.push(transition.actor.techTreeData(depth));
+    if (transition.target)
+      parents.push(transition.target.techTreeData(depth));
+    return parents;
   }
 }
 

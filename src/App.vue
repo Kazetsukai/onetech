@@ -8,7 +8,8 @@
       <ObjectSearch :objects="nonNilObjects" :selectedObject="selectedObject" />
 
       <div v-if="selectedObject">
-        <ObjectInspector :object="selectedObject" :objectData="selectedObjectData || {loading: true}" />
+        <TechTree :object="selectedObject" :objectData="selectedObjectData" v-if="showTechTree" />
+        <ObjectInspector :object="selectedObject" :objectData="selectedObjectData" v-else />
       </div>
 
       <div v-if="!selectedObject">
@@ -34,6 +35,7 @@ import EventBus from './services/EventBus';
 import ObjectView from './components/ObjectView';
 import ObjectSearch from './components/ObjectSearch';
 import ObjectInspector from './components/ObjectInspector';
+import TechTree from './components/TechTree';
 
 export default {
   name: 'app',
@@ -43,7 +45,8 @@ export default {
       objects: null,
       showAmount: 90,
       selectedObject: null,
-      selectedObjectData: null,
+      selectedObjectData: {loading: true},
+      showTechTree: false,
       currentRoute: window.location.hash
     }
   },
@@ -60,7 +63,7 @@ export default {
     loadSelectedObjectData () {
       let vue = this;
       if (this.selectedObject) {
-        vue.selectedObjectData = null;
+        vue.selectedObjectData = {loading: true};
         fetch("./static/objects/" + this.selectedObject.id + ".json").then(data => {
           return data.json();
         }).then(data => {
@@ -72,12 +75,14 @@ export default {
       if (!this.objects) return;
       if (!window.location.hash) {
         this.selectedObject = null;
+        this.showTechTree = false;
       } else {
-        let id = window.location.hash.split('#')[1].split('/')[0];
-        if (!this.selectedObject || id != this.selectedObject.id) {
-          this.selectedObject = _.find(this.objects, o => o.id == id);
+        let path = window.location.hash.split('#')[1].split('/');
+        if (!this.selectedObject || path[0] != this.selectedObject.id) {
+          this.selectedObject = _.find(this.objects, o => o.id == path[0]);
           this.loadSelectedObjectData();
         }
+        this.showTechTree = (path[2] == "tech-tree");
       }
     }
   },
@@ -100,8 +105,7 @@ export default {
       if (object) {
         console.log("Object selected: " + object.name);
         window.location.hash = '#' + object.id + '/' + encodeURIComponent(object.name.split(' ').join('-'));
-      }
-      else {
+      } else {
         console.log("Object cleared");
         window.location.hash = '#';
       }
@@ -109,12 +113,17 @@ export default {
       document.body.scrollTop = document.documentElement.scrollTop = 0;
     });
 
+    EventBus.$on('visit-tech-tree', object => {
+      window.location.hash = window.location.hash + '/tech-tree';
+    });
+
     window.onhashchange = () => vue.parseHash();
   },
   components: {
     ObjectView,
     ObjectSearch,
-    ObjectInspector
+    ObjectInspector,
+    TechTree
   }
 }
 </script>
@@ -152,18 +161,6 @@ export default {
     color: #42b983;
   }
 
-  .object {
-    min-width: 200px;
-    width: 33.3333%;
-  }
-
-  @media only screen and (max-width: 768px) {
-    .object {
-      min-width: 150px;
-      width: 50%;
-    }
-  }
-
   .objectList {
     background-color: #222;
     border-radius: 5px;
@@ -192,6 +189,18 @@ export default {
 
     > a {
       color: #ccc;
+    }
+  }
+
+  .objectList > .object {
+    min-width: 200px;
+    width: 33.3333%;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .objectList > .object {
+      min-width: 150px;
+      width: 50%;
     }
   }
 </style>

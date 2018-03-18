@@ -16,6 +16,9 @@
           <li v-if="objectData.heatValue > 0">Heat: {{objectData.heatValue}}</li>
           <!-- <li v-if="objectData.complexity > 0">Complexity: {{objectData.complexity}}</li> -->
         </ul>
+        <div class="techTree" v-if="objectData.techTree">
+          <img src="../assets/techtree.png" width="38" height="36" @click="goToTechTree()" title="Tech Tree" v-tippy />
+        </div>
       </div>
       <div class="away transitions">
         <div v-for="trans in objectData.transitionsAway">
@@ -29,6 +32,7 @@
 <script>
 import ObjectImage from './ObjectImage';
 import TransitionView from './TransitionView';
+import EventBus from '../services/EventBus';
 
 export default {
   props: ['object', 'objectData'],
@@ -39,6 +43,11 @@ export default {
   beforeMount () {
     console.dir(this.object);
   },
+  methods: {
+    goToTechTree () {
+      EventBus.$emit('visit-tech-tree', this.object);
+    }
+  }
 }
 </script>
 
@@ -83,9 +92,29 @@ export default {
     height: 256px;
   }
   .info > ul {
-    margin: 5px 30px 5px 30px;
+    padding: 0;
+    margin: 5px 30px;
     font-size: 1.3rem;
     list-style-type: none;
+  }
+  .info li {
+    text-align: center;
+  }
+
+  .info .techTree {
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  .info .techTree img {
+    padding: 8px 10px;
+    background-color: #505050;
+    border: 1px solid transparent;
+    border-radius: 5px;
+  }
+  .info .techTree img:hover {
+    border: 1px solid #eee;
+    background-color: #666;
   }
 
   .panels {
