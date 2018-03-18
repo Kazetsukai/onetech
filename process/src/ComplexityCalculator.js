@@ -34,13 +34,13 @@ class ComplexityCalculator {
     const targetComplexity = transition.target && transition.target.complexity;
 
     if (!actorComplexity || !targetComplexity) {
-      transition.complexity = actorComplexity || targetComplexity;
+      transition.complexity = (actorComplexity || targetComplexity).increment();
 
     } else if (actorComplexity.tools.includes(transition.target)) {
-      transition.complexity = actorComplexity;
+      transition.complexity = actorComplexity.increment();
 
     } else if (targetComplexity.tools.includes(transition.actor)) {
-      transition.complexity = targetComplexity;
+      transition.complexity = targetComplexity.increment();
 
     } else if (actorComplexity.calculated && targetComplexity.calculated) {
       transition.complexity = actorComplexity.combine(targetComplexity)

@@ -23,6 +23,17 @@ class Complexity {
     return newComplexity;
   }
 
+  increment() {
+    const newComplexity = this.clone();
+    if (newComplexity.value)
+      newComplexity.value += 1;
+    return newComplexity;
+  }
+
+  clone() {
+    return Object.assign(Object.create(Object.getPrototypeOf(this)), this);
+  }
+
   overlappingToolValue(otherTools) {
     var value = 0;
     for (var tool of this.tools) {
