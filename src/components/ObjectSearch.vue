@@ -29,8 +29,8 @@ export default {
   },
   methods: {
     selectObject (obj) {
-      console.log(obj);
-      EventBus.$emit('object-selected', obj);
+      if (obj != this.selectedObject)
+        EventBus.$emit('object-selected', obj);
     }
   }
 }
