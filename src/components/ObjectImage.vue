@@ -15,7 +15,7 @@ export default {
   props: ['object', 'clickable', 'hand', 'hover', 'decay', 'ground'],
   computed: {
     imageUrl () {
-      return this.object && this.object.sprites[0]
+      return this.object && this.object.hasSprite
         ? './static/sprites/obj_' + this.object.id + '.png'
         : 'about:blank';
     },

@@ -2,13 +2,13 @@
   <div id="app">
     <h1>{{ msg }}</h1>
 
-    <h2 v-if="!gameData">Loading...</h2>
+    <h2 v-if="!objects">Loading...</h2>
 
-    <div v-if="gameData">
+    <div v-if="objects">
       <ObjectSearch :objects="nonNilObjects" :selectedObject="selectedObject" />
 
       <div v-if="selectedObject">
-        <ObjectInspector :object="selectedObject" />
+        <ObjectInspector :object="selectedObject" :objectData="selectedObjectData || {loading: true}" />
       </div>
 
       <div v-if="!selectedObject">
@@ -29,7 +29,6 @@
 <script>
 import _ from 'lodash';
 
-import GameDataService from './services/GameDataService';
 import EventBus from './services/EventBus';
 
 import ObjectView from './components/ObjectView';
@@ -41,44 +40,58 @@ export default {
   data () {
     return {
       msg: 'Crafting reference for One Hour One Life',
-      gameData: null,
+      objects: null,
       showAmount: 90,
       selectedObject: null,
+      selectedObjectData: null,
       currentRoute: window.location.hash
     }
   },
   methods: {
-    load () {
+    loadObjects () {
       let vue = this;
-
-      vue.gameData = null;
-
-      GameDataService.loadGameData()
-      .then(data => {
-        vue.gameData = data;
-        vue.objectFromUrl();
+      fetch("./static/objects.json").then(data => {
+        return data.json();
+      }).then(data => {
+        vue.objects = data;
+        vue.parseHash();
       });
     },
-    objectFromUrl () {
-      if (!this.gameData) return;
+    loadSelectedObjectData () {
+      let vue = this;
+      if (this.selectedObject) {
+        vue.selectedObjectData = null;
+        fetch("./static/objects/" + this.selectedObject.id + ".json").then(data => {
+          return data.json();
+        }).then(data => {
+          vue.selectedObjectData = data;
+        });
+      }
+    },
+    parseHash () {
+      if (!this.objects) return;
       if (!window.location.hash) {
         this.selectedObject = null;
       } else {
-        let objid = window.location.hash.split('#')[1].split('/')[0];
-        this.selectedObject = this.gameData.objectMap[objid];
+        let id = window.location.hash.split('#')[1].split('/')[0];
+        if (!this.selectedObject || id != this.selectedObject.id) {
+          this.selectedObject = _.find(this.objects, o => o.id == id);
+          this.loadSelectedObjectData();
+        }
       }
     }
   },
   computed: {
     nonNilObjects () {
-      return _.filter(this.gameData.objects, _.negate(_.isNil));
+      return _.filter(this.objects, _.negate(_.isNil));
     },
     firstFewObjects () {
       return _.take(this.nonNilObjects, this.showAmount);
     }
   },
   beforeMount () {
-    this.load();
+    this.loadObjects();
+    this.parseHash();
   },
   created () {
     let vue = this;
@@ -96,7 +109,7 @@ export default {
       document.body.scrollTop = document.documentElement.scrollTop = 0;
     });
 
-    window.onhashchange = () => vue.objectFromUrl();
+    window.onhashchange = () => vue.parseHash();
   },
   components: {
     ObjectView,

@@ -1,6 +1,6 @@
 <template>
   <div class="objectSearch">
-    <VueSelect label="name" :options="objects" v-model="tmpSelect" :on-change="selectObject">
+    <VueSelect label="name" :options="sortedObjects" v-model="selectedObject" :on-change="selectObject">
       <template slot="option" slot-scope="option">
         <ObjectImage :object="option" />
         {{ option.name }}
@@ -18,14 +18,9 @@ import ObjectImage from './ObjectImage';
 
 export default {
   props: ['objects', 'selectedObject'],
-  data () {
-    return {
-      tmpSelect: this.selectedObject
-    };
-  },
-  watch: {
-    selectedObject (obj) {
-      this.tmpSelect = obj;
+  computed: {
+    sortedObjects () {
+      return _.sortBy(this.objects, o => o.name.length);
     }
   },
   components: {
