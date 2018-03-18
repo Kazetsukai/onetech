@@ -46,6 +46,7 @@ export default {
       showAmount: 90,
       selectedObject: null,
       selectedObjectData: {loading: true},
+      showTechTree: false,
       currentRoute: window.location.hash
     }
   },
@@ -79,9 +80,9 @@ export default {
         let path = window.location.hash.split('#')[1].split('/');
         if (!this.selectedObject || path[0] != this.selectedObject.id) {
           this.selectedObject = _.find(this.objects, o => o.id == path[0]);
-          this.showTechTree = (path[2] == "tech-tree");
           this.loadSelectedObjectData();
         }
+        this.showTechTree = (path[2] == "tech-tree");
       }
     }
   },
