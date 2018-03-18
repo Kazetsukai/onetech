@@ -122,7 +122,12 @@ export default {
     color: #555;
     cursor: default;
   }
+  .parents > .expand:hover {
+    color: #999;
+  }
   .parents > .expand.selected {
     color: #ccc;
+    margin-top: -6px;
+    font-size: 20px;
   }
 </style>

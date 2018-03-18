@@ -17,7 +17,7 @@
           <!-- <li v-if="objectData.complexity > 0">Complexity: {{objectData.complexity}}</li> -->
         </ul>
         <div class="techTree" v-if="objectData.techTree">
-          <div class="button" @click="goToTechTree()">Tech Tree</div>
+          <img src="../assets/techtree.png" width="38" height="36" @click="goToTechTree()" title="Tech Tree" v-tippy />
         </div>
       </div>
       <div class="away transitions">
@@ -102,21 +102,19 @@ export default {
   }
 
   .info .techTree {
-    margin-top: 10px;
+    margin-top: 20px;
     text-align: center;
   }
 
-  .info .button {
-    padding: 3px 10px;
+  .info .techTree img {
+    padding: 8px 10px;
     background-color: #505050;
+    border: 1px solid transparent;
     border-radius: 5px;
-    display: inline;
-    font-size: 1.2rem;
   }
-  .info .button:hover {
+  .info .techTree img:hover {
     border: 1px solid #eee;
     background-color: #666;
-    cursor: pointer;
   }
 
   .panels {
