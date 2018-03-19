@@ -14,6 +14,7 @@
         <ul>
           <li v-if="objectData.foodValue > 0">Food: {{objectData.foodValue}}</li>
           <li v-if="objectData.heatValue > 0">Heat: {{objectData.heatValue}}</li>
+          <li v-if="objectData.rValue > 0">Insulation: {{parseFloat(objectData.rValue)}}</li>
           <!-- <li v-if="objectData.complexity > 0">Complexity: {{objectData.complexity}}</li> -->
         </ul>
         <div class="techTree" v-if="objectData.techTree">
