@@ -116,6 +116,8 @@ class GameObject {
     if (depth == 0)
       return []; // Empty array means tree goes deeper
     var parents = [];
+    if (transition.decay)
+      parents.push({decay: transition.decay});
     if (transition.actor)
       parents.push(transition.actor.techTreeData(depth));
     if (transition.target)
