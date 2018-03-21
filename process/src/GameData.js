@@ -65,6 +65,7 @@ class GameData {
 
   exportObjects() {
     this.prepareStaticDir();
+    this.updateTimestamp();
     var list = [];
     const objects = this.sortedObjects();
     for (var object of objects) {
@@ -85,6 +86,12 @@ class GameData {
 
   makeDir(path) {
     if (!fs.existsSync(path)) fs.mkdirSync(path);
+  }
+
+  updateTimestamp() {
+    const timestamp = new Date().getTime();
+    fs.writeFileSync("./timestamp.txt", timestamp);
+    fs.writeFileSync("../static-dev/timestamp.txt", timestamp);
   }
 
   saveJSON(path, data) {
@@ -111,13 +118,8 @@ class GameData {
     }
   }
 
-  expireStaticDir() {
-    fs.writeFileSync("../static/out-of-date.txt", "Run process.js to bring static up to date");
-  }
-
   syncStaticDir() {
     execSync("rsync -aq ../static-dev/ ../static");
-    execSync("rm -f ../static/out-of-date.txt");
   }
 }
 

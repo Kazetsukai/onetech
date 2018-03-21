@@ -26,10 +26,7 @@ if (process.argv.includes('download') || process.argv.includes('sprites')) {
   gameData.processSprites();
 }
 
-if (process.argv.includes('dev')) {
-  console.log("Marking static out of date...");
-  gameData.expireStaticDir();
-} else {
+if (!process.argv.includes('dev')) {
   console.log("Copying static-dev to static...");
   gameData.syncStaticDir();
 }
