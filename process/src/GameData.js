@@ -20,16 +20,6 @@ class GameData {
     execSync("curl https://codeload.github.com/jasonrohrer/OneLifeData7/tar.gz/master | tar -xzf -");
   }
 
-  convertSpriteImages() {
-    const dir = this.baseDir + "/sprites";
-    for (var filename of fs.readdirSync(dir)) {
-      const id = filename.split('.')[0];
-      const inPath = dir + "/" + filename;
-      const outPath = "../static/sprites/sprite_" + id + ".png";
-      spawnSync("convert", [inPath, outPath]);
-    }
-  }
-
   importObjects() {
     this.eachFileInDir("objects", (content, _filename) => {
       const object = new GameObject(content);
@@ -105,8 +95,18 @@ class GameData {
     return _.sortBy(this.objects, o => o.sortWeight());
   }
 
+  convertSpriteImages() {
+    const dir = this.baseDir + "/sprites";
+    for (var filename of fs.readdirSync(dir)) {
+      const id = filename.split('.')[0];
+      const inPath = dir + "/" + filename;
+      const outPath = "../static-dev/sprites/sprite_" + id + ".png";
+      spawnSync("convert", [inPath, outPath]);
+    }
+  }
+
   processSprites() {
-    const processor = new SpriteProcessor(this.baseDir + "/sprites", "../static/sprites")
+    const processor = new SpriteProcessor(this.baseDir + "/sprites", "../static-dev/sprites")
     processor.process(this.objects)
   }
 
