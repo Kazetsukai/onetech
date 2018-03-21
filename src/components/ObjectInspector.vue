@@ -14,7 +14,8 @@
         <ul>
           <li v-if="objectData.foodValue > 0">Food: {{objectData.foodValue}}</li>
           <li v-if="objectData.heatValue > 0">Heat: {{objectData.heatValue}}</li>
-          <li v-if="objectData.insulation">Insulation: {{objectData.insulation}}</li>
+          <li v-if="objectData.clothing != 'n'">Clothing: {{clothingPart()}}</li>
+          <li v-if="objectData.clothing != 'n'">Insulation: {{objectData.insulation.toFixed(4)*100}}%</li>
           <!-- <li v-if="objectData.complexity > 0">Complexity: {{objectData.complexity}}</li> -->
         </ul>
         <div class="techTree" v-if="objectData.techTree">
@@ -47,6 +48,10 @@ export default {
   methods: {
     goToTechTree () {
       EventBus.$emit('visit-tech-tree', this.object);
+    },
+    clothingPart () {
+      var parts = {'h': "Head", 't': "Chest", 'b': "Bottom", 's': "Foot", 'p': "Back"};
+      return parts[this.objectData.clothing];
     }
   }
 }

@@ -127,27 +127,9 @@ class GameObject {
   }
 
   insulationData() {
-    switch (this.data.clothing) {
-      case "h":
-        return this.insulationPartData("Head", 0.25);
-      case "t":
-        return this.insulationPartData("Chest", 0.35);
-      case "b":
-        return this.insulationPartData("Butt", 0.2);
-      case "s":
-        return this.insulationPartData("Foot", 0.1);
-      case "p":
-        return this.insulationPartData("Back", 0.1);
-      default:
-        return null;
-    }
-  }
-
-  insulationPartData(part, coefficient) {
-    const rValue = parseFloat(this.data.rValue);
-    const partPercent = (rValue*100).toFixed();
-    const bodyPercent = (rValue*coefficient*100).toFixed();
-    return partPercent + "% " + part + " (" + bodyPercent + "% Body)";
+    const parts = {'h': 0.25, 't': 0.35, 'b': 0.2, 's': 0.1, 'p': 0.1};
+    if (parts[this.data.clothing])
+      return parts[this.data.clothing]*parseFloat(this.data.rValue);
   }
 }
 
