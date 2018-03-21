@@ -80,6 +80,7 @@ class GameObject {
       techTree: this.techTreeParentsData(3),
       transitionsToward: this.transitionsToward.map(t => t.data()),
       transitionsAway: this.transitionsAway.map(t => t.data()),
+      insulation: this.insulationData(),
     };
   }
 
@@ -123,6 +124,30 @@ class GameObject {
     if (transition.target)
       parents.push(transition.target.techTreeData(depth));
     return parents;
+  }
+
+  insulationData() {
+    switch (this.data.clothing) {
+      case "h":
+        return this.insulationPartData("Head", 0.25);
+      case "t":
+        return this.insulationPartData("Chest", 0.35);
+      case "b":
+        return this.insulationPartData("Butt", 0.2);
+      case "s":
+        return this.insulationPartData("Foot", 0.1);
+      case "p":
+        return this.insulationPartData("Back", 0.1);
+      default:
+        return null;
+    }
+  }
+
+  insulationPartData(part, coefficient) {
+    const rValue = parseFloat(this.data.rValue);
+    const partPercent = (rValue*100).toFixed();
+    const bodyPercent = (rValue*coefficient*100).toFixed();
+    return partPercent + "% " + part + " (" + bodyPercent + "% Body)";
   }
 }
 
