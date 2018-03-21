@@ -1,6 +1,7 @@
 <template>
   <div class="node">
-    <ObjectImage :object="object" clickable="true" hover="true" class="object" />
+    <ObjectImage v-if="object.decay" :decay="object.decay" hover="true" class="object" />
+    <ObjectImage v-else :object="object" clickable="true" hover="true" class="object" />
     <div class="parents" v-if="parents">
       <TechTreeNode
         v-for="(parent, index) in parents"
@@ -115,6 +116,13 @@ export default {
   .node > .object:hover {
     border: 1px solid #aaa;
     background-color: #666;
+  }
+
+  .node > .object.current {
+    background-color: #444;
+  }
+  .node > .object.current:hover {
+    border: 1px solid transparent;
   }
 
   .parents > .expand {

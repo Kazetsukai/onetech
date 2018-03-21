@@ -3,16 +3,18 @@
     <h2>{{object.name}}</h2>
     <h3>Tech Tree</h3>
 
-    <TechTreeNode
-      :object="object"
-      :parents="objectData.techTree"
-      :selected="subtrees[0]"
-      treeIndex="0"
-    />
+    <div class="tree">
+      <TechTreeNode
+        :object="object"
+        :parents="objectData.techTree"
+        :selected="subtrees[0]"
+        treeIndex="0"
+      />
+    </div>
 
     <h3 v-if="objectData.loading">Loading...</h3>
 
-    <div class="subtree" v-for="(object, index) in subtrees" :key="index">
+    <div class="tree subtree" v-for="(object, index) in subtrees" :key="index">
       <TechTreeNode
         :object="object"
         :parents="object.techTree"
@@ -57,15 +59,10 @@ export default {
 
 <style scoped>
   .techTree {
-    width: 100%;
-
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-
     background-color: #222;
     margin-top: 10px;
     border-radius: 5px;
+    padding-top: 1px;
     padding-bottom: 20px;
   }
 
@@ -82,13 +79,15 @@ export default {
     margin-top: 0px;
   }
 
+  .tree {
+    text-align: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
   .subtree {
     border-top: dashed 1px #777;
     margin-top: 15px;
     padding-top: 10px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-content: center;
   }
 </style>
