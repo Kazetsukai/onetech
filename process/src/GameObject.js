@@ -80,6 +80,7 @@ class GameObject {
       techTree: this.techTreeParentsData(3),
       transitionsToward: this.transitionsToward.map(t => t.data()),
       transitionsAway: this.transitionsAway.map(t => t.data()),
+      insulation: this.insulationData(),
     };
   }
 
@@ -123,6 +124,12 @@ class GameObject {
     if (transition.target)
       parents.push(transition.target.techTreeData(depth));
     return parents;
+  }
+
+  insulationData() {
+    const parts = {'h': 0.25, 't': 0.35, 'b': 0.2, 's': 0.1, 'p': 0.1};
+    if (parts[this.data.clothing])
+      return parts[this.data.clothing]*parseFloat(this.data.rValue);
   }
 }
 
