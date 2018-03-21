@@ -64,9 +64,7 @@ class GameData {
   }
 
   exportObjects() {
-    this.staticDir("objects");
-    this.staticDir("pretty-json");
-    this.staticDir("pretty-json/objects");
+    this.prepareStaticDir();
     var list = [];
     const objects = this.sortedObjects();
     for (var object of objects) {
@@ -76,14 +74,22 @@ class GameData {
     this.saveJSON("objects.json", list);
   }
 
-  staticDir(dir) {
-    const path = "../static/" + dir;
+  prepareStaticDir() {
+    if (!fs.existsSync("../static-dev"))
+      execSync("rsync -aq ../static/ ../static-dev");
+    this.makeDir("../static-dev/sprites");
+    this.makeDir("../static-dev/objects");
+    this.makeDir("../static-dev/pretty-json");
+    this.makeDir("../static-dev/pretty-json/objects");
+  }
+
+  makeDir(path) {
     if (!fs.existsSync(path)) fs.mkdirSync(path);
   }
 
   saveJSON(path, data) {
-    const minPath = "../static/" + path;
-    const prettyPath = "../static/pretty-json/" + path;
+    const minPath = "../static-dev/" + path;
+    const prettyPath = "../static-dev/pretty-json/" + path;
     fs.writeFileSync(minPath, JSON.stringify(data));
     fs.writeFileSync(prettyPath, JSON.stringify(data, null, 2));
   }
@@ -103,6 +109,15 @@ class GameData {
       const content = fs.readFileSync(dir + "/" + filename, "utf8");
       callback(content, filename);
     }
+  }
+
+  expireStaticDir() {
+    fs.writeFileSync("../static/out-of-date.txt", "Run process.js to bring static up to date");
+  }
+
+  syncStaticDir() {
+    execSync("rsync -aq ../static-dev/ ../static");
+    execSync("rm -f ../static/out-of-date.txt");
   }
 }
 

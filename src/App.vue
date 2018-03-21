@@ -53,7 +53,7 @@ export default {
   methods: {
     loadObjects () {
       let vue = this;
-      fetch("./static/objects.json").then(data => {
+      fetch(STATIC_PATH + "/objects.json").then(data => {
         return data.json();
       }).then(data => {
         vue.objects = data;
@@ -64,7 +64,7 @@ export default {
       let vue = this;
       if (this.selectedObject) {
         vue.selectedObjectData = {loading: true};
-        fetch("./static/objects/" + this.selectedObject.id + ".json").then(data => {
+        fetch(STATIC_PATH + "/objects/" + this.selectedObject.id + ".json").then(data => {
           return data.json();
         }).then(data => {
           vue.selectedObjectData = data;

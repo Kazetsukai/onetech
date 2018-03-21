@@ -12,13 +12,13 @@ This is a reference. For a better guide, go to the game wiki.
 
 ## Build Setup
 
-The project is split into two parts: 
+The project is split into two parts:
 - A node script that processes the latest data from the game data repository
 - The site itself, built in VueJS
 
 ### Processing Script
 
-The script is under the folder `process`. It will pull the latest data from the game data repository (if provided `download` as a command line argument), and then build a JSON blob with all the data the site needs. It will also composite the sprites and create PNGs for each object in the game.
+The script is under the folder `process`. It will pull the latest data from the game data repository (if provided `download` as a command line argument), and then generate JSON files for the objects. It will also composite the sprites and create PNGs for each object in the game.
 
 To get it running, you will need to install [ImageMagick](https://www.imagemagick.org/script/index.php), and then:
 
@@ -28,10 +28,16 @@ cd process
 # install dependencies
 npm install
 
-# run script including downloading latest data
-node process.js download
+# run script including downloading latest data and processing sprites
+node process.js dev download
 
 # after downloading once, you can run without the download argument
+node process.js dev
+
+# if you want to re-process the sprites
+node process.js dev sprites
+
+# remove the dev argument to process for production (before building)
 node process.js
 ```
 

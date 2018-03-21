@@ -16,7 +16,7 @@ export default {
   computed: {
     imageUrl () {
       return this.object && this.object.hasSprite
-        ? './static/sprites/obj_' + this.object.id + '.png'
+        ? STATIC_PATH + '/sprites/obj_' + this.object.id + '.png'
         : 'about:blank';
     },
     title () {

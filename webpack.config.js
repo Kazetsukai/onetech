@@ -1,5 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
+var fs = require('fs')
 
 module.exports = {
   entry: './src/main.js',
@@ -87,13 +88,17 @@ module.exports = {
 }
 
 if (process.env.NODE_ENV === 'production') {
+  if (fs.existsSync('static/out-of-date.txt'))
+    throw "Run the process script before building"
+
   module.exports.devtool = '#source-map'
   // http://vue-loader.vuejs.org/en/workflow/production.html
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"production"'
-      }
+      },
+      'STATIC_PATH': '"./static"'
     }),
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,
@@ -103,6 +108,15 @@ if (process.env.NODE_ENV === 'production') {
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: true
+    })
+  ])
+} else {
+  module.exports.plugins = (module.exports.plugins || []).concat([
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: '"development"'
+      },
+      'STATIC_PATH': fs.existsSync('static-dev') ? '"./static-dev"' : '"./static"'
     })
   ])
 }
