@@ -84,6 +84,19 @@ export default {
         }
         this.showTechTree = (path[2] == "tech-tree");
       }
+      this.updateTitle();
+    },
+    updateTitle () {
+      var parts = []
+      if (this.selectedObject) {
+        parts.push(this.selectedObject.name);
+        if (this.showTechTree)
+          parts.push("Tech Tree");
+      } else {
+        parts.push("Crafting reference for One Hour One Life");
+      }
+      parts.push("onetech");
+      document.title = parts.join(" - ");
     }
   },
   computed: {
