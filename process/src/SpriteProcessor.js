@@ -66,8 +66,13 @@ class SpriteProcessor {
     // Draw sprites as if they were 20 years old
     if (sprite.beyondAge(20)) return;
 
-    const [r, g, b] = sprite.color;
+    this.drawSpriteImage(sprite, this.context);
 
+    if (sprite.color.find(c => c < 1.0))
+      this.overlayColor(sprite)
+  }
+
+  drawSpriteImage(sprite, context) {
     var img = new Canvas.Image;
     img.src = fs.readFileSync(this.pngDir + "/sprite_" + sprite.id + ".png");
     sprite.width = img.width;
@@ -77,17 +82,45 @@ class SpriteProcessor {
     const x = parseFloat(sprite.x);
     const y = parseFloat(sprite.y);
 
-    this.context.setTransform(1, 0, 0, 1, 0, 0);
-    this.context.translate(x + this.canvas.width / 2, -y + this.canvas.height / 2);
-    this.context.rotate(angleRads);
-    if (sprite.hFlip == 1) this.context.scale(-1, 1);
-    this.context.drawImage(
+    context.setTransform(1, 0, 0, 1, 0, 0);
+    context.translate(x + context.canvas.width / 2, -y + context.canvas.height / 2);
+    context.rotate(angleRads);
+    if (sprite.hFlip == 1) context.scale(-1, 1);
+    context.drawImage(
       img,
       -img.width / 2 - sprite.centerAnchorXOffset,
       -img.height / 2 - sprite.centerAnchorYOffset,
       img.width,
       img.height
     );
+  }
+
+  overlayColor(sprite) {
+    const newCanvas = new Canvas(this.canvas.width, this.canvas.height);
+    const newContext = newCanvas.getContext('2d');
+
+    this.drawSpriteImage(sprite, newContext)
+
+    const color = sprite.color.map(c => Math.round(c*255)).join(", ");
+
+    newContext.globalCompositeOperation = "source-in";
+    newContext.setTransform(1, 0, 0, 1, 0, 0);
+    newContext.fillStyle = "rgb(" + color + ")";
+    newContext.fillRect(0, 0, newCanvas.width, newCanvas.height);
+
+    const previousOperation = this.context.globalCompositeOperation;
+    this.context.globalCompositeOperation = "multiply";
+
+    this.context.setTransform(1, 0, 0, 1, 0, 0);
+    this.context.drawImage(
+      newCanvas,
+      0,
+      0,
+      newCanvas.width,
+      newCanvas.height
+    );
+
+    this.context.globalCompositeOperation = previousOperation;
   }
 
   objectBounds(object) {
