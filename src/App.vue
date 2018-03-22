@@ -30,8 +30,6 @@
 <script>
 import _ from 'lodash';
 
-import EventBus from './services/EventBus';
-
 import ObjectView from './components/ObjectView';
 import ObjectSearch from './components/ObjectSearch';
 import ObjectInspector from './components/ObjectInspector';
@@ -112,25 +110,7 @@ export default {
     this.parseHash();
   },
   created () {
-    let vue = this;
-
-    EventBus.$on('object-selected', object => {
-      if (object) {
-        console.log("Object selected: " + object.name);
-        window.location.hash = '#' + object.id + '/' + encodeURIComponent(object.name.split(' ').join('-'));
-      } else {
-        console.log("Object cleared");
-        window.location.hash = '#';
-      }
-      vue.showAmount = 90;
-      document.body.scrollTop = document.documentElement.scrollTop = 0;
-    });
-
-    EventBus.$on('visit-tech-tree', object => {
-      window.location.hash = window.location.hash + '/tech-tree';
-    });
-
-    window.onhashchange = () => vue.parseHash();
+    window.onhashchange = () => this.parseHash();
   },
   components: {
     ObjectView,

@@ -10,11 +10,12 @@
         :selected="selected"
         :treeIndex="treeIndex"
         :key="index"
+        @expand="expandTree"
       />
       <div class="expand"
         v-if="parents.length == 0"
         v-bind:class="{selected: selected && selected.id == object.id}"
-        @click="expandTree()"
+        @click="expandTree(object, treeIndex)"
       >
         &#9660;
       </div>
@@ -23,8 +24,6 @@
 </template>
 
 <script>
-import EventBus from '../services/EventBus';
-
 import ObjectImage from './ObjectImage';
 
 export default {
@@ -34,8 +33,8 @@ export default {
     ObjectImage
   },
   methods: {
-    expandTree () {
-      EventBus.$emit('expand-tree', this.object, this.treeIndex);
+    expandTree (object, treeIndex) {
+      this.$emit('expand', object, treeIndex);
     }
   }
 }

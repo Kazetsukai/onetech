@@ -15,11 +15,12 @@
           <li v-if="objectData.foodValue > 0">Food: {{objectData.foodValue}}</li>
           <li v-if="objectData.heatValue > 0">Heat: {{objectData.heatValue}}</li>
           <li v-if="objectData.clothing != 'n'">Clothing: {{clothingPart()}}</li>
-          <li v-if="objectData.clothing != 'n'">Insulation: {{objectData.insulation.toFixed(4)*100}}%</li>
+          <li v-if="objectData.insulation">Insulation: {{objectData.insulation.toFixed(4)*100}}%</li>
           <!-- <li v-if="objectData.complexity > 0">Complexity: {{objectData.complexity}}</li> -->
         </ul>
         <div class="techTree" v-if="objectData.techTree">
-          <img src="../assets/techtree.png" width="38" height="36" @click="goToTechTree()" title="Tech Tree" v-tippy />
+          <a :href="urlTo(object, true)">
+          <img src="../assets/techtree.png" width="38" height="36" title="Tech Tree" v-tippy /></a>
         </div>
       </div>
       <div class="away transitions">
@@ -34,7 +35,6 @@
 <script>
 import ObjectImage from './ObjectImage';
 import TransitionView from './TransitionView';
-import EventBus from '../services/EventBus';
 
 export default {
   props: ['object', 'objectData'],
@@ -46,9 +46,6 @@ export default {
     console.dir(this.object);
   },
   methods: {
-    goToTechTree () {
-      EventBus.$emit('visit-tech-tree', this.object);
-    },
     clothingPart () {
       var parts = {'h': "Head", 't': "Chest", 'b': "Bottom", 's': "Foot", 'p': "Back"};
       return parts[this.objectData.clothing];

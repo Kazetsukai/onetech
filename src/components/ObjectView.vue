@@ -1,26 +1,20 @@
 <template>
-  <div class="objectView" @click="select">
-    <h3>{{object.name}}</h3>
-    <ObjectImage :object="object" />
-  </div>
+  <a class="nostyle" :href="urlTo(object)">
+    <div class="objectView">
+      <h3>{{object.name}}</h3>
+      <ObjectImage :object="object" />
+    </div>
+  </a>
 </template>
 
 <script>
 import ObjectImage from './ObjectImage';
-import EventBus from '../services/EventBus';
 
 export default {
   props: ['object'],
   components: {
     ObjectImage
-  },
-  methods: {
-    select () {
-      EventBus.$emit('object-selected', this.object);
-      return false;
-    }
-  }
-}
+  }}
 </script>
 
 <style scoped>
@@ -44,5 +38,15 @@ export default {
 
   .objectView h3 {
     text-align: center;
+  }
+
+  a.nostyle:link {
+    text-decoration: inherit;
+    color: inherit;
+  }
+
+  a.nostyle:visited {
+      text-decoration: inherit;
+      color: inherit;
   }
 </style>

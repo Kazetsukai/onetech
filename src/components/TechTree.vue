@@ -9,6 +9,7 @@
         :parents="objectData.techTree"
         :selected="subtrees[0]"
         treeIndex="0"
+        @expand="expand"
       />
     </div>
 
@@ -20,14 +21,13 @@
         :parents="object.techTree"
         :selected="subtrees[index+1]"
         :treeIndex="index+1"
+        @expand="expand"
       />
     </div>
   </div>
 </template>
 
 <script>
-import EventBus from '../services/EventBus';
-
 import TechTreeNode from './TechTreeNode';
 
 export default {
@@ -40,20 +40,16 @@ export default {
       subtrees: []
     };
   },
-  created () {
-    let vue = this;
-
-    EventBus.$on('expand-tree', (object, treeIndex) => {
+  methods: {
+    expand (object, treeIndex) {
+      let vue = this;
       fetch(STATIC_PATH + "/objects/" + object.id + ".json").then(data => {
         return data.json();
       }).then(data => {
         vue.subtrees = vue.subtrees.slice(0, treeIndex).concat([data]);
       });
-    });
-  },
-  destroyed () {
-    EventBus.$off('expand-tree');
-  },
+    }
+  }
 }
 </script>
 
@@ -83,6 +79,7 @@ export default {
     text-align: center;
     overflow-x: auto;
     overflow-y: hidden;
+    box-sizing: border-box;
   }
 
   .subtree {

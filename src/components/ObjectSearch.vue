@@ -11,7 +11,6 @@
 
 <script>
 import _ from 'lodash';
-import EventBus from '../services/EventBus';
 
 import VueSelect from './Select';
 import ObjectImage from './ObjectImage';
@@ -30,7 +29,7 @@ export default {
   methods: {
     selectObject (obj) {
       if (obj != this.selectedObject)
-        EventBus.$emit('object-selected', obj);
+        this.navigateTo(obj);
     }
   }
 }

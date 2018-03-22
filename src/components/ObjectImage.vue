@@ -3,14 +3,13 @@
     <div v-if="hand" class="hand" :style="object ? {} : { width: '100%', height: '100%' }" />
     <div v-if="decay" class="decay"><span>{{decay}}</span></div>
     <div v-if="ground" class="ground"></div>
-    <div class="image" v-if="object" :style="'background-image: url(' + imageUrl + ');'" @click="select()">
-    </div>
+    <a :href="clickable ? urlTo(object) : undefined">
+      <div class="image" v-if="object" :style="'background-image: url(' + imageUrl + ');'">
+    </div></a>
   </div>
 </template>
 
 <script>
-import EventBus from '../services/EventBus';
-
 export default {
   props: ['object', 'clickable', 'hand', 'hover', 'decay', 'ground'],
   computed: {
@@ -34,12 +33,6 @@ export default {
 
       if (this.decay)
         return this.decay.replace("s", " second").replace("h", " hour") + (parseInt(this.decay) != 1 ? 's' : '');
-    }
-  },
-  methods: {
-    select () {
-      if (this.clickable)
-        EventBus.$emit('object-selected', this.object);
     }
   }
 }
