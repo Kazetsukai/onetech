@@ -15,7 +15,7 @@
           <li v-if="objectData.foodValue > 0">Food: {{objectData.foodValue}}</li>
           <li v-if="objectData.heatValue > 0">Heat: {{objectData.heatValue}}</li>
           <li v-if="objectData.clothing != 'n'">Clothing: {{clothingPart()}}</li>
-          <li v-if="objectData.insulation">Insulation: {{objectData.insulation.toFixed(4)*100}}%</li>
+          <li v-if="!isNaN(objectData.insulation)">Insulation: {{objectData.insulation.toFixed(4)*100}}%</li>
           <!-- <li v-if="objectData.complexity > 0">Complexity: {{objectData.complexity}}</li> -->
         </ul>
         <div class="techTree" v-if="objectData.techTree">
