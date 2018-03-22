@@ -20,16 +20,6 @@ class GameData {
     execSync("curl https://codeload.github.com/jasonrohrer/OneLifeData7/tar.gz/master | tar -xzf -");
   }
 
-  convertSpriteImages() {
-    const dir = this.baseDir + "/sprites";
-    for (var filename of fs.readdirSync(dir)) {
-      const id = filename.split('.')[0];
-      const inPath = dir + "/" + filename;
-      const outPath = "../static/sprites/sprite_" + id + ".png";
-      spawnSync("convert", [inPath, outPath]);
-    }
-  }
-
   importObjects() {
     this.eachFileInDir("objects", (content, _filename) => {
       const object = new GameObject(content);
@@ -64,9 +54,8 @@ class GameData {
   }
 
   exportObjects() {
-    this.staticDir("objects");
-    this.staticDir("pretty-json");
-    this.staticDir("pretty-json/objects");
+    this.prepareStaticDir();
+    this.updateTimestamp();
     var list = [];
     const objects = this.sortedObjects();
     for (var object of objects) {
@@ -76,14 +65,28 @@ class GameData {
     this.saveJSON("objects.json", list);
   }
 
-  staticDir(dir) {
-    const path = "../static/" + dir;
+  prepareStaticDir() {
+    if (!fs.existsSync("../static-dev"))
+      execSync("rsync -aq ../static/ ../static-dev");
+    this.makeDir("../static-dev/sprites");
+    this.makeDir("../static-dev/objects");
+    this.makeDir("../static-dev/pretty-json");
+    this.makeDir("../static-dev/pretty-json/objects");
+  }
+
+  makeDir(path) {
     if (!fs.existsSync(path)) fs.mkdirSync(path);
   }
 
+  updateTimestamp() {
+    const timestamp = new Date().getTime();
+    fs.writeFileSync("./timestamp.txt", timestamp);
+    fs.writeFileSync("../static-dev/timestamp.txt", timestamp);
+  }
+
   saveJSON(path, data) {
-    const minPath = "../static/" + path;
-    const prettyPath = "../static/pretty-json/" + path;
+    const minPath = "../static-dev/" + path;
+    const prettyPath = "../static-dev/pretty-json/" + path;
     fs.writeFileSync(minPath, JSON.stringify(data));
     fs.writeFileSync(prettyPath, JSON.stringify(data, null, 2));
   }
@@ -92,8 +95,18 @@ class GameData {
     return _.sortBy(this.objects, o => o.sortWeight());
   }
 
+  convertSpriteImages() {
+    const dir = this.baseDir + "/sprites";
+    for (var filename of fs.readdirSync(dir)) {
+      const id = filename.split('.')[0];
+      const inPath = dir + "/" + filename;
+      const outPath = "../static-dev/sprites/sprite_" + id + ".png";
+      spawnSync("convert", [inPath, outPath]);
+    }
+  }
+
   processSprites() {
-    const processor = new SpriteProcessor(this.baseDir + "/sprites", "../static/sprites")
+    const processor = new SpriteProcessor(this.baseDir + "/sprites", "../static-dev/sprites")
     processor.process(this.objects)
   }
 
@@ -103,6 +116,10 @@ class GameData {
       const content = fs.readFileSync(dir + "/" + filename, "utf8");
       callback(content, filename);
     }
+  }
+
+  syncStaticDir() {
+    execSync("rsync -aq ../static-dev/ ../static");
   }
 }
 

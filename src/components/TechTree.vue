@@ -44,7 +44,7 @@ export default {
     let vue = this;
 
     EventBus.$on('expand-tree', (object, treeIndex) => {
-      fetch("./static/objects/" + object.id + ".json").then(data => {
+      fetch(STATIC_PATH + "/objects/" + object.id + ".json").then(data => {
         return data.json();
       }).then(data => {
         vue.subtrees = vue.subtrees.slice(0, treeIndex).concat([data]);
