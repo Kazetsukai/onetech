@@ -67,7 +67,7 @@ class GameData {
 
   prepareStaticDir() {
     if (!fs.existsSync("../static-dev"))
-      execSync("rsync -aq ../static/ ../static-dev");
+      execSync("cp -R ../static ../static-dev");
     this.makeDir("../static-dev/sprites");
     this.makeDir("../static-dev/objects");
     this.makeDir("../static-dev/pretty-json");
@@ -79,9 +79,10 @@ class GameData {
   }
 
   updateTimestamp() {
-    const timestamp = new Date().getTime();
-    fs.writeFileSync("./timestamp.txt", timestamp);
-    fs.writeFileSync("../static-dev/timestamp.txt", timestamp);
+    // Only update timestamp if we have changed the process script
+    if (execSync("git status -s .") != "")
+      fs.writeFileSync("./timestamp.txt", new Date().getTime());
+    execSync("cp timestamp.txt ../static-dev/timestamp.txt");
   }
 
   saveJSON(path, data) {
