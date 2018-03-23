@@ -2,30 +2,30 @@
   <div class="objectInspector">
     <div class="panels">
       <div class="toward transitions">
-        <div v-for="trans in objectData.transitionsToward">
-          <TransitionView :transition="trans" :selectedObjectID="object.id" />
+        <div v-for="transition in object.transitionsToward">
+          <TransitionView :transition="transition" :selectedObjectID="objectID" />
         </div>
       </div>
       <div class="info">
-        <h2>{{object.name.split(' - ')[0]}}</h2>
-        <h3>{{object.name.split(' - ')[1]}}</h3>
-        <ObjectImage :object="object" />
-        <h3 v-if="objectData.loading">Loading...</h3>
+        <h2>{{baseName}}</h2>
+        <h3>{{subName}}</h3>
+        <ObjectImage :objectID="objectID" />
+        <h3 v-if="object.loading">Loading...</h3>
         <ul>
-          <li v-if="objectData.foodValue > 0">Food: {{objectData.foodValue}}</li>
-          <li v-if="objectData.heatValue > 0">Heat: {{objectData.heatValue}}</li>
-          <li v-if="objectData.clothing && objectData.clothing != 'n'">Clothing: {{clothingPart()}}</li>
-          <li v-if="!isNaN(objectData.insulation)">Insulation: {{objectData.insulation.toFixed(4)*100}}%</li>
-          <!-- <li v-if="objectData.complexity > 0">Complexity: {{objectData.complexity}}</li> -->
+          <li v-if="object.foodValue > 0">Food: {{object.foodValue}}</li>
+          <li v-if="object.heatValue > 0">Heat: {{object.heatValue}}</li>
+          <li v-if="clothingPart()">Clothing: {{clothingPart()}}</li>
+          <li v-if="!isNaN(object.insulation)">Insulation: {{object.insulation.toFixed(4)*100}}%</li>
+          <!-- <li v-if="object.complexity > 0">Complexity: {{object.complexity}}</li> -->
         </ul>
-        <div class="techTree" v-if="objectData.techTree">
-          <a :href="urlTo(object, true)">
+        <div class="techTree" v-if="object.techTree">
+          <a :href="techTreeUrl">
           <img src="../assets/techtree.png" width="38" height="36" title="Tech Tree" v-tippy /></a>
         </div>
       </div>
       <div class="away transitions">
-        <div v-for="trans in objectData.transitionsAway">
-          <TransitionView :transition="trans" :selectedObjectID="object.id" />
+        <div v-for="transition in object.transitionsAway">
+          <TransitionView :transition="transition" :selectedObjectID="objectID" />
         </div>
       </div>
     </div>
@@ -33,22 +33,47 @@
 </template>
 
 <script>
+import ObjectService from '../services/ObjectService'
+
 import ObjectImage from './ObjectImage';
 import TransitionView from './TransitionView';
 
 export default {
-  props: ['object', 'objectData'],
+  props: ['objectID'],
   components: {
     ObjectImage,
     TransitionView
   },
+  data () {
+    return {
+      object: null,
+    }
+  },
   beforeMount () {
-    console.dir(this.object);
+    this.loadObject();
+  },
+  computed: {
+    baseName () {
+      return ObjectService.baseName(this.objectID);
+    },
+    subName () {
+      return ObjectService.subName(this.objectID);
+    },
+    techTreeUrl () {
+      return ObjectService.url(this.objectID, 'tech-tree');
+    },
+  },
+  watch: {
+    objectID () { this.loadObject(); }
   },
   methods: {
+    loadObject () {
+      this.object = {loading: true};
+      ObjectService.fetchObject(this.objectID, obj => this.object = obj);
+    },
     clothingPart () {
       var parts = {'h': "Head", 't': "Chest", 'b': "Bottom", 's': "Foot", 'p': "Back"};
-      return parts[this.objectData.clothing];
+      return parts[this.object.clothing];
     }
   }
 }

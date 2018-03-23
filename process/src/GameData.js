@@ -23,8 +23,8 @@ class GameData {
   importObjects() {
     this.eachFileInDir("objects", (content, _filename) => {
       const object = new GameObject(content);
-      if (object.data.id) {
-        this.objects[object.data.id] = object;
+      if (object.id) {
+        this.objects[object.id] = object;
       }
     });
   }
@@ -56,13 +56,10 @@ class GameData {
   exportObjects() {
     this.prepareStaticDir();
     this.updateTimestamp();
-    var list = [];
-    const objects = this.sortedObjects();
-    for (var object of objects) {
-      list.push(object.simpleData());
-      this.saveJSON("objects/" + object.data.id + ".json", object.fullData());
+    this.saveJSON("objects.json", this.objectsData());
+    for (var id in this.objects) {
+      this.saveJSON(`objects/${id}.json`, this.objects[id].jsonData());
     }
-    this.saveJSON("objects.json", list);
   }
 
   prepareStaticDir() {
@@ -90,6 +87,14 @@ class GameData {
     const prettyPath = "../static-dev/pretty-json/" + path;
     fs.writeFileSync(minPath, JSON.stringify(data));
     fs.writeFileSync(prettyPath, JSON.stringify(data, null, 2));
+  }
+
+  objectsData() {
+    var objects = this.sortedObjects();
+    return {
+      ids: this.sortedObjects().map(o => o.id),
+      names: this.sortedObjects().map(o => o.name),
+    }
   }
 
   sortedObjects() {

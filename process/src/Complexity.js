@@ -54,10 +54,6 @@ class Complexity {
       this.tools.push(tool);
   }
 
-  toolsData() {
-    return this.tools.map(t => t.simpleData());
-  }
-
   // For use in an array sort function, returns 1, -1 or 0 depending
   // on the value comparison
   compare(complexity) {
