@@ -9,14 +9,13 @@
         :decay="node.decay"
         :nodes="node.nodes"
         :selectedID="selectedID"
-        :treeIndex="treeIndex"
         :key="index"
         @expand="expandTree"
       />
       <div class="expand"
         v-if="nodes.length == 0"
         v-bind:class="{selected: selectedID == objectID}"
-        @click="expandTree(objectID, treeIndex)"
+        @click="expandTree(objectID)"
       >
         &#9660;
       </div>
@@ -29,13 +28,13 @@ import ObjectImage from './ObjectImage';
 
 export default {
   name: 'TechTreeNode',
-  props: ['objectID', 'nodes', 'decay', 'treeIndex', 'selectedID'],
+  props: ['objectID', 'nodes', 'decay', 'selectedID'],
   components: {
     ObjectImage
   },
   methods: {
-    expandTree (objectID, treeIndex) {
-      this.$emit('expand', objectID, treeIndex);
+    expandTree (objectID) {
+      this.$emit('expand', objectID);
     }
   }
 }
