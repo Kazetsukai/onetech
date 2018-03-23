@@ -17,9 +17,6 @@
           <div class="object" v-for="object in firstFewObjects" >
             <ObjectView :object="object" />
           </div>
-          <div class="showMore">
-            <a href="#" onclick="return false" @click="showAmount = Math.min(nonNilObjects.length, showAmount + 90)" v-if="showAmount < nonNilObjects.length">Show more...</a>
-          </div>
         </div>
       </div>
 
