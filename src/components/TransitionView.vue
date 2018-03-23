@@ -10,19 +10,19 @@
                 :decay="transition.decay" />
 
     <ObjectImage class="actor transitionObject"
-                v-if="transition.actor || transition.hand"
+                v-if="transition.actorID || transition.hand"
                 hand="true" hover="true"
-                :object="transition.actor"
-                :clickable="transition.actor && transition.actor.id != selectedObjectID" />
-    <span class="plus" v-if="transition.actor || transition.decay || transition.hand">+</span>
+                :objectID="transition.actorID"
+                :clickable="transition.actorID && transition.actorID != selectedObjectID" />
+    <span class="plus" v-if="transition.actorID || transition.decay || transition.hand">+</span>
     <ObjectImage class="target transitionObject"
-                v-if="transition.target"
+                v-if="transition.targetID"
                 hover="true"
-                :object="transition.target"
-                :clickable="transition.target && transition.target.id != selectedObjectID" />
+                :objectID="transition.targetID"
+                :clickable="transition.targetID && transition.targetID != selectedObjectID" />
 
     <ObjectImage class="target transitionObject"
-                v-if="!transition.target"
+                v-if="!transition.targetID"
                 ground="true"
                 hover="true" />
 
@@ -30,17 +30,17 @@
     <ObjectImage class="newActor transitionObject"
                 v-if="!transition.tool && !transition.decay"
                 hand="true" hover="true"
-                :object="transition.newActor"
-                :clickable="transition.newActor && transition.newActor.id != selectedObjectID" />
+                :objectID="transition.newActorID"
+                :clickable="transition.newActorID && transition.newActorID != selectedObjectID" />
 
     <!-- What does the target item become? -->
     <ObjectImage class="newTarget transitionObject"
-                v-if="transition.newTarget && (!transition.targetRemains || transition.target.numUses > 0)"
-                hover="true" :usedUp="!transition.newTarget"
-                :object="transition.newTarget"
-                :clickable="transition.newTarget && transition.newTarget.id != selectedObjectID" />
+                v-if="transition.newTargetID && (!transition.targetRemains || transition.targetNumUses > 0)"
+                hover="true" :usedUp="!transition.newTargetID"
+                :objectID="transition.newTargetID"
+                :clickable="transition.newTargetID && transition.newTargetID != selectedObjectID" />
     <ObjectImage class="newTarget transitionObject"
-                v-if="!transition.targetRemains && !transition.newTarget"
+                v-if="!transition.targetRemains && !transition.newTargetID"
                 ground="true"
                 hover="true"  />
   </div>

@@ -1,9 +1,9 @@
 <template>
   <div class="objectSearch">
-    <VueSelect label="name" :options="sortedObjects" v-model="selectedObject" :on-change="selectObject">
+    <VueSelect label="name" :options="sortedOptions" v-model="selectedOption" :on-change="selectObject">
       <template slot="option" slot-scope="option">
-        <ObjectImage :object="option" />
-        {{ option.name }}
+        <ObjectImage :objectID="option.id" />
+        {{option.name}}
       </template>
     </VueSelect>
   </div>
@@ -12,24 +12,36 @@
 <script>
 import _ from 'lodash';
 
+import ObjectService from '../services/ObjectService'
+
 import VueSelect from './Select';
 import ObjectImage from './ObjectImage';
 
 export default {
-  props: ['objects', 'selectedObject'],
-  computed: {
-    sortedObjects () {
-      return _.sortBy(this.objects, o => o.name.length);
-    }
-  },
+  props: ['selectedObjectID'],
   components: {
     VueSelect,
     ObjectImage
   },
+  computed: {
+    options () {
+      return ObjectService.ids.map(id => {
+        return {id: id, name: ObjectService.name(id)};
+      });
+    },
+    sortedOptions () {
+      return _.sortBy(this.options, option => option.name.length);
+    },
+    selectedOption () {
+      return this.options.find(option => option.id == this.selectedObjectID);
+    }
+  },
   methods: {
-    selectObject (obj) {
-      if (obj != this.selectedObject)
-        this.navigateTo(obj);
+    selectObject (option) {
+      if (!option)
+        window.location = '#';
+      else if (option.id != this.selectedObjectID)
+        window.location = ObjectService.url(option.id);
     }
   }
 }

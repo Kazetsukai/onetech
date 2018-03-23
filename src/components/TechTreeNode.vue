@@ -1,21 +1,21 @@
 <template>
   <div class="node">
-    <ObjectImage v-if="object.decay" :decay="object.decay" hover="true" class="object" />
-    <ObjectImage v-else :object="object" clickable="true" hover="true" class="object" />
-    <div class="parents" v-if="parents">
+    <ObjectImage v-if="decay" :decay="decay" hover="true" class="object" />
+    <ObjectImage v-else :objectID="objectID" clickable="true" hover="true" class="object" />
+    <div class="nodes" v-if="nodes">
       <TechTreeNode
-        v-for="(parent, index) in parents"
-        :object="parent"
-        :parents="parent.parents"
-        :selected="selected"
-        :treeIndex="treeIndex"
+        v-for="(node, index) in nodes"
+        :objectID="node.id"
+        :decay="node.decay"
+        :nodes="node.nodes"
+        :selectedID="selectedID"
         :key="index"
         @expand="expandTree"
       />
       <div class="expand"
-        v-if="parents.length == 0"
-        v-bind:class="{selected: selected && selected.id == object.id}"
-        @click="expandTree(object, treeIndex)"
+        v-if="nodes.length == 0"
+        v-bind:class="{selected: selectedID == objectID}"
+        @click="expandTree(objectID)"
       >
         &#9660;
       </div>
@@ -28,13 +28,13 @@ import ObjectImage from './ObjectImage';
 
 export default {
   name: 'TechTreeNode',
-  props: ['object', 'parents', 'treeIndex', 'selected'],
+  props: ['objectID', 'nodes', 'decay', 'selectedID'],
   components: {
     ObjectImage
   },
   methods: {
-    expandTree (object, treeIndex) {
-      this.$emit('expand', object, treeIndex);
+    expandTree (objectID) {
+      this.$emit('expand', objectID);
     }
   }
 }
@@ -82,19 +82,19 @@ export default {
     display: none;
   }
 
-  .parents {
+  .nodes {
     position: relative;
     padding-top: 12px;
     white-space: nowrap;
     margin: 0 auto;
     text-align: center;
   }
-  .parents::after {
+  .nodes::after {
     content: '';
     display: table;
     clear: both;
   }
-  .parents::before {
+  .nodes::before {
     content: '';
     position: absolute;
     top: 0;
@@ -124,15 +124,15 @@ export default {
     border: 1px solid transparent;
   }
 
-  .parents > .expand {
+  .nodes > .expand {
     margin-top: -5px;
     color: #555;
     cursor: default;
   }
-  .parents > .expand:hover {
+  .nodes > .expand:hover {
     color: #999;
   }
-  .parents > .expand.selected {
+  .nodes > .expand.selected {
     color: #ccc;
     margin-top: -6px;
     font-size: 20px;

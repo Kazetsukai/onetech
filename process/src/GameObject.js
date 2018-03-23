@@ -22,6 +22,7 @@ class GameObject {
     this.categories = [];
     this.parseData(dataText);
     this.complexity = new Complexity({});
+    this.id = this.data.id;
   }
 
   parseData(dataText) {
@@ -39,7 +40,7 @@ class GameObject {
   }
 
   parseName(name) {
-    if (name) this.data.name = name.replace('#', ' - ');
+    if (name) this.name = name.replace('#', ' - ');
   }
 
   parseLine(line) {
@@ -68,19 +69,18 @@ class GameObject {
     this.sprites.push(new Sprite(lines));
   }
 
-  simpleData() {
-    return {id: this.data.id, name: this.data.name, hasSprite: this.hasSprite()};
-  }
-
-  fullData() {
-    return {...this.data,
-      hasSprite: this.hasSprite(),
-      complexity: this.complexity.value,
-      tools: this.complexity.toolsData(),
-      techTree: this.techTreeParentsData(3),
-      transitionsToward: this.transitionsToward.map(t => t.data()),
-      transitionsAway: this.transitionsAway.map(t => t.data()),
+  jsonData() {
+    return {
+      id: this.id,
+      name: this.name,
+      foodValue: this.foodValue,
+      heatValue: this.heatValue,
+      clothing: this.clothing,
       insulation: this.insulationData(),
+      complexity: this.complexity.value,
+      techTree: this.techTreeNodes(3),
+      transitionsToward: this.transitionsToward.map(t => t.jsonData()),
+      transitionsAway: this.transitionsAway.map(t => t.jsonData()),
     };
   }
 
@@ -103,27 +103,27 @@ class GameObject {
     return this.data.mapChance > 0;
   }
 
-  techTreeData(depth) {
-    return {
-      ...this.simpleData(),
-      parents: this.techTreeParentsData(depth - 1)
-    };
-  }
-
-  techTreeParentsData(depth) {
+  techTreeNodes(depth) {
     const transition = this.transitionsToward[0];
     if (this.isNatural() || !transition)
       return null;
     if (depth == 0)
       return []; // Empty array means tree goes deeper
-    var parents = [];
+    var nodes = [];
     if (transition.decay)
-      parents.push({decay: transition.decay});
+      nodes.push({decay: transition.decay});
     if (transition.actor)
-      parents.push(transition.actor.techTreeData(depth));
+      nodes.push(transition.actor.techTreeNode(depth));
     if (transition.target)
-      parents.push(transition.target.techTreeData(depth));
-    return parents;
+      nodes.push(transition.target.techTreeNode(depth));
+    return nodes;
+  }
+
+  techTreeNode(depth) {
+    return {
+      id: this.id,
+      nodes: this.techTreeNodes(depth - 1)
+    };
   }
 
   insulationData() {

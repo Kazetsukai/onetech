@@ -1,29 +1,34 @@
 <template>
   <div class="imgContainer" :class="clickable ? '' : 'current'" :title="title" v-tippy>
-    <div v-if="hand" class="hand" :style="object ? {} : { width: '100%', height: '100%' }" />
+    <div v-if="hand" class="hand" :style="objectID ? {} : { width: '100%', height: '100%' }" />
     <div v-if="decay" class="decay"><span>{{decay}}</span></div>
     <div v-if="ground" class="ground"></div>
-    <a :href="clickable ? urlTo(object) : undefined">
-      <div class="image" v-if="object" :style="'background-image: url(' + imageUrl + ');'">
+    <a :href="clickable ? objectUrl : undefined">
+      <div class="image" v-if="objectID" :style="'background-image: url(' + imageUrl + ');'">
     </div></a>
   </div>
 </template>
 
 <script>
+import ObjectService from '../services/ObjectService'
+
 export default {
-  props: ['object', 'clickable', 'hand', 'hover', 'decay', 'ground'],
+  props: ['objectID', 'clickable', 'hand', 'hover', 'decay', 'ground'],
   computed: {
+    objectUrl () {
+      return ObjectService.url(this.objectID);
+    },
     imageUrl () {
-      return this.object && this.object.hasSprite
-        ? STATIC_PATH + '/sprites/obj_' + this.object.id + '.png'
+      return this.objectID
+        ? `${STATIC_PATH}/sprites/obj_${this.objectID}.png`
         : 'about:blank';
     },
     title () {
       if (!this.hover)
         return '';
 
-      if (this.object)
-        return this.object.name.split(' - ')[0];
+      if (this.objectID)
+        return ObjectService.baseName(this.objectID);
 
       if (this.hand)
         return "Empty hands"

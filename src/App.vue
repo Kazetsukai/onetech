@@ -2,23 +2,20 @@
   <div id="app">
     <h1>{{ msg }}</h1>
 
-    <h2 v-if="!objects">Loading...</h2>
+    <h2 v-if="!objectIDs">Loading...</h2>
 
-    <div v-if="objects">
-      <ObjectSearch :objects="nonNilObjects" :selectedObject="selectedObject" />
+    <div v-else>
+      <ObjectSearch :selectedObjectID="selectedObjectID" />
 
-      <div v-if="selectedObject">
-        <TechTree :object="selectedObject" :objectData="selectedObjectData" v-if="showTechTree" />
-        <ObjectInspector :object="selectedObject" :objectData="selectedObjectData" v-else />
+      <div v-if="selectedObjectID">
+        <TechTree :objectID="selectedObjectID" v-if="showTechTree" />
+        <ObjectInspector :objectID="selectedObjectID" v-else />
       </div>
 
-      <div v-if="!selectedObject">
+      <div v-else>
         <div class="objectList">
-          <div class="object" v-for="object in firstFewObjects" >
-            <ObjectView :object="object" />
-          </div>
-          <div class="showMore">
-            <a href="#" onclick="return false" @click="showAmount = Math.min(nonNilObjects.length, showAmount + 90)" v-if="showAmount < nonNilObjects.length">Show more...</a>
+          <div class="object" v-for="objectID in shownObjectIDs" >
+            <ObjectView :objectID="objectID" />
           </div>
         </div>
       </div>
@@ -28,7 +25,7 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import ObjectService from './services/ObjectService'
 
 import ObjectView from './components/ObjectView';
 import ObjectSearch from './components/ObjectSearch';
@@ -37,57 +34,57 @@ import TechTree from './components/TechTree';
 
 export default {
   name: 'app',
+  components: {
+    ObjectView,
+    ObjectSearch,
+    ObjectInspector,
+    TechTree
+  },
   data () {
     return {
       msg: 'Crafting reference for One Hour One Life',
-      objects: null,
-      showAmount: 90,
-      selectedObject: null,
-      selectedObjectData: {loading: true},
-      showTechTree: false,
-      currentRoute: window.location.hash
+      showAmount: 24,
+      objectIDs: null,
+      selectedObjectID: null,
+      showTechTree: false
+    }
+  },
+  created () {
+    window.onhashchange = () => this.parseHash();
+    window.onscroll = () => this.handleScroll();
+  },
+  beforeMount () {
+    ObjectService.load(ids => {
+      this.objectIDs = ids;
+      this.parseHash();
+    });
+  },
+  computed: {
+    shownObjectIDs () {
+      return this.objectIDs.slice(0, this.showAmount);
     }
   },
   methods: {
-    loadObjects () {
-      let vue = this;
-      fetch(STATIC_PATH + "/objects.json").then(data => {
-        return data.json();
-      }).then(data => {
-        vue.objects = data;
-        vue.parseHash();
-      });
-    },
-    loadSelectedObjectData () {
-      let vue = this;
-      if (this.selectedObject) {
-        vue.selectedObjectData = {loading: true};
-        fetch(STATIC_PATH + "/objects/" + this.selectedObject.id + ".json").then(data => {
-          return data.json();
-        }).then(data => {
-          vue.selectedObjectData = data;
-        });
-      }
-    },
     parseHash () {
-      if (!this.objects) return;
+      if (!this.objectIDs) return;
       if (!window.location.hash) {
-        this.selectedObject = null;
+        this.selectedObjectID = null;
         this.showTechTree = false;
+        this.showAmount = 24;
       } else {
         let path = window.location.hash.split('#')[1].split('/');
-        if (!this.selectedObject || path[0] != this.selectedObject.id) {
-          this.selectedObject = _.find(this.objects, o => o.id == path[0]);
-          this.loadSelectedObjectData();
+        if (this.objectIDs.includes(path[0])) {
+          this.selectedObjectID = path[0];
+          this.showTechTree = (path[2] == "tech-tree");
         }
-        this.showTechTree = (path[2] == "tech-tree");
       }
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
       this.updateTitle();
     },
     updateTitle () {
       var parts = []
-      if (this.selectedObject) {
-        parts.push(this.selectedObject.name);
+      if (this.selectedObjectID) {
+        parts.push(ObjectService.name(this.selectedObjectID));
         if (this.showTechTree)
           parts.push("Tech Tree");
       } else {
@@ -95,29 +92,20 @@ export default {
       }
       parts.push("onetech");
       document.title = parts.join(" - ");
-    }
-  },
-  computed: {
-    nonNilObjects () {
-      return _.filter(this.objects, _.negate(_.isNil));
     },
-    firstFewObjects () {
-      return _.take(this.nonNilObjects, this.showAmount);
+    handleScroll () {
+      if (!this.selectedObjectID) {
+        if (window.scrollY + window.innerHeight > document.body.clientHeight - 100) {
+          if (!this.loadingMore) {
+            this.loadingMore = true;
+            this.showAmount += 24;
+          }
+        } else {
+          this.loadingMore = false;
+        }
+      }
     }
   },
-  beforeMount () {
-    this.loadObjects();
-    this.parseHash();
-  },
-  created () {
-    window.onhashchange = () => this.parseHash();
-  },
-  components: {
-    ObjectView,
-    ObjectSearch,
-    ObjectInspector,
-    TechTree
-  }
 }
 </script>
 
