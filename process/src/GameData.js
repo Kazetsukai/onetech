@@ -90,15 +90,11 @@ class GameData {
   }
 
   objectsData() {
-    var objects = this.sortedObjects();
+    var objects = _.sortBy(this.objects, o => o.sortWeight());
     return {
-      ids: this.sortedObjects().map(o => o.id),
-      names: this.sortedObjects().map(o => o.name),
+      ids: objects.map(o => o.id),
+      names: objects.map(o => o.name),
     }
-  }
-
-  sortedObjects() {
-    return _.sortBy(this.objects, o => o.sortWeight());
   }
 
   convertSpriteImages() {
