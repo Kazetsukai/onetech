@@ -3,56 +3,76 @@
   <div class="transitionView">
     <div class="arrow"></div>
 
-    <!-- What is being used on what -->
+    <!-- What object is being used -->
     <ObjectImage class="actor transitionObject"
                 v-if="transition.decay"
                 hover="true"
                 :decay="transition.decay" />
 
     <ObjectImage class="actor transitionObject"
-                v-if="transition.actorID || transition.hand"
+                v-else-if="transition.actorID || transition.hand"
                 hand="true" hover="true"
-                :objectID="transition.actorID"
-                :clickable="transition.actorID && transition.actorID != selectedObjectID" />
+                :object="actor"
+                :clickable="transition.actorID && actor != selectedObject" />
+
     <span class="plus" v-if="transition.actorID || transition.decay || transition.hand">+</span>
+
+    <!-- What object is the target -->
     <ObjectImage class="target transitionObject"
                 v-if="transition.targetID"
                 hover="true"
-                :objectID="transition.targetID"
-                :clickable="transition.targetID && transition.targetID != selectedObjectID" />
+                :object="target"
+                :clickable="transition.targetID && target != selectedObject" />
 
     <ObjectImage class="target transitionObject"
-                v-if="!transition.targetID"
+                v-else
                 ground="true"
                 hover="true" />
 
-    <!-- What does the item used become? -->
+    <!-- What does the used object become? -->
     <ObjectImage class="newActor transitionObject"
                 v-if="!transition.tool && !transition.decay"
                 hand="true" hover="true"
-                :objectID="transition.newActorID"
-                :clickable="transition.newActorID && transition.newActorID != selectedObjectID" />
+                :object="newActor"
+                :clickable="newActor && newActor != selectedObject" />
 
     <!-- What does the target item become? -->
     <ObjectImage class="newTarget transitionObject"
                 v-if="transition.newTargetID && (!transition.targetRemains || transition.targetNumUses > 0)"
                 hover="true" :usedUp="!transition.newTargetID"
-                :objectID="transition.newTargetID"
-                :clickable="transition.newTargetID && transition.newTargetID != selectedObjectID" />
+                :object="newTarget"
+                :clickable="newTarget && newTarget != selectedObject" />
+
     <ObjectImage class="newTarget transitionObject"
-                v-if="!transition.targetRemains && !transition.newTargetID"
+                v-else
                 ground="true"
-                hover="true"  />
+                hover="true" />
   </div>
 </template>
 
 <script>
+import GameObject from '../models/GameObject';
+
 import ObjectImage from './ObjectImage';
 
 export default {
-  props: ['transition', 'selectedObjectID'],
+  props: ['transition', 'selectedObject'],
   components: {
     ObjectImage
+  },
+  computed: {
+    actor () {
+      return GameObject.find(this.transition.actorID);
+    },
+    target () {
+      return GameObject.find(this.transition.targetID);
+    },
+    newActor () {
+      return GameObject.find(this.transition.newActorID);
+    },
+    newTarget () {
+      return GameObject.find(this.transition.newTargetID);
+    },
   }
 }
 </script>

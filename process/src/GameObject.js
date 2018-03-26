@@ -73,9 +73,9 @@ class GameObject {
     return {
       id: this.id,
       name: this.name,
-      foodValue: this.foodValue,
-      heatValue: this.heatValue,
-      clothing: this.clothing,
+      foodValue: this.data.foodValue,
+      heatValue: this.data.heatValue,
+      clothing: this.data.clothing,
       insulation: this.insulationData(),
       complexity: this.complexity.value,
       techTree: this.techTreeNodes(3),

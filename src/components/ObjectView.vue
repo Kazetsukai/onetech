@@ -1,25 +1,19 @@
 <template>
-  <a class="nostyle" :href="url">
+  <a class="nostyle" :href="object.url()">
     <div class="objectView">
-      <h3>{{name}}</h3>
-      <ObjectImage :objectID="objectID" />
+      <h3>{{object.name}}</h3>
+      <ObjectImage :object="object" />
     </div>
   </a>
 </template>
 
 <script>
-import ObjectService from '../services/ObjectService'
-
 import ObjectImage from './ObjectImage';
 
 export default {
-  props: ['objectID'],
+  props: ['object'],
   components: {
     ObjectImage
-  },
-  computed: {
-    url () { return ObjectService.url(this.objectID) },
-    name () { return ObjectService.name(this.objectID) },
   }
 }
 </script>

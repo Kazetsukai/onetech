@@ -1,21 +1,21 @@
 <template>
   <div class="node">
     <ObjectImage v-if="decay" :decay="decay" hover="true" class="object" />
-    <ObjectImage v-else :objectID="objectID" clickable="true" hover="true" class="object" />
+    <ObjectImage v-else :object="object" clickable="true" hover="true" class="object" />
     <div class="nodes" v-if="nodes">
       <TechTreeNode
         v-for="(node, index) in nodes"
-        :objectID="node.id"
+        :object="findObject(node.id)"
         :decay="node.decay"
         :nodes="node.nodes"
-        :selectedID="selectedID"
+        :selectedObject="selectedObject"
         :key="index"
         @expand="expandTree"
       />
       <div class="expand"
         v-if="nodes.length == 0"
-        v-bind:class="{selected: selectedID == objectID}"
-        @click="expandTree(objectID)"
+        v-bind:class="{selected: selectedObject == object}"
+        @click="expandTree(object)"
       >
         &#9660;
       </div>
@@ -24,17 +24,22 @@
 </template>
 
 <script>
+import GameObject from '../models/GameObject';
+
 import ObjectImage from './ObjectImage';
 
 export default {
   name: 'TechTreeNode',
-  props: ['objectID', 'nodes', 'decay', 'selectedID'],
+  props: ['object', 'nodes', 'decay', 'selectedObject'],
   components: {
     ObjectImage
   },
   methods: {
-    expandTree (objectID) {
-      this.$emit('expand', objectID);
+    findObject (id) {
+      return GameObject.find(id);
+    },
+    expandTree (object) {
+      this.$emit('expand', object);
     }
   }
 }

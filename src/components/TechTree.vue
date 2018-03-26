@@ -1,25 +1,20 @@
 <template>
   <div class="techTree">
-    <h2>{{name}}</h2>
+    <h2>{{object.name}}</h2>
     <h3>Tech Tree</h3>
 
-    <TechTreeView :objectID="objectID" />
+    <TechTreeView :object="object" />
   </div>
 </template>
 
 <script>
-import ObjectService from '../services/ObjectService'
-
 import TechTreeView from './TechTreeView';
 
 export default {
-  props: ['objectID'],
+  props: ['object'],
   components: {
     TechTreeView
-  },
-  computed: {
-    name () { return ObjectService.name(this.objectID); },
-  },
+  }
 }
 </script>
 

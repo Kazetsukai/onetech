@@ -1,55 +1,51 @@
 <template>
   <div class="techTreeView">
-    <h3 v-if="object.loading">Loading...</h3>
+    <h3 v-if="!object.data">Loading...</h3>
 
     <div v-else class="tree">
       <TechTreeNode
-        :objectID="objectID"
-        :nodes="object.techTree"
-        :selectedID="selectedID"
+        :object="object"
+        :nodes="object.data.techTree"
+        :selectedObject="selectedObject"
         @expand="expand"
       />
     </div>
 
-    <div v-if="selectedID" class="subtree">
-      <TechTreeView :objectID="selectedID" />
+    <div v-if="selectedObject" class="subtree">
+      <TechTreeView :object="selectedObject" />
     </div>
   </div>
 </template>
 
 <script>
-import ObjectService from '../services/ObjectService'
-
 import TechTreeView from './TechTreeView';
 import TechTreeNode from './TechTreeNode';
 
 export default {
   name: 'TechTreeView',
-  props: ['objectID'],
+  props: ['object'],
   components: {
     TechTreeView,
     TechTreeNode
   },
   data () {
     return {
-      object: null,
-      selectedID: null,
+      selectedObject: null,
     };
   },
-  beforeMount () {
-    this.loadObject();
-  },
   watch: {
-    objectID () { this.loadObject(); }
+    object () {
+      this.selectedObject = null;
+      this.object.loadData();
+    }
+  },
+  beforeMount () {
+    this.selectedObject = null;
+    this.object.loadData();
   },
   methods: {
-    loadObject () {
-      this.selectedID = null;
-      this.object = {loading: true};
-      ObjectService.fetchObject(this.objectID, obj => this.object = obj);
-    },
-    expand (objectID) {
-      this.selectedID = objectID;
+    expand (object) {
+      this.selectedObject = object;
     }
   }
 }

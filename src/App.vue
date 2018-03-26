@@ -1,21 +1,21 @@
 <template>
   <div id="app">
-    <h1>{{ msg }}</h1>
+    <h1>Crafting reference for One Hour One Life</h1>
 
-    <h2 v-if="!objectIDs">Loading...</h2>
+    <h2 v-if="loading">Loading...</h2>
 
     <div v-else>
-      <ObjectSearch :selectedObjectID="selectedObjectID" />
+      <ObjectSearch :selectedObject="selectedObject" />
 
-      <div v-if="selectedObjectID">
-        <TechTree :objectID="selectedObjectID" v-if="showTechTree" />
-        <ObjectInspector :objectID="selectedObjectID" v-else />
+      <div v-if="selectedObject">
+        <TechTree :object="selectedObject" v-if="showTechTree" />
+        <ObjectInspector :object="selectedObject" v-else />
       </div>
 
       <div v-else>
         <div class="objectList">
-          <div class="object" v-for="objectID in shownObjectIDs" >
-            <ObjectView :objectID="objectID" />
+          <div class="object" v-for="object in shownObjects" >
+            <ObjectView :object="object" />
           </div>
         </div>
       </div>
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import ObjectService from './services/ObjectService'
+import GameObject from './models/GameObject'
 
 import ObjectView from './components/ObjectView';
 import ObjectSearch from './components/ObjectSearch';
@@ -42,10 +42,9 @@ export default {
   },
   data () {
     return {
-      msg: 'Crafting reference for One Hour One Life',
+      loading: true,
       showAmount: 24,
-      objectIDs: null,
-      selectedObjectID: null,
+      selectedObject: null,
       showTechTree: false
     }
   },
@@ -54,27 +53,28 @@ export default {
     window.onscroll = () => this.handleScroll();
   },
   beforeMount () {
-    ObjectService.load(ids => {
-      this.objectIDs = ids;
+    GameObject.load(() => {
+      this.loading = false;
       this.parseHash();
     });
   },
   computed: {
-    shownObjectIDs () {
-      return this.objectIDs.slice(0, this.showAmount);
+    shownObjects () {
+      return GameObject.first(this.showAmount);
     }
   },
   methods: {
     parseHash () {
-      if (!this.objectIDs) return;
+      if (this.loading) return;
       if (!window.location.hash) {
-        this.selectedObjectID = null;
+        this.selectedObject = null;
         this.showTechTree = false;
         this.showAmount = 24;
       } else {
-        let path = window.location.hash.split('#')[1].split('/');
-        if (this.objectIDs.includes(path[0])) {
-          this.selectedObjectID = path[0];
+        const path = window.location.hash.split('#')[1].split('/');
+        const object = GameObject.find(path[0]);
+        if (object) {
+          this.selectedObject = object;
           this.showTechTree = (path[2] == "tech-tree");
         }
       }
@@ -83,8 +83,8 @@ export default {
     },
     updateTitle () {
       var parts = []
-      if (this.selectedObjectID) {
-        parts.push(ObjectService.name(this.selectedObjectID));
+      if (this.selectedObject) {
+        parts.push(this.selectedObject.name);
         if (this.showTechTree)
           parts.push("Tech Tree");
       } else {
@@ -94,7 +94,7 @@ export default {
       document.title = parts.join(" - ");
     },
     handleScroll () {
-      if (!this.selectedObjectID) {
+      if (!this.selectedObject) {
         if (window.scrollY + window.innerHeight > document.body.clientHeight - 100) {
           if (!this.loadingMore) {
             this.loadingMore = true;
