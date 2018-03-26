@@ -77,6 +77,7 @@ class GameObject {
       heatValue: this.data.heatValue,
       clothing: this.data.clothing,
       insulation: this.insulationData(),
+      numUses: this.data.numUses,
       complexity: this.complexity.value,
       techTree: this.techTreeNodes(3),
       transitionsToward: this.transitionsToward.map(t => t.jsonData()),

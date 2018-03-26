@@ -16,6 +16,7 @@
           <li v-if="object.data.heatValue > 0">Heat: {{object.data.heatValue}}</li>
           <li v-if="object.clothingPart()">Clothing: {{object.clothingPart()}}</li>
           <li v-if="object.hasInsulation()">Insulation: {{object.insulationPercent()}}%</li>
+          <li v-if="object.data.numUses > 1">Number of Uses: {{object.data.numUses}}</li>
           <!-- <li v-if="object.data.complexity > 0">Complexity: {{object.data.complexity}}</li> -->
         </ul>
         <div class="techTree" v-if="object.data && object.data.techTree">
