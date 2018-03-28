@@ -75,6 +75,7 @@ export default {
         const object = GameObject.find(path[0]);
         if (object) {
           this.selectedObject = object;
+          this.selectedObject.loadData();
           this.showTechTree = (path[2] == "tech-tree");
         }
       }

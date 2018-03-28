@@ -42,12 +42,6 @@ export default {
   components: {
     ObjectImage,
     TransitionView
-  },
-  watch: {
-    object () { this.object.loadData(); }
-  },
-  beforeMount () {
-    this.object.loadData();
   }
 }
 </script>

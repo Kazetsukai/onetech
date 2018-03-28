@@ -36,16 +36,12 @@ export default {
   watch: {
     object () {
       this.selectedObject = null;
-      this.object.loadData();
     }
-  },
-  beforeMount () {
-    this.selectedObject = null;
-    this.object.loadData();
   },
   methods: {
     expand (object) {
       this.selectedObject = object;
+      this.selectedObject.loadData();
     }
   }
 }
