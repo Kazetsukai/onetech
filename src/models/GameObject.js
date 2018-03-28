@@ -63,13 +63,9 @@ export default class GameObject {
     return this.data.insulation.toFixed(4)*100;
   }
 
-  loadData(callback) {
-    if (this.data)
-      return callback && callback(this.data);
-    this.fetchData(data => {
-      this.data = data;
-      if (callback) callback(data);
-    });
+  loadData() {
+    if (this.data) return;
+    this.fetchData(data => this.data = data);
   }
 
   fetchData(callback) {
