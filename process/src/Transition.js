@@ -64,7 +64,7 @@ class Transition {
     if (this.newTarget)
       this.newTarget.transitionsToward.push(this)
 
-    if (this.newActor && this.newActor != this.newTarget)
+    if (this.newActor && !this.tool && this.newActor != this.newTarget)
       this.newActor.transitionsToward.push(this)
   }
 
