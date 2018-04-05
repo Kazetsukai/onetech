@@ -17,9 +17,6 @@
           <div class="object" v-for="object in firstFewObjects" >
             <ObjectView :object="object" />
           </div>
-          <div class="showMore">
-            <a href="#" onclick="return false" @click="showAmount = Math.min(nonNilObjects.length, showAmount + 90)" v-if="showAmount < nonNilObjects.length">Show more...</a>
-          </div>
         </div>
       </div>
 
@@ -41,7 +38,7 @@ export default {
     return {
       msg: 'Crafting reference for One Hour One Life',
       objects: null,
-      showAmount: 90,
+      showAmount: 24,
       selectedObject: null,
       selectedObjectData: {loading: true},
       showTechTree: false,
@@ -74,6 +71,7 @@ export default {
       if (!window.location.hash) {
         this.selectedObject = null;
         this.showTechTree = false;
+        this.showAmount = 24;
       } else {
         let path = window.location.hash.split('#')[1].split('/');
         if (!this.selectedObject || path[0] != this.selectedObject.id) {
@@ -95,6 +93,18 @@ export default {
       }
       parts.push("onetech");
       document.title = parts.join(" - ");
+    },
+    handleScroll () {
+      if (!this.selectedObject) {
+        if (window.scrollY + window.innerHeight > document.body.clientHeight - 100) {
+          if (!this.loadingMore) {
+            this.loadingMore = true;
+            this.showAmount += 24;
+          }
+        } else {
+          this.loadingMore = false;
+        }
+      }
     }
   },
   computed: {
@@ -111,6 +121,7 @@ export default {
   },
   created () {
     window.onhashchange = () => this.parseHash();
+    window.onscroll = () => this.handleScroll();
   },
   components: {
     ObjectView,
