@@ -20,7 +20,7 @@ The project is split into two parts:
 
 The script is under the folder `process`. It will pull the latest data from the game data repository (if provided `download` as a command line argument), and then generate JSON files for the objects. It will also composite the sprites and create PNGs for each object in the game.
 
-To get it running, you will need to install [ImageMagick](https://www.imagemagick.org/script/index.php), and then:
+To get it running, you will need to install [ImageMagick](https://www.imagemagick.org/script/index.php) and [Canvas dependencies](https://github.com/Automattic/node-canvas/blob/v1.x/Readme.md#installation), and then:
 
 ``` bash
 cd process
