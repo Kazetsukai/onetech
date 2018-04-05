@@ -42,7 +42,8 @@ class Transition {
   }
 
   addToObjects(objects) {
-    if (this.move != 0) return; // Ignore move transitions
+    // Ignore transitions which only effect one object
+    if (!this.hasMultipleObjects()) return;
 
     if (this.target = objects[this.targetID]) {
       this.addToObject(this.target, true, objects);
@@ -89,6 +90,18 @@ class Transition {
     if (this.actorID == oldID)     this.actorID = newID;
     if (this.newTargetID == oldID) this.newTargetID = newID;
     if (this.newActorID == oldID)  this.newActorID = newID;
+  }
+
+  hasMultipleObjects() {
+    if (this.actorID > 0 && this.targetID > 0 && this.actorID != this.targetID)
+      return true;
+    if (this.actorID > 0 && this.newActorID > 0 && this.actorID != this.newActorID)
+      return true;
+    if (this.targetID > 0 && this.newTargetID > 0 && this.targetID != this.newTargetID)
+      return true;
+    if (this.newActorID > 0 && this.newTargetID > 0 && this.newActorID != this.newTargetID)
+      return true;
+    return false;
   }
 
   clone() {

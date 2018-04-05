@@ -6,14 +6,12 @@ class ComplexityCalculator {
   // Calculates the complexity starting with natural and uncraftable objects.
   calculate(objects) {
     for (var object of objects) {
-      if (object.isNatural()) {
+      if (object.isNatural())
         this.setObjectComplexity(object, new Complexity({value: 1, calculated: true}));
-      } else if (object.transitionsToward.length == 0) {
-        this.setObjectComplexity(object, new Complexity({calculated: true})); // Uncraftable
-      }
     }
     this.sortObjectTransitions(objects);
-    this.reportUncalculated(objects.filter(o => !o.complexity.calculated));
+    // Debug uncalculated complexities:
+    // this.reportUncalculated(objects.filter(o => !o.complexity.calculated));
   }
 
   // Sets the object complexity if it is lower than previously set
@@ -62,7 +60,8 @@ class ComplexityCalculator {
 
   reportUncalculated(objects) {
     for (var object of objects) {
-      console.log(object.id, object.name, "- Unable to calculate complexity");
+      if (!object.category)
+        console.log(object.id, object.name, "- Unable to calculate complexity");
     }
   }
 
