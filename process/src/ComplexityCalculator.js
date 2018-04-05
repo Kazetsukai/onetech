@@ -62,7 +62,7 @@ class ComplexityCalculator {
 
   reportUncalculated(objects) {
     for (var object of objects) {
-      console.log(object.data.id, object.data.name, "- Unable to calculate complexity");
+      console.log(object.id, object.name, "- Unable to calculate complexity");
     }
   }
 

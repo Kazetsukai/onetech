@@ -3,52 +3,17 @@
     <h2>{{object.name}}</h2>
     <h3>Tech Tree</h3>
 
-    <div class="tree">
-      <TechTreeNode
-        :object="object"
-        :parents="objectData.techTree"
-        :selected="subtrees[0]"
-        treeIndex="0"
-        @expand="expand"
-      />
-    </div>
-
-    <h3 v-if="objectData.loading">Loading...</h3>
-
-    <div class="tree subtree" v-for="(object, index) in subtrees" :key="index">
-      <TechTreeNode
-        :object="object"
-        :parents="object.techTree"
-        :selected="subtrees[index+1]"
-        :treeIndex="index+1"
-        @expand="expand"
-      />
-    </div>
+    <TechTreeView :object="object" />
   </div>
 </template>
 
 <script>
-import TechTreeNode from './TechTreeNode';
+import TechTreeView from './TechTreeView';
 
 export default {
-  props: ['object', 'objectData'],
+  props: ['object'],
   components: {
-    TechTreeNode
-  },
-  data () {
-    return {
-      subtrees: []
-    };
-  },
-  methods: {
-    expand (object, treeIndex) {
-      let vue = this;
-      fetch(STATIC_PATH + "/objects/" + object.id + ".json").then(data => {
-        return data.json();
-      }).then(data => {
-        vue.subtrees = vue.subtrees.slice(0, treeIndex).concat([data]);
-      });
-    }
+    TechTreeView
   }
 }
 </script>
@@ -68,23 +33,10 @@ export default {
     margin-bottom: 0px;
   }
 
-  .techTree > h3 {
+  .techTree h3 {
     text-align: center;
     font-weight: lighter;
     font-style: italic;
     margin-top: 0px;
-  }
-
-  .tree {
-    text-align: center;
-    overflow-x: auto;
-    overflow-y: hidden;
-    box-sizing: border-box;
-  }
-
-  .subtree {
-    border-top: dashed 1px #777;
-    margin-top: 15px;
-    padding-top: 10px;
   }
 </style>

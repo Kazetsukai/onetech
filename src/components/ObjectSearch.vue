@@ -1,9 +1,9 @@
 <template>
   <div class="objectSearch">
-    <VueSelect label="name" :options="sortedObjects" v-model="selectedObject" :on-change="selectObject">
+    <VueSelect label="name" :options="objects" v-model="selectedObject" :on-change="selectObject">
       <template slot="option" slot-scope="option">
         <ObjectImage :object="option" />
-        {{ option.name }}
+        {{option.name}}
       </template>
     </VueSelect>
   </div>
@@ -12,24 +12,29 @@
 <script>
 import _ from 'lodash';
 
+import GameObject from '../models/GameObject'
+
 import VueSelect from './Select';
 import ObjectImage from './ObjectImage';
 
 export default {
-  props: ['objects', 'selectedObject'],
-  computed: {
-    sortedObjects () {
-      return _.sortBy(this.objects, o => o.name.length);
-    }
-  },
+  props: ['selectedObject'],
   components: {
     VueSelect,
     ObjectImage
   },
+  computed: {
+    objects () {
+      return GameObject.byName();
+    }
+  },
   methods: {
-    selectObject (obj) {
-      if (obj != this.selectedObject)
-        this.navigateTo(obj);
+    selectObject (object) {
+      console.log("select", object)
+      if (!object)
+        window.location = '#';
+      else if (!this.selectedObject || object.id != this.selectedObject.id)
+        window.location = object.url();
     }
   }
 }

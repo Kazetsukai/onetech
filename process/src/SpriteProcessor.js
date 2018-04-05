@@ -53,11 +53,11 @@ class SpriteProcessor {
     this.context.stroke();
     this.context.closePath(); //
 
-    fs.writeFileSync(this.pngDir + "/obj_" + object.data.id + ".png", newCanvas.toBuffer());
+    fs.writeFileSync(`${this.pngDir}/obj_${object.id}.png`, newCanvas.toBuffer());
   }
 
   parseSpriteFile(sprite) {
-    const path = this.spritesDir + "/" + sprite.id + ".txt";
+    const path = `${this.spritesDir}/${sprite.id}.txt`
     const data = fs.readFileSync(path, "utf8").split(' ');
     sprite.parseExtraData(data);
   }
@@ -74,7 +74,7 @@ class SpriteProcessor {
 
   drawSpriteImage(sprite, context) {
     var img = new Canvas.Image;
-    img.src = fs.readFileSync(this.pngDir + "/sprite_" + sprite.id + ".png");
+    img.src = fs.readFileSync(`${this.pngDir}/sprite_${sprite.id}.png`);
     sprite.width = img.width;
     sprite.height = img.height;
 

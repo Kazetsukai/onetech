@@ -1,5 +1,5 @@
 <template>
-  <a class="nostyle" :href="urlTo(object)">
+  <a class="nostyle" :href="object.url()">
     <div class="objectView">
       <h3>{{object.name}}</h3>
       <ObjectImage :object="object" />
@@ -14,7 +14,8 @@ export default {
   props: ['object'],
   components: {
     ObjectImage
-  }}
+  }
+}
 </script>
 
 <style scoped>

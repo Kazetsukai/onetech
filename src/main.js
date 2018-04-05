@@ -11,23 +11,6 @@ Vue.use(Tippy, {
   hideOnClick: false
 });
 
-Vue.mixin({
-	methods: {
-		urlTo: (object, techTree) => {
-			if (!object) return '#';
-
-			return '#' + 
-				   object.id + 
-				   '/' + 
-				   encodeURIComponent(object.name.split(' ').join('-')) +
-				   (techTree ? '/tech-tree' : '');
-		},
-		navigateTo: (object, techTree) => {
-			window.location = v.urlTo(object, techTree);
-		}
-	}
-})
-
 let v = new Vue({
   el: '#app',
   render: h => h(App)

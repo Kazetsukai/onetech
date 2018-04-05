@@ -3,7 +3,7 @@
     <div v-if="hand" class="hand" :style="object ? {} : { width: '100%', height: '100%' }" />
     <div v-if="decay" class="decay"><span>{{decay}}</span></div>
     <div v-if="ground" class="ground"></div>
-    <a :href="clickable ? urlTo(object) : undefined">
+    <a :href="clickable ? object.url() : undefined">
       <div class="image" v-if="object" :style="'background-image: url(' + imageUrl + ');'">
     </div></a>
   </div>
@@ -14,8 +14,8 @@ export default {
   props: ['object', 'clickable', 'hand', 'hover', 'decay', 'ground'],
   computed: {
     imageUrl () {
-      return this.object && this.object.hasSprite
-        ? STATIC_PATH + '/sprites/obj_' + this.object.id + '.png'
+      return this.object
+        ? `${STATIC_PATH}/sprites/obj_${this.object.id}.png`
         : 'about:blank';
     },
     title () {
@@ -23,7 +23,7 @@ export default {
         return '';
 
       if (this.object)
-        return this.object.name.split(' - ')[0];
+        return this.object.name;
 
       if (this.hand)
         return "Empty hands"

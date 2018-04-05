@@ -79,7 +79,7 @@ class Transition {
   addToCategory(category, away, objects) {
     for (var object of category.objects) {
       const transition = this.clone();
-      transition.replaceObjectID(category.parentID, object.data.id);
+      transition.replaceObjectID(category.parentID, object.id);
       transition.addToObjects(objects);
     }
   }
@@ -95,21 +95,18 @@ class Transition {
     return Object.assign(Object.create(Object.getPrototypeOf(this)), this);
   }
 
-  data() {
+  jsonData() {
     return {
-      actor: this.objectData(this.actor),
-      target: this.objectData(this.target),
-      newActor: this.objectData(this.newActor),
-      newTarget: this.objectData(this.newTarget),
+      actorID: this.actor && this.actor.id,
+      targetID: this.target && this.target.id,
+      newActorID: this.newActor && this.newActor.id,
+      newTargetID: this.newTarget && this.newTarget.id,
+      targetNumUses: this.target && this.target.data.numUses,
       targetRemains: this.targetRemains,
       hand: this.hand,
       tool: this.tool,
       decay: this.decay
     }
-  }
-
-  objectData(object) {
-    if (object) return object.simpleData();
   }
 }
 
