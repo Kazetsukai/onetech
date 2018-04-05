@@ -42,8 +42,8 @@ class Transition {
   }
 
   addToObjects(objects) {
-    // Ignore transitions which only effect one object
-    if (!this.hasMultipleObjects()) return;
+    // Ignore transitions which don't make a change
+    if (!this.causesChange()) return;
 
     if (this.target = objects[this.targetID]) {
       this.addToObject(this.target, true, objects);
@@ -92,14 +92,10 @@ class Transition {
     if (this.newActorID == oldID)  this.newActorID = newID;
   }
 
-  hasMultipleObjects() {
-    if (this.actorID > 0 && this.targetID > 0 && this.actorID != this.targetID)
+  causesChange() {
+    if ((this.actorID > 0 || this.newActorID > 0) && this.actorID != this.newActorID)
       return true;
-    if (this.actorID > 0 && this.newActorID > 0 && this.actorID != this.newActorID)
-      return true;
-    if (this.targetID > 0 && this.newTargetID > 0 && this.targetID != this.newTargetID)
-      return true;
-    if (this.newActorID > 0 && this.newTargetID > 0 && this.newActorID != this.newTargetID)
+    if ((this.targetID > 0 || this.newTargetID > 0) && this.targetID != this.newTargetID)
       return true;
     return false;
   }
