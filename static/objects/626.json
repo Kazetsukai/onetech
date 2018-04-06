@@ -1,1 +1,1 @@
-{"id":"626","name":"@ Planted Stakes","foodValue":"0","heatValue":"0","clothing":"n","numUses":"0","techTree":null,"transitionsToward":[],"transitionsAway":[{"actorID":"34","targetID":"626","newActorID":"34","newTargetID":"107","targetNumUses":"0","targetRemains":false,"hand":false,"tool":true}]}
+{"id":"626","name":"@ Planted Stakes","foodValue":"0","heatValue":"0","clothing":"n","numUses":"0","techTree":null,"transitionsToward":[],"transitionsAway":[]}

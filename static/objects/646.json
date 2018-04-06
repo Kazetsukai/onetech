@@ -1,1 +1,1 @@
-{"id":"646","name":"@ Unshot Grizzly Bear","foodValue":"0","heatValue":"0","clothing":"n","numUses":"1","techTree":null,"transitionsToward":[],"transitionsAway":[{"actorID":"152","targetID":"646","newActorID":"151","newTargetID":"632","targetNumUses":"1","targetRemains":false,"hand":false,"tool":false}]}
+{"id":"646","name":"@ Unshot Grizzly Bear","foodValue":"0","heatValue":"0","clothing":"n","numUses":"1","techTree":null,"transitionsToward":[],"transitionsAway":[]}

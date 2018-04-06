@@ -1,1 +1,1 @@
-{"id":"696","name":"@ Scrap Steel","foodValue":"0","heatValue":"0","clothing":"h","insulation":0,"numUses":"1","techTree":null,"transitionsToward":[],"transitionsAway":[{"actorID":"696","targetID":"235","newTargetID":"495","targetNumUses":"1","targetRemains":false,"hand":false,"tool":false}]}
+{"id":"696","name":"@ Scrap Steel","foodValue":"0","heatValue":"0","clothing":"h","insulation":0,"numUses":"1","techTree":null,"transitionsToward":[],"transitionsAway":[]}

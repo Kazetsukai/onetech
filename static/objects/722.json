@@ -1,1 +1,1 @@
-{"id":"722","name":"@ Shallow Digger","foodValue":"0","heatValue":"0","clothing":"n","numUses":"1","techTree":null,"transitionsToward":[],"transitionsAway":[{"actorID":"722","targetID":"714","newActorID":"722","newTargetID":"715","targetNumUses":"1","targetRemains":false,"hand":false,"tool":true}]}
+{"id":"722","name":"@ Shallow Digger","foodValue":"0","heatValue":"0","clothing":"n","numUses":"1","techTree":null,"transitionsToward":[],"transitionsAway":[]}

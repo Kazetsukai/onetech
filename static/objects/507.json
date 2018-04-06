@@ -1,1 +1,1 @@
-{"id":"507","name":"@ Diggable Live Berry Bush","foodValue":"0","heatValue":"0","clothing":"n","numUses":"0","techTree":null,"transitionsToward":[],"transitionsAway":[{"actorID":"502","targetID":"507","newActorID":"502","newTargetID":"498","targetNumUses":"0","targetRemains":false,"hand":false,"tool":true}]}
+{"id":"507","name":"@ Diggable Live Berry Bush","foodValue":"0","heatValue":"0","clothing":"n","numUses":"0","techTree":null,"transitionsToward":[],"transitionsAway":[]}

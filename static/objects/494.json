@@ -1,1 +1,1 @@
-{"id":"494","name":"@ Yew Bow","foodValue":"0","heatValue":"0","clothing":"n","numUses":"1","techTree":null,"transitionsToward":[],"transitionsAway":[{"actorID":"148","targetID":"494","newActorID":"152","targetNumUses":"1","targetRemains":false,"hand":false,"tool":false},{"actorID":"494","targetID":"148","newActorID":"152","targetNumUses":"1","targetRemains":false,"hand":false,"tool":false}]}
+{"id":"494","name":"@ Yew Bow","foodValue":"0","heatValue":"0","clothing":"n","numUses":"1","techTree":null,"transitionsToward":[],"transitionsAway":[]}
