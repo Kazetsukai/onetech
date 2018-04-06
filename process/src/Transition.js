@@ -45,39 +45,35 @@ class Transition {
     // Ignore transitions which don't make a change
     if (!this.causesChange()) return;
 
-    if (this.target = objects[this.targetID]) {
-      this.addToObject(this.target, true, objects);
-    }
-    if (this.actor = objects[this.actorID]) {
-      if (this.actor != this.target) {
-        this.addToObject(this.actor, true, objects);
-      }
+    this.target = objects[this.targetID];
+    this.actor = objects[this.actorID];
+    this.newTarget = objects[this.newTargetID];
+    this.newActor = objects[this.newActorID];
+
+    if (this.categories().length > 0) {
+      this.categories().forEach(category => this.addToCategory(category, objects))
+      return;
     }
 
-    if (this.newTarget = objects[this.newTargetID]) {
-      // Hide new target if target hasn't changed
-      if (!this.targetRemains)
-        this.addToObject(this.newTarget, false, objects);
-    }
-    if (this.newActor = objects[this.newActorID]) {
-      // Hide new actor if actor hasn't changed
-      if (!this.tool && this.newActor != this.newTarget)
-        this.addToObject(this.newActor, false, objects);
-    }
+    if (this.target)
+      this.target.transitionsAway.push(this)
+
+    if (this.actor && this.actor != this.target)
+      this.actor.transitionsAway.push(this)
+
+    if (this.newTarget)
+      this.newTarget.transitionsToward.push(this)
+
+    if (this.newActor && !this.tool && this.newActor != this.newTarget)
+      this.newActor.transitionsToward.push(this)
   }
 
-  addToObject(object, away, objects) {
-    if (object.category) {
-      this.addToCategory(object.category, away, objects);
-    }
-    if (away) {
-      object.transitionsAway.push(this);
-    } else {
-      object.transitionsToward.push(this);
-    }
+  categories() {
+    const objects = [this.target, this.actor, this.newTarget, this.newActor];
+    return objects.map(o => o && o.category).filter((c, i, arr) => c && arr.lastIndexOf(c) == i);
   }
 
-  addToCategory(category, away, objects) {
+  addToCategory(category, objects) {
     for (var object of category.objects) {
       const transition = this.clone();
       transition.replaceObjectID(category.parentID, object.id);

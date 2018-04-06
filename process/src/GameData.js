@@ -90,7 +90,7 @@ class GameData {
   }
 
   objectsData() {
-    var objects = _.sortBy(this.objects, o => o.sortWeight());
+    var objects = _.sortBy(this.objects, o => o.sortWeight()).filter(o => !o.category);
     return {
       ids: objects.map(o => o.id),
       names: objects.map(o => o.name),
