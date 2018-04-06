@@ -50,8 +50,10 @@ class Transition {
     this.newTarget = objects[this.newTargetID];
     this.newActor = objects[this.newActorID];
 
-    if (this.categories().length > 0) {
-      this.categories().forEach(category => this.addToCategory(category, objects))
+    // Only add to the first category since the other
+    // categories will be added to recursively
+    if (this.firstCategory()) {
+      this.addToCategory(this.firstCategory(), objects);
       return;
     }
 
@@ -68,9 +70,12 @@ class Transition {
       this.newActor.transitionsToward.push(this)
   }
 
-  categories() {
+  firstCategory() {
     const objects = [this.target, this.actor, this.newTarget, this.newActor];
-    return objects.map(o => o && o.category).filter((c, i, arr) => c && arr.lastIndexOf(c) == i);
+    for (let object of objects) {
+      if (object && object.category)
+        return object.category;
+    }
   }
 
   addToCategory(category, objects) {
@@ -89,6 +94,8 @@ class Transition {
   }
 
   causesChange() {
+    if (this.targetID <= 0 && this.newTargetID <= 0 && typeof this.actorMinUseFraction == "string")
+      return false; // A bit of a hack to remove the empty/full water bowl transitions
     if ((this.actorID > 0 || this.newActorID > 0) && this.actorID != this.newActorID)
       return true;
     if ((this.targetID > 0 || this.newTargetID > 0) && this.targetID != this.newTargetID)
