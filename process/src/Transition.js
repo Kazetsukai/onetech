@@ -30,15 +30,20 @@ class Transition {
     this.move = data[7] || 0;
     this.desiredMoveDist = data[8] || 1;
 
-    this.epochAutoDecay = this.autoDecaySeconds < 0 ? -this.autoDecaySeconds : 0;
     this.hand = this.actorID == 0;
     this.tool = this.actorID >= 0 && this.actorID == this.newActorID;
     this.targetRemains = this.targetID >= 0 && this.targetID == this.newTargetID;
 
+    this.decay = this.calculateDecay();
+  }
+
+  calculateDecay() {
+    if (this.autoDecaySeconds < 0)
+      return -this.autoDecaySeconds + "h";
+    if (this.autoDecaySeconds > 0 && this.autoDecaySeconds % 60 == 0)
+      return this.autoDecaySeconds/60 + "m";
     if (this.autoDecaySeconds > 0)
-      this.decay = this.autoDecaySeconds + "s";
-    if (this.epochAutoDecay > 0)
-      this.decay = this.epochAutoDecay + "h";
+      return this.autoDecaySeconds + "s";
   }
 
   addToObjects(objects) {
