@@ -1,6 +1,6 @@
 "use strict";
 
-const { execSync, spawnSync } = require('child_process');
+const { spawnSync } = require('child_process');
 const fs = require('fs');
 const _ = require('lodash');
 

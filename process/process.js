@@ -1,10 +1,12 @@
 const GameData = require('./src/GameData');
 
+const gitURL = process.env.ONETECH_PROCESS_GIT_URL || "https://github.com/jasonrohrer/OneLifeData7.git";
+
 const gameData = new GameData(__dirname);
 
 if (process.argv.includes('download')) {
   console.log("Downloading data...");
-  gameData.download("https://github.com/jasonrohrer/OneLifeData7.git");
+  gameData.download(gitURL);
 } else {
   gameData.verifyDownloaded();
 }
