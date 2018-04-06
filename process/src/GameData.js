@@ -27,6 +27,11 @@ class GameData {
       spawnSync("git", ["clone", gitURL, this.dataDir]);
   }
 
+  verifyDownloaded() {
+    if (!fs.existsSync(this.dataDir))
+      throw "OneLifeData7 not found, first run `node process dev download`"
+  }
+
   importObjects() {
     this.eachFileInDir("objects", (content, _filename) => {
       const object = new GameObject(content);

@@ -5,6 +5,8 @@ const gameData = new GameData(__dirname);
 if (process.argv.includes('download')) {
   console.log("Downloading data...");
   gameData.download("https://github.com/jasonrohrer/OneLifeData7.git");
+} else {
+  gameData.verifyDownloaded();
 }
 
 console.log("Importing objects...");
