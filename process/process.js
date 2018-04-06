@@ -4,13 +4,16 @@ const gameData = new GameData();
 
 if (process.argv.includes('download')) {
   console.log("Downloading data...");
-  gameData.download();
+  gameData.download("https://github.com/jasonrohrer/OneLifeData7.git");
 }
 
 console.log("Importing objects...");
 gameData.importObjects();
 gameData.importCategories();
 gameData.importTransitions();
+
+console.log("Populating versions...");
+gameData.populateVersions();
 
 console.log("Calculating object complexity...");
 gameData.calculateObjectComplexity();

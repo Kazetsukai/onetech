@@ -7,17 +7,21 @@ const _ = require('lodash');
 const GameObject = require('./GameObject');
 const Category = require('./Category');
 const Transition = require('./Transition');
+const VersionPopulator = require('./VersionPopulator');
 const ComplexityCalculator = require('./ComplexityCalculator');
 const SpriteProcessor = require('./SpriteProcessor');
 
 class GameData {
   constructor() {
-    this.baseDir = "OneLifeData7-master";
+    this.baseDir = "OneLifeData7";
     this.objects = {};
   }
 
-  download() {
-    execSync("curl https://codeload.github.com/jasonrohrer/OneLifeData7/tar.gz/master | tar -xzf -");
+  download(gitURL) {
+    if (fs.existsSync(this.baseDir))
+      spawnSync("git", ["pull"], {cwd: this.baseDir});
+    else
+      spawnSync("git", ["clone", gitURL, this.baseDir]);
   }
 
   importObjects() {
@@ -41,6 +45,11 @@ class GameData {
       const transition = new Transition(content, filename);
       transition.addToObjects(this.objects);
     });
+  }
+
+  populateVersions() {
+    var populator = new VersionPopulator(this.baseDir, this.objects);
+    populator.populate();
   }
 
   calculateObjectComplexity() {
