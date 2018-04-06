@@ -1,6 +1,6 @@
 const GameData = require('./src/GameData');
 
-const gameData = new GameData();
+const gameData = new GameData(__dirname);
 
 if (process.argv.includes('download')) {
   console.log("Downloading data...");

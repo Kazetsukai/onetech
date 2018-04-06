@@ -12,16 +12,19 @@ const ComplexityCalculator = require('./ComplexityCalculator');
 const SpriteProcessor = require('./SpriteProcessor');
 
 class GameData {
-  constructor() {
-    this.baseDir = "OneLifeData7";
+  constructor(processDir) {
+    this.processDir = processDir;
+    this.dataDir = processDir + "/OneLifeData7";
+    this.staticDir = processDir + "/../static";
+    this.staticDevDir = processDir + "/../static-dev";
     this.objects = {};
   }
 
   download(gitURL) {
-    if (fs.existsSync(this.baseDir))
-      spawnSync("git", ["pull"], {cwd: this.baseDir});
+    if (fs.existsSync(this.dataDir))
+      spawnSync("git", ["pull"], {cwd: this.dataDir});
     else
-      spawnSync("git", ["clone", gitURL, this.baseDir]);
+      spawnSync("git", ["clone", gitURL, this.dataDir]);
   }
 
   importObjects() {
@@ -48,7 +51,7 @@ class GameData {
   }
 
   populateVersions() {
-    var populator = new VersionPopulator(this.baseDir, this.objects);
+    var populator = new VersionPopulator(this.dataDir, this.objects);
     populator.populate();
   }
 
@@ -72,12 +75,12 @@ class GameData {
   }
 
   prepareStaticDir() {
-    if (!fs.existsSync("../static-dev"))
-      execSync("cp -R ../static ../static-dev");
-    this.makeDir("../static-dev/sprites");
-    this.makeDir("../static-dev/objects");
-    this.makeDir("../static-dev/pretty-json");
-    this.makeDir("../static-dev/pretty-json/objects");
+    if (!fs.existsSync(this.staticDevDir))
+      spawnSync("cp", ["-R", this.staticDir, this.staticDevDir]);
+    this.makeDir(this.staticDevDir + "/sprites");
+    this.makeDir(this.staticDevDir + "/objects");
+    this.makeDir(this.staticDevDir + "/pretty-json");
+    this.makeDir(this.staticDevDir + "/pretty-json/objects");
   }
 
   makeDir(path) {
@@ -85,15 +88,16 @@ class GameData {
   }
 
   updateTimestamp() {
+    const path = this.processDir + "/timestamp.txt";
     // Only update timestamp if we have changed the process script
-    if (execSync("git status -s .") != "")
-      fs.writeFileSync("./timestamp.txt", new Date().getTime());
-    execSync("cp timestamp.txt ../static-dev/timestamp.txt");
+    if (spawnSync("git", ["status", "-s", this.processDir]).stdout != "")
+      fs.writeFileSync(path, new Date().getTime());
+    spawnSync("cp", [path, this.staticDevDir + "/timestamp.txt"]);
   }
 
   saveJSON(path, data) {
-    const minPath = "../static-dev/" + path;
-    const prettyPath = "../static-dev/pretty-json/" + path;
+    const minPath = this.staticDevDir + "/" + path;
+    const prettyPath = this.staticDevDir + "/pretty-json/" + path;
     fs.writeFileSync(minPath, JSON.stringify(data));
     fs.writeFileSync(prettyPath, JSON.stringify(data, null, 2));
   }
@@ -107,22 +111,22 @@ class GameData {
   }
 
   convertSpriteImages() {
-    const dir = this.baseDir + "/sprites";
+    const dir = this.dataDir + "/sprites";
     for (var filename of fs.readdirSync(dir)) {
       const id = filename.split('.')[0];
       const inPath = dir + "/" + filename;
-      const outPath = "../static-dev/sprites/sprite_" + id + ".png";
+      const outPath = this.staticDevDir + "/sprites/sprite_" + id + ".png";
       spawnSync("convert", [inPath, outPath]);
     }
   }
 
   processSprites() {
-    const processor = new SpriteProcessor(this.baseDir + "/sprites", "../static-dev/sprites")
+    const processor = new SpriteProcessor(this.dataDir + "/sprites", this.staticDevDir + "/sprites")
     processor.process(this.objects)
   }
 
   eachFileInDir(dirName, callback) {
-    const dir = this.baseDir + "/" + dirName;
+    const dir = this.dataDir + "/" + dirName;
     for (var filename of fs.readdirSync(dir)) {
       const content = fs.readFileSync(dir + "/" + filename, "utf8");
       callback(content, filename);
@@ -130,7 +134,7 @@ class GameData {
   }
 
   syncStaticDir() {
-    execSync("rsync -aq ../static-dev/ ../static");
+    spawnSync("rsync", ["-aq", this.staticDevDir + "/", this.staticDir]);
   }
 }
 
