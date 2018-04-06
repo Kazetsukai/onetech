@@ -73,6 +73,7 @@ class GameObject {
     return {
       id: this.id,
       name: this.name,
+      version: this.version,
       foodValue: this.data.foodValue,
       heatValue: this.data.heatValue,
       clothing: this.data.clothing,
@@ -90,7 +91,7 @@ class GameObject {
   }
 
   sortWeight() { // TODO: Improve object sorting
-    return -this.complexity.value;
+    return -this.version*10000 + -this.complexity.value;
   }
 
   isTool() {

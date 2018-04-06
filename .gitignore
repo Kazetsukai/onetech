@@ -9,6 +9,7 @@ yarn-error.log
 *.ntvs*
 *.njsproj
 *.sln
+process/OneLifeData7
 process/OneLifeData7-master/
 sprites/sprite_*.png
 sprite_*.png
