@@ -60,7 +60,7 @@ export default class GameObject {
   }
 
   insulationPercent() {
-    return this.data.insulation.toFixed(4)*100;
+    return (this.data.insulation*10000).toFixed()/100;
   }
 
   loadData() {
