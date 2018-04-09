@@ -30,11 +30,8 @@ export default {
   },
   methods: {
     selectObject (object) {
-      console.log("select", object)
-      if (!object)
-        window.location = '#';
-      else if (!this.selectedObject || object.id != this.selectedObject.id)
-        window.location = object.url();
+      if (object == this.selectedObject) return;
+      window.location = object ? object.url() : '#';
     }
   }
 }
