@@ -1,6 +1,6 @@
 <template>
   <div class="objectSearch">
-    <VueSelect label="name" :options="objects" v-model="selectedObject" :on-change="selectObject">
+    <VueSelect label="name" :options="objects" v-model="selectedObject" :on-change="selectObject" placeholder="Search">
       <template slot="option" slot-scope="option">
         <ObjectImage :object="option" />
         {{option.name}}
