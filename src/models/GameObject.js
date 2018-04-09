@@ -6,6 +6,7 @@ export default class GameObject {
         this.objectsMap[data.ids[i]] = new GameObject(data.ids[i], data.names[i]);
       }
       this.ids = data.ids;
+      this.filters = data.filters;
       callback();
     });
   }
@@ -20,12 +21,17 @@ export default class GameObject {
     return Object.values(this.objectsMap).sort((a,b) => a.name.length - b.name.length);
   }
 
-  static first(amount) {
-    return this.ids.slice(0, amount).map(id => this.objectsMap[id]);
+  static objects(amount, filter) {
+    const ids = filter ? filter.ids : this.ids;
+    return ids.slice(0, amount).map(id => this.objectsMap[id]);
   }
 
   static find(id) {
     return this.objectsMap[id];
+  }
+
+  static findFilter(key) {
+    return this.filters.find(f => f.key == key);
   }
 
   constructor(id, name) {

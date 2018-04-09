@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     selectObject (object) {
-      console.log("select", object)
+      if (object == this.selectedObject) return;
       if (!object)
         window.location = '#';
       else if (!this.selectedObject || object.id != this.selectedObject.id)
