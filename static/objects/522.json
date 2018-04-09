@@ -1,1 +1,1 @@
-{"id":"522","name":"Goose Bones","foodValue":"0","heatValue":"0","clothing":"n","numUses":"1","techTree":null,"transitionsToward":[],"transitionsAway":[{"targetID":"522","targetNumUses":"1","targetRemains":false,"hand":false,"tool":false,"decay":"4m"}]}
+{"id":"522","name":"Goose Bones","version":49,"foodValue":"0","heatValue":"0","clothing":"n","numUses":"1","techTree":null,"transitionsToward":[],"transitionsAway":[{"targetID":"522","targetNumUses":"1","targetRemains":false,"hand":false,"tool":false,"decay":"4m"}]}

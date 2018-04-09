@@ -1,6 +1,6 @@
 <template>
   <div class="objectSearch">
-    <VueSelect label="name" :options="objects" v-model="selectedObject" :on-change="selectObject">
+    <VueSelect label="name" :options="objects" v-model="selectedObject" :on-change="selectObject" placeholder="Search">
       <template slot="option" slot-scope="option">
         <ObjectImage :object="option" />
         {{option.name}}
@@ -31,10 +31,7 @@ export default {
   methods: {
     selectObject (object) {
       if (object == this.selectedObject) return;
-      if (!object)
-        window.location = '#';
-      else if (!this.selectedObject || object.id != this.selectedObject.id)
-        window.location = object.url();
+      window.location = object ? object.url() : '#';
     }
   }
 }
