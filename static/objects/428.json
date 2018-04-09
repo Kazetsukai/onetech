@@ -1,1 +1,1 @@
-{"id":"428","name":"Attacking Shot Wolf","foodValue":"0","heatValue":"0","clothing":"n","numUses":"4","techTree":null,"transitionsToward":[],"transitionsAway":[{"targetID":"428","newTargetID":"420","targetNumUses":"4","targetRemains":false,"hand":true,"tool":true}]}
+{"id":"428","name":"Attacking Shot Wolf","version":33,"foodValue":"0","heatValue":"0","clothing":"n","numUses":"4","techTree":null,"transitionsToward":[],"transitionsAway":[{"targetID":"428","newTargetID":"420","targetNumUses":"4","targetRemains":false,"hand":true,"tool":true}]}
