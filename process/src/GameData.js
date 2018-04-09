@@ -10,6 +10,7 @@ const Transition = require('./Transition');
 const VersionPopulator = require('./VersionPopulator');
 const ComplexityCalculator = require('./ComplexityCalculator');
 const SpriteProcessor = require('./SpriteProcessor');
+const ObjectFilters = require('./ObjectFilters');
 
 class GameData {
   constructor(processDir) {
@@ -112,6 +113,7 @@ class GameData {
     return {
       ids: objects.map(o => o.id),
       names: objects.map(o => o.name),
+      filters: ObjectFilters.jsonData(objects),
     }
   }
 

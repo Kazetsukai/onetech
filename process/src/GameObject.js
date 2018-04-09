@@ -101,8 +101,28 @@ class GameObject {
     return false;
   }
 
+  isCraftableContainer() {
+    return this.data.numSlots.split('#')[0] > 0 && !this.isGrave();
+  }
+
+  isGrave() {
+    return this.name.includes("Grave");
+  }
+
   isNatural() {
     return this.data.mapChance > 0;
+  }
+
+  isClothing() {
+    return this.data.clothing != "n" && (this.data.rValue > 0 || this.data.foodValue == '0' && this.data.containable == '1');
+  }
+
+  isWaterSource() {
+    // TODO: We need to fix water transitions to do this properly
+    for (var transition of this.transitionsAway) {
+      if (transition.actorID == '209' && transition.target == this && (transition.tool || transition.targetRemains)) return true;
+    }
+    return false;
   }
 
   techTreeNodes(depth) {
