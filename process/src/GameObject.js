@@ -70,20 +70,38 @@ class GameObject {
   }
 
   jsonData() {
-    return {
+    const result = {
       id: this.id,
       name: this.name,
-      version: this.version,
-      foodValue: this.data.foodValue,
-      heatValue: this.data.heatValue,
-      clothing: this.data.clothing,
-      insulation: this.insulationData(),
-      numUses: this.data.numUses,
-      complexity: this.complexity.value,
-      techTree: this.techTreeNodes(3),
       transitionsToward: this.transitionsToward.map(t => t.jsonData()),
       transitionsAway: this.transitionsAway.map(t => t.jsonData()),
     };
+
+    if (this.version)
+      result.version = this.version;
+
+    if (this.data.foodValue > 0)
+      result.foodValue = parseInt(this.data.foodValue);
+
+    if (this.data.heatValue > 0)
+      result.heatValue = parseInt(this.data.heatValue);
+
+    if (this.data.numUses > 1)
+      result.numUses = parseInt(this.data.numUses);
+
+    if (this.complexity.value)
+      result.complexity = this.complexity.value;
+
+    if (this.data.clothing != "n") {
+      result.clothing = this.data.clothing;
+      result.insulation = this.insulation();
+    }
+
+    let techTree = this.techTreeNodes(3);
+    if (techTree)
+      result.techTree = techTree;
+
+    return result;
   }
 
   hasSprite() {
@@ -148,7 +166,7 @@ class GameObject {
     };
   }
 
-  insulationData() {
+  insulation() {
     const parts = {'h': 0.25, 't': 0.35, 'b': 0.2, 's': 0.1, 'p': 0.1};
     if (parts[this.data.clothing])
       return parts[this.data.clothing]*parseFloat(this.data.rValue);

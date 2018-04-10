@@ -113,17 +113,30 @@ class Transition {
   }
 
   jsonData() {
-    return {
-      actorID: this.actor && this.actor.id,
-      targetID: this.target && this.target.id,
-      newActorID: this.newActor && this.newActor.id,
-      newTargetID: this.newTarget && this.newTarget.id,
-      targetNumUses: this.target && this.target.data.numUses,
-      targetRemains: this.targetRemains,
-      hand: this.hand,
-      tool: this.tool,
-      decay: this.decay
-    }
+    const result = {}
+
+    if (this.actor)
+      result.actorID = this.actor.id;
+    if (this.target)
+      result.targetID = this.target.id;
+    if (this.newActor)
+      result.newActorID = this.newActor.id;
+    if (this.newTarget)
+      result.newTargetID = this.newTarget.id;
+
+    if (this.target && this.target.data.numUses > 1)
+      result.targetNumUses = this.target.data.numUses;
+
+    if (this.targetRemains)
+      result.targetRemains = true;
+
+    if (this.hand)
+      result.hand = true;
+
+    if (this.decay)
+      result.decay = this.decay;
+
+    return result;
   }
 }
 
