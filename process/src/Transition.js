@@ -25,8 +25,8 @@ class Transition {
     this.autoDecaySeconds = data[2] || 0;
     this.actorMinUseFraction = data[3] || 0;
     this.targetMinUseFraction = data[4] || 0;
-    this.reverseUseActor = !!data[5];
-    this.reverseUseTarget = !!data[6];
+    this.reverseUseActor = data[5] == '1';
+    this.reverseUseTarget = data[6] == '1';
     this.move = data[7] || 0;
     this.desiredMoveDist = data[8] || 1;
 
@@ -103,7 +103,7 @@ class Transition {
       return false; // A bit of a hack to remove the empty/full water bowl transitions
     if ((this.actorID > 0 || this.newActorID > 0) && this.actorID != this.newActorID)
       return true;
-    if ((this.targetID > 0 || this.newTargetID > 0) && (this.targetID != this.newTargetID || this.targetRemains && this.decay && this.target.data.numUses > 0))
+    if ((this.targetID > 0 || this.newTargetID > 0) && (this.targetID != this.newTargetID || (this.targetRemains && this.decay || this.target.data.numUses > 0)))
       return true;
     return false;
   }
@@ -115,17 +115,31 @@ class Transition {
   jsonData() {
     const result = {}
 
-    if (this.actor)
+    if (this.actor) {
       result.actorID = this.actor.id;
-    if (this.target)
+      if (this.actor.data.numUses > 1) {
+        if (this.lastUseActor)
+          result.actorUses = this.reverseUseActor ? "max" : "last";
+        else if (this.tool)
+          result.newActorUses = this.reverseUseActor ? "+1" : "-1";
+      }
+    }
+
+    if (this.target) {
       result.targetID = this.target.id;
+      if (this.target.data.numUses > 1) {
+        if (this.lastUseTarget)
+          result.targetUses = this.reverseUseTarget ? "max" : "last";
+        else if (this.targetRemains)
+          result.newTargetUses = this.reverseUseTarget ? "+1" : "-1";
+      }
+    }
+
     if (this.newActor)
       result.newActorID = this.newActor.id;
+
     if (this.newTarget)
       result.newTargetID = this.newTarget.id;
-
-    if (this.target && this.target.data.numUses > 1)
-      result.targetNumUses = this.target.data.numUses;
 
     if (this.targetRemains)
       result.targetRemains = true;
