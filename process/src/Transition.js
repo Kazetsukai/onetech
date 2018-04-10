@@ -133,6 +133,9 @@ class Transition {
     if (this.hand)
       result.hand = true;
 
+    if (this.tool)
+      result.tool = true;
+
     if (this.decay)
       result.decay = this.decay;
 
