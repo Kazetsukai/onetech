@@ -67,9 +67,9 @@ class VersionPopulator {
 
   reportMissing() {
     const objects = Object.values(this.objects).filter(o => !o.version);
-    console.log(objects.length, "objects are missing version");
+    console.log(objects.length + " objects are missing version");
     // for (let object of objects) {
-    //   console.log(object.id, object.name, "- Unable to determine version");
+    //   console.log(object.id, object.name, "unable to determine version");
     // }
   }
 }

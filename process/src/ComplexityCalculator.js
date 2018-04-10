@@ -66,9 +66,9 @@ class ComplexityCalculator {
 
   reportMissing(allObjects) {
     const objects = allObjects.filter(o => !o.complexity.calculated && !o.category);
-    console.log(objects.length, "objects are missing complexity");
+    console.log(objects.length + " objects are missing complexity");
     // for (var object of objects) {
-    //   console.log(object.id, object.name, "- Unable to calculate complexity");
+    //   console.log(object.id, object.name, "unable to calculate complexity");
     // }
   }
 }
