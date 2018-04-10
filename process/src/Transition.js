@@ -30,6 +30,8 @@ class Transition {
     this.move = data[7] || 0;
     this.desiredMoveDist = data[8] || 1;
 
+    this.fixAttack();
+
     this.hand = this.actorID == 0;
     this.tool = this.actorID >= 0 && this.actorID == this.newActorID;
     this.targetRemains = this.targetID >= 0 && this.targetID == this.newTargetID;
@@ -47,12 +49,12 @@ class Transition {
   }
 
   addToObjects(objects) {
-    if (this.isUnimportant()) return;
-
     this.target = objects[this.targetID];
     this.actor = objects[this.actorID];
     this.newTarget = objects[this.newTargetID];
     this.newActor = objects[this.newActorID];
+
+    if (this.isUnimportant()) return;
 
     // Only add to the first category since the other
     // categories will be added to recursively
@@ -97,11 +99,22 @@ class Transition {
     if (this.newActorID == oldID)  this.newActorID = newID;
   }
 
+  fixAttack() {
+    // Check for attack transition and replace target with fresh grave
+    if (this.targetID == 0 && this.newTargetID == 0 && this.actorID != this.newActorID)
+      this.newTargetID = '87'; // Fresh Grave
+  }
+
   isUnimportant() {
-    if (this.targetID <= 0 && this.newTargetID <= 0 && typeof this.actorMinUseFraction == "string")
-      return true; // A bit of a hack to remove the empty/full water bowl transitions
+    // Ignore transitions which don't have a target and the actors have categories
+    // This is a bit of a hack to remove the empty/full water bowl transitions
+    if (this.targetID <= 0 && this.newTargetID <= 0 && this.actor && this.actor.data.numUses <= 1 && this.actor.categories.length > 0 && this.newActor && this.newActor.categories.length > 0)
+      return true;
+
+    // Ignore move transitions which don't change the target
     if (this.move > 0 && this.targetID == this.newTargetID)
       return true;
+
     return false;
   }
 
