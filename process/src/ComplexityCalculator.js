@@ -10,8 +10,7 @@ class ComplexityCalculator {
         this.setObjectComplexity(object, new Complexity({value: 1, calculated: true}));
     }
     this.sortObjectTransitions(objects);
-    // Debug uncalculated complexities:
-    // this.reportUncalculated(objects.filter(o => !o.complexity.calculated));
+    this.reportMissing(objects);
   }
 
   // Sets the object complexity if it is lower than previously set
@@ -58,18 +57,19 @@ class ComplexityCalculator {
     }
   }
 
-  reportUncalculated(objects) {
-    for (var object of objects) {
-      if (!object.category)
-        console.log(object.id, object.name, "- Unable to calculate complexity");
-    }
-  }
-
   sortObjectTransitions(objects) {
     for (var object of objects) {
       object.transitionsToward.sort((a,b) => a.complexity.compare(b.complexity));
       object.transitionsAway.sort((a,b) => a.complexity.compare(b.complexity));
     }
+  }
+
+  reportMissing(allObjects) {
+    const objects = allObjects.filter(o => !o.complexity.calculated && !o.category);
+    console.log(objects.length, "objects are missing complexity");
+    // for (var object of objects) {
+    //   console.log(object.id, object.name, "- Unable to calculate complexity");
+    // }
   }
 }
 
