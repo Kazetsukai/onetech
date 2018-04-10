@@ -10,7 +10,8 @@ const BIOMES = {
   1: 'swamp',
   2: 'prairie',
   3: 'rocky',
-  4: 'snow'
+  4: 'snow',
+  5: 'desert'
 }
 
 class GameObject {
@@ -101,7 +102,16 @@ class GameObject {
     if (techTree)
       result.techTree = techTree;
 
+    if (this.data.mapChance > 0) {
+      result.mapChance = parseFloat(this.data.mapChance);
+      result.biomes = this.biomes();
+    }
+
     return result;
+  }
+
+  biomes() {
+    return this.data.biomes.map(name => name[0].toUpperCase() + name.substring(1)).join(", ");
   }
 
   hasSprite() {

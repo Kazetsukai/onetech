@@ -17,6 +17,8 @@
           <li v-if="object.clothingPart()">Clothing: {{object.clothingPart()}}</li>
           <li v-if="object.hasInsulation()">Insulation: {{object.insulationPercent()}}%</li>
           <li v-if="object.data.numUses">Number of Uses: {{object.data.numUses}}</li>
+          <li v-if="object.data.mapChance">Spawn Chance: {{object.data.mapChance}}</li>
+          <li v-if="object.data.biomes">Biome: {{object.data.biomes}}</li>
           <li v-if="object.data.version">Added in v{{object.data.version}}</li>
           <!-- <li v-if="object.data.complexity > 0">Complexity: {{object.data.complexity}}</li> -->
         </ul>
