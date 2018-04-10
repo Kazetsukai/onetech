@@ -47,13 +47,12 @@ class Transition {
   }
 
   addToObjects(objects) {
+    if (this.isUnimportant()) return;
+
     this.target = objects[this.targetID];
     this.actor = objects[this.actorID];
     this.newTarget = objects[this.newTargetID];
     this.newActor = objects[this.newActorID];
-
-    // Ignore transitions which don't make a change
-    if (!this.causesChange()) return;
 
     // Only add to the first category since the other
     // categories will be added to recursively
@@ -98,12 +97,10 @@ class Transition {
     if (this.newActorID == oldID)  this.newActorID = newID;
   }
 
-  causesChange() {
+  isUnimportant() {
     if (this.targetID <= 0 && this.newTargetID <= 0 && typeof this.actorMinUseFraction == "string")
-      return false; // A bit of a hack to remove the empty/full water bowl transitions
-    if ((this.actorID > 0 || this.newActorID > 0) && this.actorID != this.newActorID)
-      return true;
-    if ((this.targetID > 0 || this.newTargetID > 0) && (this.targetID != this.newTargetID || (this.targetRemains && this.decay || this.target.data.numUses > 0)))
+      return true; // A bit of a hack to remove the empty/full water bowl transitions
+    if (this.move > 0 && this.targetID == this.newTargetID)
       return true;
     return false;
   }
