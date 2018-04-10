@@ -151,6 +151,9 @@ class Transition {
     if (this.newTarget)
       result.newTargetID = this.newTarget.id;
 
+    if (this.targetID == 0 || this.targetID == -1 && this.actor.data.foodValue > 0)
+      result.targetPlayer = true;
+
     if (this.targetRemains)
       result.targetRemains = true;
 

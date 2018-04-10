@@ -27,6 +27,11 @@
                 :clickable="transition.targetID && target != selectedObject" />
 
     <ObjectImage class="target transitionObject"
+                v-else-if="transition.targetPlayer"
+                hover="true"
+                player="true" />
+
+    <ObjectImage class="target transitionObject"
                 v-else
                 ground="true"
                 hover="true" />
