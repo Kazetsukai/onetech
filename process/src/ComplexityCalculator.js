@@ -32,7 +32,10 @@ class ComplexityCalculator {
     const targetComplexity = transition.target && transition.target.complexity;
 
     if (!actorComplexity || !targetComplexity) {
-      transition.complexity = (actorComplexity || targetComplexity).increment();
+      if (transition.decay)
+        transition.complexity = (actorComplexity || targetComplexity).clone();
+      else
+        transition.complexity = (actorComplexity || targetComplexity).increment();
 
     } else if (actorComplexity.tools.includes(transition.target)) {
       transition.complexity = actorComplexity.increment();
