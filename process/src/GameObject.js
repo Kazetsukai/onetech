@@ -1,9 +1,8 @@
 "use strict";
 
-const fs = require('fs');
-
 const Sprite = require('./Sprite');
 const Complexity = require('./Complexity');
+const StepsGenerator = require('./StepsGenerator');
 
 const BIOMES = {
   0: 'grassland',
@@ -100,6 +99,11 @@ class GameObject {
     let techTree = this.techTreeNodes(3);
     if (techTree)
       result.techTree = techTree;
+
+    let stepsGenerator = new StepsGenerator(this);
+    stepsGenerator.generate();
+    if (stepsGenerator.hasData())
+      result.steps = stepsGenerator.jsonData();
 
     return result;
   }

@@ -39,7 +39,7 @@
     <!-- What does the target item become? -->
     <ObjectImage class="newTarget transitionObject"
                 v-if="transition.newTargetID && (!transition.targetRemains || transition.targetNumUses > 0)"
-                hover="true" :usedUp="!transition.newTargetID"
+                hover="true"
                 :object="newTarget"
                 :clickable="newTarget && newTarget != selectedObject" />
 
