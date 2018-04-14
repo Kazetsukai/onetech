@@ -1,0 +1,1 @@
+{"id":"797","name":"Wound Blood","transitionsToward":[{"actorID":"560","newActorID":"750","newTargetID":"797"}],"transitionsAway":[],"version":75,"complexity":497,"techTree":[{"id":"560","nodes":[{"id":"559","nodes":[{"id":"458","nodes":[]},{"id":"459","nodes":[]}]},{"id":"69","nodes":[{"id":"34","nodes":[]},{"id":"67","nodes":[]}]}]}]}

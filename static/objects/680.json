@@ -1,1 +1,1 @@
-{"id":"680","name":"Gold Vein","version":62,"foodValue":"0","heatValue":"0","clothing":"n","numUses":"0","complexity":1,"techTree":null,"transitionsToward":[],"transitionsAway":[{"actorID":"684","targetID":"680","newActorID":"684","newTargetID":"681","targetNumUses":"0","targetRemains":false,"hand":false,"tool":true}]}
+{"id":"680","name":"Gold Vein","transitionsToward":[],"transitionsAway":[{"actorID":"684","targetID":"680","newActorID":"684","newTargetID":"681","tool":true}],"version":62,"complexity":1}

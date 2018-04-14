@@ -1,1 +1,1 @@
-{"id":"491","name":"Phonograph","version":43,"foodValue":"0","heatValue":"0","clothing":"n","numUses":"0","techTree":null,"transitionsToward":[],"transitionsAway":[{"actorID":"490","targetID":"491","newTargetID":"492","targetNumUses":"0","targetRemains":false,"hand":false,"tool":false}]}
+{"id":"491","name":"Phonograph","transitionsToward":[],"transitionsAway":[{"actorID":"490","targetID":"491","newTargetID":"492"}],"version":43}

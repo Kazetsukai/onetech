@@ -1,1 +1,1 @@
-{"id":"688","name":"Gold Flakes - dumped","version":62,"foodValue":"0","heatValue":"0","clothing":"n","numUses":"0","techTree":null,"transitionsToward":[],"transitionsAway":[{"actorID":"235","targetID":"688","newActorID":"686","targetNumUses":"0","targetRemains":false,"hand":false,"tool":false}]}
+{"id":"688","name":"Gold Flakes - dumped","transitionsToward":[],"transitionsAway":[{"actorID":"235","targetID":"688","newActorID":"686"}],"version":62}
