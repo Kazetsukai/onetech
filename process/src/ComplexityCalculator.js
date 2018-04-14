@@ -28,7 +28,7 @@ class ComplexityCalculator {
   // Tools are not counted toward complexity if used in previous complexity
   // If the complexity was calculated, it sets it to the resulting object
   calculateTransition(transition) {
-    const complexity = new Complexity({value: transition.decay ? 0 : 1})
+    const complexity = new Complexity({value: 1})
     complexity.combineObjectComplexities(transition.actor, transition.target);
 
     if (complexity.hasValue()) {
