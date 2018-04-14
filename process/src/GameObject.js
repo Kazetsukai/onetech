@@ -92,6 +92,9 @@ class GameObject {
     if (this.complexity.value)
       result.complexity = this.complexity.value;
 
+    if (this.complexity.difficulty)
+      result.difficulty = this.complexity.difficulty;
+
     if (this.data.clothing != "n") {
       result.clothing = this.data.clothing;
       result.insulation = this.insulation();

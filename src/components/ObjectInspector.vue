@@ -18,8 +18,11 @@
           <li v-if="object.hasInsulation()">Insulation: {{object.insulationPercent()}}%</li>
           <li v-if="object.data.numUses">Number of Uses: {{object.data.numUses}}</li>
           <li v-if="object.data.version">Added in v{{object.data.version}}</li>
+          <li v-if="difficultyText">
+            Difficulty: {{difficultyText}}
+            <span class="helpTip" v-tippy :title="difficultyTip">?</span>
+          </li>
           <li v-if="!object.data.version">Unreleased</li>
-          <!-- <li v-if="object.data.complexity > 0">Complexity: {{object.data.complexity}}</li> -->
         </ul>
         <div class="techTree" v-if="object.data && object.data.techTree">
           <a :href="object.url('tech-tree')">
@@ -44,6 +47,27 @@ export default {
   components: {
     ObjectImage,
     TransitionView
+  },
+  computed: {
+    difficultyText() {
+      console.log(this.object.data.difficulty);
+      if (!this.object.data)
+        return;
+      switch (Math.round(this.object.data.difficulty*6)) {
+        case 0: return "Extremely Easy";
+        case 1: return "Very Easy";
+        case 2: return "Easy";
+        case 3: return "Moderate";
+        case 4: return "Hard";
+        case 5: return "Very Hard";
+        case 6: return "Extremely Hard";
+      }
+    },
+    difficultyTip() {
+      const complexityStr = this.object.data.complexity.toString();
+      const complexityWithCommas = complexityStr.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      return complexityStr + " steps to create";
+    }
   }
 }
 </script>
@@ -112,6 +136,23 @@ export default {
   .info .techTree img:hover {
     border: 1px solid #eee;
     background-color: #666;
+  }
+
+  .info .helpTip {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    font-size: 14px;
+    border: 1px solid #999;
+    border-radius: 10px;
+    background-color: #222;
+    vertical-align: 2px;
+    margin-left: 3px;
+  }
+
+  .info .helpTip:hover {
+    background-color: #555;
+    cursor: default;
   }
 
   .panels {
