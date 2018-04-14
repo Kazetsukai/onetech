@@ -65,7 +65,7 @@ class StepsGenerator {
 
   // Add the current object to the queue if it has a transition
   enqueue(object, skipDecay) {
-    if (object.isNatural() || object.transitionsToward.length == 0 || this.nextRemaining.includes(object))
+    if (!object.complexity.hasValue() || object.complexity.value <= 1 || this.nextRemaining.includes(object))
       return;
 
     if (skipDecay && object.transitionsToward[0].decay) {
