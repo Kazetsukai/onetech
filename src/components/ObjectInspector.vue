@@ -17,11 +17,11 @@
           <li v-if="object.clothingPart()">Clothing: {{object.clothingPart()}}</li>
           <li v-if="object.hasInsulation()">Insulation: {{object.insulationPercent()}}%</li>
           <li v-if="object.data.numUses">Number of Uses: {{object.data.numUses}}</li>
-          <li v-if="object.data.version">Added in v{{object.data.version}}</li>
           <li v-if="difficultyText">
             Difficulty: {{difficultyText}}
             <span class="helpTip" v-tippy :title="difficultyTip">?</span>
           </li>
+          <li v-if="object.data.version">Added in v{{object.data.version}}</li>
           <li v-if="!object.data.version">Unreleased</li>
         </ul>
         <div class="techTree" v-if="object.data && object.data.techTree">
@@ -50,23 +50,25 @@ export default {
   },
   computed: {
     difficultyText() {
-      console.log(this.object.data.difficulty);
-      if (!this.object.data)
-        return;
-      switch (Math.round(this.object.data.difficulty*6)) {
-        case 0: return "Extremely Easy";
-        case 1: return "Very Easy";
-        case 2: return "Easy";
-        case 3: return "Moderate";
-        case 4: return "Hard";
-        case 5: return "Very Hard";
-        case 6: return "Extremely Hard";
-      }
+      if (!this.object.data) return;
+      const levels = [
+        "Extremely Easy",
+        "Very Easy",
+        "Easy",
+        "Moderately Easy",
+        "Moderate",
+        "Moderately Hard",
+        "Hard",
+        "Very Hard",
+        "Extremely Hard",
+      ]
+      return levels[Math.round(this.object.data.difficulty*(levels.length-1))];
     },
     difficultyTip() {
       const complexityStr = this.object.data.complexity.toString();
       const complexityWithCommas = complexityStr.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      return complexityStr + " steps to create";
+      const stepWord = complexityStr == '1' ? "step" : "steps";
+      return `${complexityWithCommas} ${stepWord} to create`;
     }
   }
 }

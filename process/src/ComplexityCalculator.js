@@ -7,7 +7,7 @@ class ComplexityCalculator {
   calculate(objects) {
     for (var object of objects) {
       if (object.isNatural())
-        this.setObjectComplexity(object, new Complexity({value: 1}));
+        this.setObjectComplexity(object, new Complexity({value: 0}));
     }
     this.sortObjectTransitions(objects);
     this.calculateDifficulty(objects);
@@ -53,7 +53,7 @@ class ComplexityCalculator {
   }
 
   calculateDifficulty(objects) {
-    const complexities = objects.map(o => o.complexity).filter(c => c.value > 1).sort((a,b) => a.compare(b));
+    const complexities = objects.map(o => o.complexity).filter(c => c.value > 0).sort((a,b) => a.compare(b));
     for (let i in complexities) {
       complexities[i].difficulty = (parseInt(i) + 1) / complexities.length;
     }
