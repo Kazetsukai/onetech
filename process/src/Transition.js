@@ -30,6 +30,8 @@ class Transition {
     this.move = data[7] || 0;
     this.desiredMoveDist = data[8] || 1;
 
+    this.fixAttack();
+
     this.hand = this.actorID == 0;
     this.tool = this.actorID >= 0 && this.actorID == this.newActorID;
     this.targetRemains = this.targetID >= 0 && this.targetID == this.newTargetID;
@@ -52,8 +54,7 @@ class Transition {
     this.newTarget = objects[this.newTargetID];
     this.newActor = objects[this.newActorID];
 
-    // Ignore transitions which don't make a change
-    if (!this.causesChange()) return;
+    if (this.isUnimportant()) return;
 
     // Only add to the first category since the other
     // categories will be added to recursively
@@ -98,13 +99,22 @@ class Transition {
     if (this.newActorID == oldID)  this.newActorID = newID;
   }
 
-  causesChange() {
-    if (this.targetID <= 0 && this.newTargetID <= 0 && typeof this.actorMinUseFraction == "string")
-      return false; // A bit of a hack to remove the empty/full water bowl transitions
-    if ((this.actorID > 0 || this.newActorID > 0) && this.actorID != this.newActorID)
+  fixAttack() {
+    // Check for attack transition and replace target with fresh grave
+    if (this.targetID == 0 && this.newTargetID == 0 && this.actorID != this.newActorID)
+      this.newTargetID = '87'; // Fresh Grave
+  }
+
+  isUnimportant() {
+    // Ignore transitions which don't have a target and the actors have categories
+    // This is a bit of a hack to remove the empty/full water bowl transitions
+    if (this.targetID <= 0 && this.newTargetID <= 0 && this.actor && this.actor.data.numUses <= 1 && this.actor.categories.length > 0 && this.newActor && this.newActor.categories.length > 0)
       return true;
-    if ((this.targetID > 0 || this.newTargetID > 0) && (this.targetID != this.newTargetID || this.targetRemains && this.decay && this.target.data.numUses > 0))
+
+    // Ignore move transitions which don't change the target
+    if (this.move > 0 && this.targetID == this.newTargetID)
       return true;
+
     return false;
   }
 
@@ -132,6 +142,9 @@ class Transition {
 
     if (this.hand)
       result.hand = true;
+
+    if (this.tool)
+      result.tool = true;
 
     if (this.decay)
       result.decay = this.decay;

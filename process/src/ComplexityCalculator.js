@@ -7,17 +7,16 @@ class ComplexityCalculator {
   calculate(objects) {
     for (var object of objects) {
       if (object.isNatural())
-        this.setObjectComplexity(object, new Complexity({value: 1, calculated: true}));
+        this.setObjectComplexity(object, new Complexity({value: 1}));
     }
     this.sortObjectTransitions(objects);
-    // Debug uncalculated complexities:
-    // this.reportUncalculated(objects.filter(o => !o.complexity.calculated));
+    this.reportMissing(objects);
   }
 
   // Sets the object complexity if it is lower than previously set
   // It then calculates the complexity for each "away" transition
   setObjectComplexity(object, complexity) {
-    if (!object.complexity.calculated || complexity.compare(object.complexity) < 0) {
+    if (!object.complexity.hasValue() || complexity.compare(object.complexity) < 0) {
       object.complexity = complexity;
       for (var transition of object.transitionsAway) {
         this.calculateTransition(transition);
@@ -26,42 +25,22 @@ class ComplexityCalculator {
   }
 
   // Calculates the transition complexity by combining the actor and target complexities
-  // Tools are no counted toward complexity if used in previous complexity
+  // Tools are not counted toward complexity if used in previous complexity
   // If the complexity was calculated, it sets it to the resulting object
   calculateTransition(transition) {
-    const actorComplexity = transition.actor && transition.actor.complexity;
-    const targetComplexity = transition.target && transition.target.complexity;
+    const complexity = new Complexity({value: transition.decay ? 0 : 1})
+    complexity.combineObjectComplexities(transition.actor, transition.target);
 
-    if (!actorComplexity || !targetComplexity) {
-      transition.complexity = (actorComplexity || targetComplexity).increment();
+    if (complexity.hasValue()) {
+      complexity.addTool(transition.newActor);
+      complexity.addTool(transition.newTarget);
 
-    } else if (actorComplexity.tools.includes(transition.target)) {
-      transition.complexity = actorComplexity.increment();
+      transition.complexity = complexity;
 
-    } else if (targetComplexity.tools.includes(transition.actor)) {
-      transition.complexity = targetComplexity.increment();
-
-    } else if (actorComplexity.calculated && targetComplexity.calculated) {
-      transition.complexity = actorComplexity.combine(targetComplexity)
-
-      if (transition.newActor && transition.newActor.complexity.calculated)
-        transition.complexity.addTool(transition.newActor);
-      if (transition.newTarget && transition.newTarget.complexity.calculated)
-        transition.complexity.addTool(transition.newTarget);
-    }
-
-    if (transition.complexity.calculated) {
-      if (transition.newActor && !transition.tool)
-        this.setObjectComplexity(transition.newActor, transition.complexity);
-      if (transition.newTarget && !transition.targetRemains)
-        this.setObjectComplexity(transition.newTarget, transition.complexity);
-    }
-  }
-
-  reportUncalculated(objects) {
-    for (var object of objects) {
-      if (!object.category)
-        console.log(object.id, object.name, "- Unable to calculate complexity");
+      if (transition.newActor)
+        this.setObjectComplexity(transition.newActor, complexity);
+      if (transition.newTarget)
+        this.setObjectComplexity(transition.newTarget, complexity);
     }
   }
 
@@ -70,6 +49,14 @@ class ComplexityCalculator {
       object.transitionsToward.sort((a,b) => a.complexity.compare(b.complexity));
       object.transitionsAway.sort((a,b) => a.complexity.compare(b.complexity));
     }
+  }
+
+  reportMissing(allObjects) {
+    const objects = allObjects.filter(o => !o.complexity.hasValue() && !o.category);
+    console.log(objects.length + " objects are missing complexity");
+    // for (var object of objects) {
+    //   console.log(object.id, object.name, "unable to calculate complexity");
+    // }
   }
 }
 

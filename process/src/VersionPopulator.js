@@ -14,8 +14,7 @@ class VersionPopulator {
       if (i > 0)
         this.populateVersion(versions[i], versions[i-1]);
     }
-    // Debug missing versions:
-    // this.reportMissing();
+    this.reportMissing();
   }
 
   fetchVersions() {
@@ -38,6 +37,8 @@ class VersionPopulator {
     for (let difference of differences) {
       if (difference[0] == "A")
         this.populateVersionAddition(current, difference[1]);
+      else if (difference[0].startsWith("R"))
+        this.populateVersionAddition(current, difference[2]);
     }
   }
 
@@ -68,9 +69,10 @@ class VersionPopulator {
 
   reportMissing() {
     const objects = Object.values(this.objects).filter(o => !o.version);
-    for (let object of objects) {
-      console.log(object.id, object.name, "- Unknown version");
-    }
+    console.log(objects.length + " objects are missing version");
+    // for (let object of objects) {
+    //   console.log(object.id, object.name, "unable to determine version");
+    // }
   }
 }
 

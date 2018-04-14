@@ -20,6 +20,7 @@
           <li v-if="object.data.mapChance">Spawn Chance: {{object.data.mapChance}}</li>
           <li v-if="object.data.biomes">Biome: {{object.data.biomes}}</li>
           <li v-if="object.data.version">Added in v{{object.data.version}}</li>
+          <li v-if="!object.data.version">Unreleased</li>
           <!-- <li v-if="object.data.complexity > 0">Complexity: {{object.data.complexity}}</li> -->
         </ul>
         <div class="techTree" v-if="object.data && object.data.techTree">
