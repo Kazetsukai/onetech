@@ -108,7 +108,7 @@ class GameObject {
     return this.sprites.length > 0;
   }
 
-  sortWeight() { // TODO: Improve object sorting
+  sortWeight() {
     return -this.version*10000 + -this.complexity.value;
   }
 
