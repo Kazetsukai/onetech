@@ -37,6 +37,8 @@ class VersionPopulator {
     for (let difference of differences) {
       if (difference[0] == "A")
         this.populateVersionAddition(current, difference[1]);
+      else if (difference[0].startsWith("R"))
+        this.populateVersionAddition(current, difference[2]);
     }
   }
 
