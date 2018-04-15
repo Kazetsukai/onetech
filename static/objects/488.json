@@ -1,1 +1,1 @@
-{"id":"488","name":"Long Play Phonorecord Album","version":43,"foodValue":"0","heatValue":"0","clothing":"n","numUses":"0","techTree":null,"transitionsToward":[],"transitionsAway":[{"actorID":"488","newActorID":"490","newTargetID":"489","targetRemains":false,"hand":false,"tool":false}]}
+{"id":"488","name":"Long Play Phonorecord Album","transitionsToward":[],"transitionsAway":[{"actorID":"488","newActorID":"490","newTargetID":"489"}],"version":43}

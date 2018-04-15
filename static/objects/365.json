@@ -1,1 +1,1 @@
-{"id":"365","name":"Touched Edge","version":29,"foodValue":"0","heatValue":"0","clothing":"n","numUses":"1","techTree":[{"id":"366","nodes":null}],"transitionsToward":[{"targetID":"366","newTargetID":"365","targetNumUses":"1","targetRemains":false,"hand":true,"tool":true}],"transitionsAway":[]}
+{"id":"365","name":"Touched Edge","transitionsToward":[{"targetID":"366","newTargetID":"365","hand":true,"tool":true}],"transitionsAway":[],"version":29,"techTree":[{"id":"366","nodes":null}]}

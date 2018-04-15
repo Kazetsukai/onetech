@@ -1,1 +1,1 @@
-{"id":"427","name":"Attacking Wolf","version":33,"foodValue":"0","heatValue":"0","clothing":"n","numUses":"1","techTree":null,"transitionsToward":[],"transitionsAway":[{"targetID":"427","newTargetID":"418","targetNumUses":"1","targetRemains":false,"hand":false,"tool":false,"decay":"1s"}]}
+{"id":"427","name":"Attacking Wolf","transitionsToward":[{"actorID":"418","newActorID":"427","newTargetID":"87"}],"transitionsAway":[{"targetID":"427","newTargetID":"418","decay":"1s"}],"version":33,"complexity":2,"techTree":[{"id":"418","nodes":null}]}
