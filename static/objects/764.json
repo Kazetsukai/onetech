@@ -1,1 +1,1 @@
-{"id":"764","name":"Rattle Snake","transitionsToward":[],"transitionsAway":[{"actorID":"560","targetID":"764","newActorID":"560","newTargetID":"765","tool":true}],"version":71,"complexity":1}
+{"id":"764","name":"Rattle Snake","transitionsToward":[],"transitionsAway":[{"actorID":"560","targetID":"764","newActorID":"560","newTargetID":"765","tool":true}],"version":71}

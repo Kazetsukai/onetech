@@ -1,1 +1,1 @@
-{"id":"791","name":"Monolith","transitionsToward":[],"transitionsAway":[{"actorID":"689","targetID":"791","newTargetID":"791","targetNumUses":"3","targetRemains":true},{"actorID":"689","targetID":"791","newTargetID":"792","targetNumUses":"3"}],"version":73,"numUses":3,"complexity":1}
+{"id":"791","name":"Monolith","transitionsToward":[],"transitionsAway":[{"actorID":"689","targetID":"791","newTargetUses":"-1","newTargetID":"791","targetRemains":true},{"actorID":"689","targetID":"791","targetUses":"last","newTargetID":"792"}],"version":73,"numUses":3}

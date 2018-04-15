@@ -1,1 +1,1 @@
-{"id":"762","name":"Flowering Barrel Cactus","transitionsToward":[{"targetID":"761","newTargetID":"762","decay":"5m"}],"transitionsAway":[{"targetID":"762","newTargetID":"763","decay":"5m"}],"version":71,"complexity":2,"techTree":[{"decay":"5m"},{"id":"761","nodes":null}]}
+{"id":"762","name":"Flowering Barrel Cactus","transitionsToward":[{"targetID":"761","newTargetID":"762","decay":"5m"}],"transitionsAway":[{"targetID":"762","newTargetID":"763","decay":"5m"}],"version":71,"complexity":1,"difficulty":0.03436988543371522,"techTree":[{"decay":"5m"},{"id":"761","nodes":null}]}
