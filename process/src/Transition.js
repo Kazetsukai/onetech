@@ -115,6 +115,10 @@ class Transition {
     if (this.move > 0 && this.targetID == this.newTargetID)
       return true;
 
+    // Ignore weapon transitions that don't result in a grave
+    if (this.targetID == 0 && this.actor && this.actor.data.deadlyDistance > 0 && this.newTarget && !this.newTarget.isGrave())
+      return true;
+
     return false;
   }
 
@@ -150,6 +154,9 @@ class Transition {
 
     if (this.newTarget)
       result.newTargetID = this.newTarget.id;
+
+    if (this.targetID == 0 || this.targetID == -1 && this.actor.data.foodValue > 0)
+      result.targetPlayer = true;
 
     if (this.targetRemains)
       result.targetRemains = true;
