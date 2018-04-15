@@ -112,7 +112,7 @@ class GameObject {
   }
 
   sortWeight() {
-    return -(this.version || 1000)*10000 + -this.complexity.value;
+    return -parseInt(this.id);
   }
 
   isTool() {
