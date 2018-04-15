@@ -55,7 +55,7 @@ class ComplexityCalculator {
   calculateDifficulty(objects) {
     const complexities = objects.map(o => o.complexity).filter(c => c.value > 0).sort((a,b) => a.compare(b));
     for (let i in complexities) {
-      complexities[i].difficulty = (parseInt(i) + 1) / complexities.length;
+      complexities[i].difficulty = parseFloat(i) / complexities.length;
     }
   }
 

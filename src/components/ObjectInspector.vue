@@ -50,7 +50,7 @@ export default {
   },
   computed: {
     difficultyText() {
-      if (!this.object.data) return;
+      if (!this.object.data || typeof this.object.data.difficulty == 'undefined') return;
       const levels = [
         "Extremely Easy",
         "Very Easy",
@@ -61,8 +61,8 @@ export default {
         "Hard",
         "Very Hard",
         "Extremely Hard",
-      ]
-      return levels[Math.round(this.object.data.difficulty*(levels.length-1))];
+      ];
+      return levels[Math.floor(this.object.data.difficulty*levels.length)];
     },
     difficultyTip() {
       const complexityStr = this.object.data.complexity.toString();
