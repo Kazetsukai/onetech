@@ -1,1 +1,1 @@
-{"id":"133","name":"Flint","version":20,"foodValue":"0","heatValue":"0","clothing":"n","numUses":"1","complexity":1,"techTree":null,"transitionsToward":[],"transitionsAway":[{"actorID":"34","targetID":"133","newActorID":"34","newTargetID":"150","targetNumUses":"1","targetRemains":false,"hand":false,"tool":true}]}
+{"id":"133","name":"Flint","transitionsToward":[],"transitionsAway":[{"actorID":"34","targetID":"133","newActorID":"34","newTargetID":"150","tool":true}],"version":20,"complexity":1}

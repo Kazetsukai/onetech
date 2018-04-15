@@ -1,1 +1,1 @@
-{"id":"729","name":"Alum","version":62,"foodValue":"0","heatValue":"0","clothing":"n","numUses":"1","complexity":1,"techTree":null,"transitionsToward":[],"transitionsAway":[{"actorID":"729","targetID":"730","newTargetID":"731","targetNumUses":"1","targetRemains":false,"hand":false,"tool":false}]}
+{"id":"729","name":"Alum","transitionsToward":[],"transitionsAway":[{"actorID":"729","targetID":"730","newTargetID":"731"}],"version":62,"complexity":1}
