@@ -1,0 +1,1 @@
+{"id":"838","name":"Wormless Soil Pit with Mushroom","transitionsToward":[{"targetID":"788","newTargetID":"838","decay":"1h"}],"transitionsAway":[{"targetID":"838","newActorID":"837","newTargetID":"788","hand":true}],"version":75,"complexity":23,"techTree":[{"decay":"1h"},{"id":"788","nodes":[{"id":"787","nodes":[{"id":"410","nodes":[]}]}]}]}
