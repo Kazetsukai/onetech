@@ -35,6 +35,7 @@
       <ObjectImage class="stepItemObject"
                   hover="true"
                   :object="result"
+                  :uses="resultCount"
                   clickable="true" />
     </div>
   </div>
@@ -62,6 +63,11 @@ export default {
     },
     result() {
       return GameObject.find(this.stepItem.id);
+    },
+    resultCount() {
+      console.log(this.stepItem);
+      if (this.stepItem.count)
+        return `${this.stepItem.count}x`;
     }
   }
 }
