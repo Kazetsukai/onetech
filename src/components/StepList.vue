@@ -8,7 +8,10 @@
       <div class="step" v-for="(items, index) in object.data.steps" >
         <h4>Step {{index+1}}</h4>
         <div class="stepItems">
-          <StepItem v-for="item in items" :stepItem="item" />
+          <StepItem v-for="item in items" :stepItem="item" :key="item.id" />
+        </div>
+        <div class="stepResults">
+          <StepResult v-for="item in items" :stepItem="item" :key="item.id" />
         </div>
       </div>
     </div>
@@ -17,11 +20,13 @@
 
 <script>
 import StepItem from './StepItem';
+import StepResult from './StepResult';
 
 export default {
   props: ['object'],
   components: {
-    StepItem
+    StepItem,
+    StepResult
   },
   computed: {
     steps() {
@@ -99,6 +104,15 @@ export default {
   }
 
   .stepList .stepItems {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .stepList .stepResults {
+    margin-top: 10px;
+    padding-top: 10px;
+    padding-left: 5px;
+    border-top: 1px dashed #999;
     display: flex;
     flex-wrap: wrap;
   }
