@@ -2,13 +2,10 @@
   <div class="step">
     <h4>Step {{number}}</h4>
     <div class="stepResults">
-      <StepResult v-for="item in items" :stepItem="item" :key="item.id" />
+      <StepResult v-for="item in items" :stepItem="item" :key="item.id" @click="selectItem" />
     </div>
-    <div v-if="!showDetails" class="showDetails">
-      <a @click="expandDetails">Show Details</a>
-    </div>
-    <div v-else class="stepItems">
-      <StepItem v-for="item in items" :stepItem="item" :key="item.id" />
+    <div v-if="selected.length > 0" class="stepItems">
+      <StepItem v-for="item in selected" :stepItem="item" :key="item.id" />
     </div>
   </div>
 </template>
@@ -25,12 +22,15 @@ export default {
   },
   data() {
     return {
-      showDetails: false,
+      selected: [],
     }
   },
   methods: {
-    expandDetails() {
-      this.showDetails = true;
+    selectItem(item) {
+      if (this.selected.includes(item))
+        this.selected = this.selected.filter(i => i != item);
+      else
+        this.selected.push(item);
     }
   }
 }

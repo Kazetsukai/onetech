@@ -1,10 +1,9 @@
 <template>
-  <div class="stepResult">
+  <div class="stepResult" v-bind:class="{selected}" @click="select">
     <ObjectImage class="stepItemObject"
                 hover="true"
                 :object="result"
-                :uses="resultCount"
-                clickable="true" />
+                :uses="resultCount" />
   </div>
 </template>
 
@@ -18,6 +17,11 @@ export default {
   components: {
     ObjectImage
   },
+  data() {
+    return {
+      selected: false
+    };
+  },
   computed: {
     result() {
       return GameObject.find(this.stepItem.id);
@@ -26,6 +30,12 @@ export default {
       console.log(this.stepItem);
       if (this.stepItem.count)
         return `x${this.stepItem.count}`;
+    }
+  },
+  methods: {
+    select() {
+      this.selected = !this.selected;
+      this.$emit('click', this.stepItem);
     }
   }
 }
@@ -36,8 +46,12 @@ export default {
     display: flex;
     align-items: center;
     margin: 5px;
-    border: solid 4px #333;
+    border: solid 2px #333;
     border-radius: 5px;
+  }
+
+  .stepResult.selected {
+    border-color: #aaa;
   }
 
   .stepResult .stepItemObject {
@@ -50,15 +64,7 @@ export default {
     height: 80px;
   }
   .stepResult .stepItemObject:hover {
-    border: 1px solid #aaa;
-    background-color: #666;
-  }
-
-  .stepResult .stepItemObject.current {
-    background-color: #444;
-  }
-  .stepResult .stepItemObject.current:hover {
-    border: 1px solid transparent;
+    cursor: pointer;
   }
 
   .stepItem .plus {
