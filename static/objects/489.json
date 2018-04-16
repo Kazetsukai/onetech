@@ -1,1 +1,1 @@
-{"id":"489","name":"Phonorecord Sleeve","version":43,"foodValue":"0","heatValue":"0","clothing":"n","numUses":"0","techTree":[{"id":"488","nodes":null}],"transitionsToward":[{"actorID":"488","newActorID":"490","newTargetID":"489","targetRemains":false,"hand":false,"tool":false}],"transitionsAway":[]}
+{"id":"489","name":"Phonorecord Sleeve","transitionsToward":[{"actorID":"488","newActorID":"490","newTargetID":"489"}],"transitionsAway":[],"version":43,"techTree":[{"id":"488","nodes":null}]}

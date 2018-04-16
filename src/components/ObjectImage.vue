@@ -1,6 +1,8 @@
 <template>
   <div class="imgContainer" :class="clickable ? '' : 'current'" :title="title" v-tippy>
     <div v-if="hand" class="hand" :style="object ? {} : { width: '100%', height: '100%' }" />
+    <div v-if="player" class="player" />
+    <div v-if="uses" class="uses">{{uses}}</div>
     <div v-if="decay" class="decay"><span>{{decay}}</span></div>
     <div v-if="ground" class="ground"></div>
     <a :href="clickable ? object.url() : undefined">
@@ -11,7 +13,7 @@
 
 <script>
 export default {
-  props: ['object', 'clickable', 'hand', 'hover', 'decay', 'ground'],
+  props: ['object', 'clickable', 'hand', 'hover', 'decay', 'ground', 'uses', 'player'],
   computed: {
     imageUrl () {
       return this.object
@@ -24,6 +26,9 @@ export default {
 
       if (this.object)
         return this.object.name;
+
+      if (this.player)
+        return "Player"
 
       if (this.hand)
         return "Empty hands"
@@ -71,6 +76,29 @@ export default {
 
     background-size: contain;
     background-image: url('../assets/hand.png');
+  }
+
+  .player {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-image: url('../assets/player.png');
+  }
+
+  .uses {
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    color: black;
+    font-weight: bold;
+    font-size: 12px;
+    padding: 1px 4px;
+    background-color: rgba(180, 180, 180, 0.75);
+    border-radius: 3px;
+    z-index: 100;
   }
 
   /*.ground {

@@ -1,0 +1,1 @@
+{"id":"840","name":"Stuck Bell Tower","transitionsToward":[{"targetID":"841","newTargetID":"840","hand":true,"tool":true}],"transitionsAway":[{"targetID":"840","newTargetID":"842","decay":"1h"}],"version":75,"complexity":727,"difficulty":0.9934533551554828,"techTree":[{"id":"841","nodes":[{"decay":"10s"},{"id":"839","nodes":[{"id":"842","nodes":[]}]}]}]}

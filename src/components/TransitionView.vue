@@ -13,6 +13,7 @@
                 v-else-if="transition.actorID || transition.hand"
                 hand="true" hover="true"
                 :object="actor"
+                :uses="transition.actorUses"
                 :clickable="transition.actorID && actor != selectedObject" />
 
     <span class="plus" v-if="transition.actorID || transition.decay || transition.hand">+</span>
@@ -22,7 +23,13 @@
                 v-if="transition.targetID"
                 hover="true"
                 :object="target"
+                :uses="transition.targetUses"
                 :clickable="transition.targetID && target != selectedObject" />
+
+    <ObjectImage class="target transitionObject"
+                v-else-if="transition.targetPlayer"
+                hover="true"
+                player="true" />
 
     <ObjectImage class="target transitionObject"
                 v-else
@@ -31,15 +38,17 @@
 
     <!-- What does the used object become? -->
     <ObjectImage class="newActor transitionObject"
-                v-if="!transition.tool && !transition.decay"
+                v-if="!transition.decay && (!transition.tool || transition.newActorUses)"
                 hand="true" hover="true"
+                :uses="transition.newActorUses"
                 :object="newActor"
                 :clickable="newActor && newActor != selectedObject" />
 
     <!-- What does the target item become? -->
     <ObjectImage class="newTarget transitionObject"
-                v-if="transition.newTargetID && (!transition.targetRemains || transition.targetNumUses > 0)"
+                v-if="transition.newTargetID && (!transition.targetRemains || transition.newTargetUses)"
                 hover="true"
+                :uses="transition.newTargetUses"
                 :object="newTarget"
                 :clickable="newTarget && newTarget != selectedObject" />
 

@@ -1,0 +1,1 @@
+{"id":"808","name":"Wild Onion","transitionsToward":[{"targetID":"805","newActorID":"808","hand":true}],"transitionsAway":[],"version":75,"foodValue":4,"complexity":1,"difficulty":0.03273322422258593,"techTree":[{"id":"805","nodes":null}]}

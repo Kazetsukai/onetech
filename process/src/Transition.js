@@ -25,8 +25,8 @@ class Transition {
     this.autoDecaySeconds = data[2] || 0;
     this.actorMinUseFraction = data[3] || 0;
     this.targetMinUseFraction = data[4] || 0;
-    this.reverseUseActor = !!data[5];
-    this.reverseUseTarget = !!data[6];
+    this.reverseUseActor = data[5] == '1';
+    this.reverseUseTarget = data[6] == '1';
     this.move = data[7] || 0;
     this.desiredMoveDist = data[8] || 1;
 
@@ -115,6 +115,10 @@ class Transition {
     if (this.move > 0 && this.targetID == this.newTargetID)
       return true;
 
+    // Ignore weapon transitions that don't result in a grave
+    if (this.targetID == 0 && this.actor && this.actor.data.deadlyDistance > 0 && this.newTarget && !this.newTarget.isGrave())
+      return true;
+
     return false;
   }
 
@@ -125,17 +129,34 @@ class Transition {
   jsonData() {
     const result = {}
 
-    if (this.actor)
+    if (this.actor) {
       result.actorID = this.actor.id;
-    if (this.target)
+      if (this.actor.data.numUses > 1) {
+        if (this.lastUseActor)
+          result.actorUses = this.reverseUseActor ? "max" : "last";
+        else if (this.tool)
+          result.newActorUses = this.reverseUseActor ? "+1" : "-1";
+      }
+    }
+
+    if (this.target) {
       result.targetID = this.target.id;
+      if (this.target.data.numUses > 1) {
+        if (this.lastUseTarget)
+          result.targetUses = this.reverseUseTarget ? "max" : "last";
+        else if (this.targetRemains)
+          result.newTargetUses = this.reverseUseTarget ? "+1" : "-1";
+      }
+    }
+
     if (this.newActor)
       result.newActorID = this.newActor.id;
+
     if (this.newTarget)
       result.newTargetID = this.newTarget.id;
 
-    if (this.target && this.target.data.numUses > 1)
-      result.targetNumUses = this.target.data.numUses;
+    if (this.targetID == 0 || this.targetID == -1 && this.actor.data.foodValue > 0)
+      result.targetPlayer = true;
 
     if (this.targetRemains)
       result.targetRemains = true;

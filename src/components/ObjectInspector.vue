@@ -17,9 +17,12 @@
           <li v-if="object.clothingPart()">Clothing: {{object.clothingPart()}}</li>
           <li v-if="object.hasInsulation()">Insulation: {{object.insulationPercent()}}%</li>
           <li v-if="object.data.numUses">Number of Uses: {{object.data.numUses}}</li>
+          <li v-if="difficultyText">
+            Difficulty: {{difficultyText}}
+            <span class="helpTip" v-tippy :title="difficultyTip">?</span>
+          </li>
           <li v-if="object.data.version">Added in v{{object.data.version}}</li>
           <li v-if="!object.data.version">Unreleased</li>
-          <!-- <li v-if="object.data.complexity > 0">Complexity: {{object.data.complexity}}</li> -->
         </ul>
         <div class="actions" v-if="object.data">
           <a :href="object.url('tech-tree')" v-if="object.data.techTree" title="Tech Tree" v-tippy>
@@ -48,6 +51,29 @@ export default {
   components: {
     ObjectImage,
     TransitionView
+  },
+  computed: {
+    difficultyText() {
+      if (!this.object.data || typeof this.object.data.difficulty == 'undefined') return;
+      const levels = [
+        "Extremely Easy",
+        "Very Easy",
+        "Easy",
+        "Moderately Easy",
+        "Moderate",
+        "Moderately Hard",
+        "Hard",
+        "Very Hard",
+        "Extremely Hard",
+      ];
+      return levels[Math.floor(this.object.data.difficulty*levels.length)];
+    },
+    difficultyTip() {
+      const complexityStr = this.object.data.complexity.toString();
+      const complexityWithCommas = complexityStr.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      const stepWord = complexityStr == '1' ? "step" : "steps";
+      return `${complexityWithCommas} ${stepWord} to create`;
+    }
   }
 }
 </script>
@@ -126,6 +152,23 @@ export default {
   }
   .info .actions a img {
     display: block;
+  }
+
+  .info .helpTip {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    font-size: 14px;
+    border: 1px solid #999;
+    border-radius: 10px;
+    background-color: #222;
+    vertical-align: 2px;
+    margin-left: 3px;
+  }
+
+  .info .helpTip:hover {
+    background-color: #555;
+    cursor: default;
   }
 
   .panels {

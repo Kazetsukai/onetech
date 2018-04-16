@@ -7,9 +7,10 @@ class ComplexityCalculator {
   calculate(objects) {
     for (var object of objects) {
       if (object.isNatural())
-        this.setObjectComplexity(object, new Complexity({value: 1}));
+        this.setObjectComplexity(object, new Complexity({value: 0}));
     }
     this.sortObjectTransitions(objects);
+    this.calculateDifficulty(objects);
     this.reportMissing(objects);
   }
 
@@ -48,6 +49,13 @@ class ComplexityCalculator {
     for (var object of objects) {
       object.transitionsToward.sort((a,b) => a.complexity.compare(b.complexity));
       object.transitionsAway.sort((a,b) => a.complexity.compare(b.complexity));
+    }
+  }
+
+  calculateDifficulty(objects) {
+    const complexities = objects.map(o => o.complexity).filter(c => c.value > 0).sort((a,b) => a.compare(b));
+    for (let i in complexities) {
+      complexities[i].difficulty = parseFloat(i) / complexities.length;
     }
   }
 
