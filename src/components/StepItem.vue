@@ -67,7 +67,7 @@ export default {
     resultCount() {
       console.log(this.stepItem);
       if (this.stepItem.count)
-        return `${this.stepItem.count}x`;
+        return `x${this.stepItem.count}`;
     }
   }
 }

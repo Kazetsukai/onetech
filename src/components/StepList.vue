@@ -5,10 +5,10 @@
 
     <h3 v-if="!object.data">Loading...</h3>
     <div v-else class="steps">
-      <div class="step" v-for="step in steps" >
-        <h4>Step {{step.name}}</h4>
+      <div class="step" v-for="(items, index) in object.data.steps" >
+        <h4>Step {{index+1}}</h4>
         <div class="stepItems">
-          <StepItem v-for="item in step.items" :stepItem="item" />
+          <StepItem v-for="item in items" :stepItem="item" />
         </div>
       </div>
     </div>
@@ -25,8 +25,7 @@ export default {
   },
   computed: {
     steps() {
-      if (!this.object.data)
-        return [];
+      if (!this.object.data) return [];
 
       const steps = [];
       for (let i in this.object.data.steps) {
@@ -81,12 +80,10 @@ export default {
 
   .stepList .steps {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: column;
   }
 
   .stepList .step {
-    width: 310px;
     background-color: #3c3c3c;
     margin: 10px;
     border-radius: 5px;
@@ -103,8 +100,6 @@ export default {
 
   .stepList .stepItems {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: center;
+    flex-wrap: wrap;
   }
 </style>
