@@ -36,8 +36,7 @@ export default {
     display: flex;
     align-items: center;
     margin: 5px;
-    padding: 10px;
-    background-color: #333;
+    border: solid 4px #333;
     border-radius: 5px;
   }
 
