@@ -45,7 +45,6 @@ export default {
 
   .stepList .steps {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: column;
   }
 </style>

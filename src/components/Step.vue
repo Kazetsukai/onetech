@@ -38,7 +38,6 @@ export default {
 
 <style scoped>
   .step {
-    width: 310px;
     background-color: #3c3c3c;
     margin: 10px;
     border-radius: 5px;
@@ -50,7 +49,7 @@ export default {
     text-align: center;
     font-size: 16px;
     margin-top: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 2px;
   }
 
   .stepResults {
@@ -78,6 +77,7 @@ export default {
     padding-top: 10px;
     border-top: 1px dashed #999;
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    flex-direction: row;
   }
 </style>
