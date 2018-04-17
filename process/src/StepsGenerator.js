@@ -12,21 +12,21 @@ class StepsGenerator {
 
   generate() {
     // console.log(this.object.id, this.object.name, this.object.complexity.value);
-    while (this.totalStepItems() < 35 && this.nextRemaining.length > 0) {
+    while (this.totalStepItems() < 40 && this.nextRemaining.length > 0) {
       const step = [];
       this.steps.push(step);
-      this.remaining = this.nextRemaining.sort((a,b) => a.object.complexity.compare(b.object.complexity));
+      this.remaining = this.nextRemaining;
       this.nextRemaining = [];
       while (this.remaining.length > 0) {
         step.push(this.generateStepItem(this.remaining.shift()));
       }
     }
-    this.nextRemaining.forEach(r => this.addUsed(r.object));
+    this.nextRemaining.forEach(r => this.addUsed(r.object, r.count));
     this.cleanupSteps();
   }
 
   hasData() {
-    return this.totalStepItems() > 1;
+    return this.totalStepItems() > 0;
   }
 
   jsonData() {
@@ -69,7 +69,7 @@ class StepsGenerator {
   // Add the current object to the queue if it has a transition and isn't a tool
   enqueue(object, skipDecay, count) {
     if (!object.complexity.hasValue() || object.complexity.value == 0 || this.isTool(object)) {
-      this.addUsed(object);
+      this.addUsed(object, this.isTool(object) ? 1 : count || 1);
       return;
     }
 
@@ -88,10 +88,11 @@ class StepsGenerator {
     }
   }
 
-  addUsed(object) {
+  addUsed(object, count) {
     if (this.isTool(object) && this.requirements.includes(object))
       return;
-    this.requirements.push(object)
+    for (let i=0; i < count; i++)
+      this.requirements.push(object)
   }
 
   isTool(otherObject) {
@@ -141,8 +142,8 @@ class StepsGenerator {
     const newSteps = [];
     for (let i in this.steps) {
       let items = this.steps[i].filter(i => i);
-      if (newSteps.length > 0 && items.length == 1)
-        items = items.concat(newSteps.pop());
+      // if (newSteps.length > 0 && items.length == 1)
+      //   items = items.concat(newSteps.pop());
       newSteps.push(items);
     }
     this.steps = newSteps;

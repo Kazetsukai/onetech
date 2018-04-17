@@ -52,13 +52,14 @@ export default {
     text-align: center;
     font-size: 16px;
     margin-top: 5px;
-    margin-bottom: 2px;
+    margin-bottom: 0;
   }
 
   .requirements .requirementObjects {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
+    margin-left: 10px;
   }
 
   .requirements .requirementWrap {

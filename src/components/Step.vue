@@ -1,11 +1,11 @@
 <template>
   <div class="step">
     <h4>Step {{number}}</h4>
-    <div class="stepResults">
+    <!-- <div class="stepResults">
       <StepResult v-for="item in items" :stepItem="item" :key="item.id" @click="selectItem" />
-    </div>
-    <div v-if="selected.length > 0" class="stepItems">
-      <StepItem v-for="item in selected" :stepItem="item" :key="item.id" />
+    </div> -->
+    <div class="stepItems">
+      <StepItem v-for="item in items" :stepItem="item" :key="item.id" />
     </div>
   </div>
 </template>
@@ -41,15 +41,13 @@ export default {
     background-color: #3c3c3c;
     margin: 10px;
     border-radius: 5px;
-    padding-top: 1px;
-    padding-bottom: 10px;
   }
 
   .step h4 {
     text-align: center;
     font-size: 16px;
-    margin-top: 5px;
-    margin-bottom: 2px;
+    margin-top: 6px;
+    margin-bottom: -5px;
   }
 
   .stepResults {
@@ -73,9 +71,9 @@ export default {
   }
 
   .stepItems {
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px dashed #999;
+    /*margin-top: 10px;*/
+    /*padding-top: 10px;*/
+    /*border-top: 1px dashed #999;*/
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
