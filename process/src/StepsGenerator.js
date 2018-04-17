@@ -6,6 +6,7 @@ class StepsGenerator {
     this.remaining = [];
     this.nextRemaining = [];
     this.steps = [];
+    this.requirements = [];
     this.enqueue(object);
   }
 
@@ -20,6 +21,7 @@ class StepsGenerator {
         step.push(this.generateStepItem(this.remaining.shift()));
       }
     }
+    this.nextRemaining.forEach(r => this.addUsed(r.object));
     this.cleanupSteps();
   }
 
@@ -28,10 +30,13 @@ class StepsGenerator {
   }
 
   jsonData() {
-    return this.steps.reverse();
+    return {
+      steps: this.steps.reverse(),
+      requirements: this.requirements.sort((a,b) => a.complexity.compare(b.complexity)).reverse().map(o => o.id),
+    }
   }
 
-  generateStepItem({object, tool, count}) {
+  generateStepItem({object, count}) {
     // if (this.object.id == '186' && object.id == '107') debugger;
     const item = {id: object.id};
 
@@ -41,18 +46,15 @@ class StepsGenerator {
     else if (count > 1)
       item.count = count;
 
-    if (tool && item.count > 1)
-      item.count -= 1;
-
     const transition = object.transitionsToward[0];
 
     if (transition.actor) {
       item.actorID = transition.actor.id;
-      this.enqueue(transition.actor, transition.decay, item.count, transition.tool);
+      this.enqueue(transition.actor, transition.decay, item.count);
     }
     if (transition.target) {
       item.targetID = transition.target.id;
-      this.enqueue(transition.target, transition.decay, item.count, transition.targetRemains);
+      this.enqueue(transition.target, transition.decay, item.count);
     }
 
     if (transition.decay)
@@ -64,19 +66,16 @@ class StepsGenerator {
     return item;
   }
 
-  isTool(otherObject) {
-    return this.object.complexity.tools.includes(otherObject);
-  }
-
-  // Add the current object to the queue if it has a transition
-  enqueue(object, skipDecay, count, tool) {
-    if (!object.complexity.hasValue() || object.complexity.value == 0)
+  // Add the current object to the queue if it has a transition and isn't a tool
+  enqueue(object, skipDecay, count) {
+    if (!object.complexity.hasValue() || object.complexity.value == 0 || this.isTool(object)) {
+      this.addUsed(object);
       return;
+    }
 
     const existingRemaining = this.nextRemaining.find(r => r.object == object);
     if (existingRemaining) {
-      if (!tool)
-        existingRemaining.count += count || 1;
+      existingRemaining.count += count || 1;
       return;
     }
 
@@ -85,8 +84,18 @@ class StepsGenerator {
       if (object.transitionsToward[0].target)
         this.enqueue(object.transitionsToward[0].target, skipDecay, count);
     } else {
-      this.nextRemaining.push({object, tool, count: count || 1});
+      this.nextRemaining.push({object, count: count || 1});
     }
+  }
+
+  addUsed(object) {
+    if (this.isTool(object) && this.requirements.includes(object))
+      return;
+    this.requirements.push(object)
+  }
+
+  isTool(otherObject) {
+    return (otherObject.data.numUses || 0) <= 1 && this.object.complexity.tools.includes(otherObject);
   }
 
   // Pluck an item and its descendents out of the earlier steps

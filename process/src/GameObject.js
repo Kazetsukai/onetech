@@ -106,7 +106,7 @@ class GameObject {
     let stepsGenerator = new StepsGenerator(this);
     stepsGenerator.generate();
     if (stepsGenerator.hasData())
-      result.steps = stepsGenerator.jsonData();
+      result.recipe = stepsGenerator.jsonData();
 
     return result;
   }

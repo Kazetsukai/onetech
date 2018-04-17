@@ -5,17 +5,20 @@
 
     <h3 v-if="!object.data">Loading...</h3>
     <div v-else class="steps">
-      <Step v-for="(items, index) in object.data.steps" :items="items" :number="index+1" />
+      <StepListRequirements :requirements="object.data.recipe.requirements" />
+      <Step v-for="(items, index) in object.data.recipe.steps" :items="items" :number="index+1" />
     </div>
   </div>
 </template>
 
 <script>
+import StepListRequirements from './StepListRequirements';
 import Step from './Step';
 
 export default {
   props: ['object'],
   components: {
+    StepListRequirements,
     Step
   }
 }
