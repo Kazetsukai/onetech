@@ -62,6 +62,10 @@ export default {
       background-color: #222;
     }
 
+    .objectFilter.selected:hover {
+      background-color: #777;
+    }
+
     .objectFilter:hover .deselect {
       background-color: #222;
     }
