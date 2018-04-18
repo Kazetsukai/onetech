@@ -33,15 +33,19 @@ class ComplexityCalculator {
     complexity.combineObjectComplexities(transition.actor, transition.target);
 
     if (complexity.hasValue()) {
-      complexity.addTool(transition.newActor);
-      complexity.addTool(transition.newTarget);
-
       transition.complexity = complexity;
 
-      if (transition.newActor)
-        this.setObjectComplexity(transition.newActor, complexity);
-      if (transition.newTarget)
-        this.setObjectComplexity(transition.newTarget, complexity);
+      if (transition.newActor) {
+        const actorComplexity = complexity.clone();
+        actorComplexity.addToolWithLookup(transition.newTarget);
+        this.setObjectComplexity(transition.newActor, actorComplexity);
+      }
+
+      if (transition.newTarget) {
+        const targetComplexity = complexity.clone();
+        targetComplexity.addToolWithLookup(transition.newActor);
+        this.setObjectComplexity(transition.newTarget, targetComplexity);
+      }
     }
   }
 
