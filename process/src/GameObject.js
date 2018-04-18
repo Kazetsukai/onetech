@@ -2,7 +2,7 @@
 
 const Sprite = require('./Sprite');
 const Complexity = require('./Complexity');
-const StepsGenerator = require('./StepsGenerator');
+const Recipe = require('./Recipe');
 
 const BIOMES = {
   0: 'grassland',
@@ -103,10 +103,10 @@ class GameObject {
     if (techTree)
       result.techTree = techTree;
 
-    let stepsGenerator = new StepsGenerator(this);
-    stepsGenerator.generate();
-    if (stepsGenerator.hasData())
-      result.recipe = stepsGenerator.jsonData();
+    let recipe = new Recipe(this);
+    recipe.generate();
+    if (recipe.hasData())
+      result.recipe = recipe.jsonData();
 
     return result;
   }

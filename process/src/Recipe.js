@@ -1,12 +1,12 @@
 "use strict";
 
-class StepsGenerator {
+class Recipe {
   constructor(object) {
     this.object = object;
     this.remaining = [];
     this.nextRemaining = [];
     this.steps = [];
-    this.requirements = [];
+    this.ingredients = [];
     this.enqueue(object);
   }
 
@@ -32,7 +32,7 @@ class StepsGenerator {
   jsonData() {
     return {
       steps: this.steps.reverse(),
-      requirements: this.requirements.sort((a,b) => a.complexity.compare(b.complexity)).reverse().map(o => o.id),
+      ingredients: this.ingredients.sort((a,b) => a.complexity.compare(b.complexity)).reverse().map(o => o.id),
     }
   }
 
@@ -89,10 +89,10 @@ class StepsGenerator {
   }
 
   addUsed(object, count) {
-    if (this.isTool(object) && this.requirements.includes(object))
+    if (this.isTool(object) && this.ingredients.includes(object))
       return;
     for (let i=0; i < count; i++)
-      this.requirements.push(object)
+      this.ingredients.push(object)
   }
 
   isTool(otherObject) {
@@ -150,4 +150,4 @@ class StepsGenerator {
   }
 }
 
-module.exports = StepsGenerator;
+module.exports = Recipe;

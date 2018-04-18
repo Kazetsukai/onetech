@@ -1,31 +1,34 @@
 <template>
-  <div class="stepList">
+  <div class="recipe">
     <h2>{{object.name}}</h2>
-    <h3>Crafting Steps</h3>
+    <h3>Crafting Recipe</h3>
 
     <h3 v-if="!object.data">Loading...</h3>
     <div v-else class="steps">
-      <StepListRequirements :requirements="object.data.recipe.requirements" />
-      <Step v-for="(items, index) in object.data.recipe.steps" :items="items" :number="index+1" />
+      <RecipeIngredients :ingredients="object.data.recipe.ingredients" />
+      <RecipeStep
+        v-for="(transitions, index) in object.data.recipe.steps"
+        :transitions="transitions"
+        :number="index+1" />
     </div>
   </div>
 </template>
 
 <script>
-import StepListRequirements from './StepListRequirements';
-import Step from './Step';
+import RecipeIngredients from './RecipeIngredients';
+import RecipeStep from './RecipeStep';
 
 export default {
   props: ['object'],
   components: {
-    StepListRequirements,
-    Step
+    RecipeIngredients,
+    RecipeStep
   }
 }
 </script>
 
 <style scoped>
-  .stepList {
+  .recipe {
     background-color: #222;
     margin-top: 10px;
     border-radius: 5px;
@@ -33,20 +36,20 @@ export default {
     padding-bottom: 20px;
   }
 
-  .stepList > h2 {
+  .recipe > h2 {
     text-align: center;
     font-weight: bolder;
     margin-bottom: 0px;
   }
 
-  .stepList h3 {
+  .recipe h3 {
     text-align: center;
     font-weight: lighter;
     font-style: italic;
     margin-top: 0px;
   }
 
-  .stepList .steps {
+  .recipe .steps {
     display: flex;
     flex-direction: column;
   }

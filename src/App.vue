@@ -9,7 +9,7 @@
 
       <div v-if="selectedObject">
         <TechTree :object="selectedObject" v-if="subpage == 'tech-tree'" />
-        <StepList :object="selectedObject" v-else-if="subpage == 'steps'" />
+        <Recipe :object="selectedObject" v-else-if="subpage == 'recipe'" />
         <ObjectInspector :object="selectedObject" v-else />
       </div>
 
@@ -38,7 +38,7 @@ import ObjectSearch from './components/ObjectSearch';
 import ObjectFilter from './components/ObjectFilter';
 import ObjectInspector from './components/ObjectInspector';
 import TechTree from './components/TechTree';
-import StepList from './components/StepList';
+import Recipe from './components/Recipe';
 
 export default {
   name: 'app',
@@ -48,7 +48,7 @@ export default {
     ObjectFilter,
     ObjectInspector,
     TechTree,
-    StepList,
+    Recipe,
   },
   data () {
     return {
@@ -117,8 +117,8 @@ export default {
         parts.push(this.selectedObject.name);
         if (this.subpage == "tech-tree")
           parts.push("Tech Tree");
-        if (this.subpage == "steps")
-          parts.push("Steps");
+        if (this.subpage == "recipe")
+          parts.push("Recipe");
       } else if (this.selectedFilter) {
         parts.push(this.selectedFilter.name);
       } else {

@@ -1,28 +1,28 @@
 <template>
-  <div class="stepItem">
+  <div class="recipeTransition">
     <!-- What object is being used -->
-    <div class="parts">
-      <ObjectImage class="stepItemObject"
-                  v-if="stepItem.decay"
+    <div class="leftSide">
+      <ObjectImage class="recipeTransitionObject"
+                  v-if="transition.decay"
                   hover="true"
-                  :decay="stepItem.decay" />
+                  :decay="transition.decay" />
 
-      <ObjectImage class="stepItemObject"
-                  v-else-if="stepItem.actorID || stepItem.hand"
+      <ObjectImage class="recipeTransitionObject"
+                  v-else-if="transition.actorID || transition.hand"
                   hand="true" hover="true"
                   :object="actor"
-                  :clickable="stepItem.actorID" />
+                  :clickable="transition.actorID" />
 
       <div class="plus" v-if="showPlus">+</div>
 
       <!-- What object is the target -->
-      <ObjectImage class="stepItemObject"
-                  v-if="stepItem.targetID"
+      <ObjectImage class="recipeTransitionObject"
+                  v-if="transition.targetID"
                   hover="true"
                   :object="target"
                   clickable="true" />
 
-      <ObjectImage class="stepItemObject"
+      <ObjectImage class="recipeTransitionObject"
                   v-else
                   ground="true"
                   hover="true" />
@@ -30,9 +30,9 @@
 
     <div class="arrow"></div>
 
-    <div class="result">
+    <div class="rightSide">
       <!-- What is the resulting object? -->
-      <ObjectImage class="stepItemObject"
+      <ObjectImage class="recipeTransitionObject"
                   hover="true"
                   :object="result"
                   :uses="resultCount"
@@ -47,34 +47,34 @@ import GameObject from '../models/GameObject';
 import ObjectImage from './ObjectImage';
 
 export default {
-  props: ['stepItem'],
+  props: ['transition'],
   components: {
     ObjectImage
   },
   computed: {
     showPlus() {
-      return this.stepItem.actorID || this.stepItem.decay || this.stepItem.hand;
+      return this.transition.actorID || this.transition.decay || this.transition.hand;
     },
     actor() {
-      return GameObject.find(this.stepItem.actorID);
+      return GameObject.find(this.transition.actorID);
     },
     target() {
-      return GameObject.find(this.stepItem.targetID);
+      return GameObject.find(this.transition.targetID);
     },
     result() {
-      return GameObject.find(this.stepItem.id);
+      return GameObject.find(this.transition.id);
     },
     resultCount() {
-      console.log(this.stepItem);
-      if (this.stepItem.count)
-        return `x${this.stepItem.count}`;
+      console.log(this.recipeTransition);
+      if (this.transition.count)
+        return `x${this.transition.count}`;
     }
   }
 }
 </script>
 
 <style scoped>
-  .stepItem {
+  .recipeTransition {
     overflow: hidden;
 
     display: flex;
@@ -85,7 +85,7 @@ export default {
     margin: 10px;
   }
 
-  .stepItem .parts {
+  .recipeTransition .leftSide {
     display: flex;
     align-items: center;
     padding: 10px;
@@ -93,14 +93,14 @@ export default {
     background-color: #2c2c2c;
   }
 
-  .stepItem .result {
+  .recipeTransition .rightSide {
     display: flex;
     align-items: center;
     padding: 10px;
     padding-left: 8px;
   }
 
-  .stepItem .stepItemObject {
+  .recipeTransition .recipeTransitionObject {
     z-index: 1;
     position: relative;
     display: block;
@@ -109,25 +109,25 @@ export default {
     width: 70px;
     height: 70px;
   }
-  .stepItem .stepItemObject:hover {
+  .recipeTransition .recipeTransitionObject:hover {
     border: 1px solid #aaa;
     background-color: #666;
   }
 
-  .stepItem .stepItemObject.current {
+  .recipeTransition .recipeTransitionObject.current {
     background-color: #444;
   }
-  .stepItem .stepItemObject.current:hover {
+  .recipeTransition .recipeTransitionObject.current:hover {
     border: 1px solid transparent;
   }
 
-  .stepItem .plus {
+  .recipeTransition .plus {
     z-index: 1;
     font-size: 16pt;
     margin: 0 2px;
   }
 
-  .stepItem .arrow {
+  .recipeTransition .arrow {
     z-index: 0;
     height: 0;
     width: 0;

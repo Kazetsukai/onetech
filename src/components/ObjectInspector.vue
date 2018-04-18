@@ -28,8 +28,8 @@
           <a :href="object.url('tech-tree')" v-if="object.data.techTree" title="Tech Tree" v-tippy>
             <img src="../assets/techtree.png" width="38" height="36" />
           </a>
-          <a :href="object.url('steps')"  v-if="object.data.recipe" title="Crafting Steps" v-tippy>
-            <img src="../assets/steps.png" width="41" height="42" />
+          <a :href="object.url('recipe')"  v-if="object.data.recipe" title="Crafting Recipe" v-tippy>
+            <img src="../assets/recipe.png" width="41" height="42" />
           </a>
         </div>
       </div>

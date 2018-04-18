@@ -1,14 +1,14 @@
 <template>
-  <div class="requirements">
-    <h4>Requirements</h4>
-    <div class="requirementObjects">
-      <div class="requirementWrap" v-for="object in objects">
-        <ObjectImage class="requirementObject"
-              hover="true"
-              clickable="true"
-              :object="object"
-              :uses="requirementUses(object)" />
-      </div>
+  <div class="ingredients">
+    <h4>Ingredients</h4>
+    <div class="ingredientObjects">
+      <ObjectImage
+        v-for="object in objects"
+        class="ingredientObject"
+        hover="true"
+        clickable="true"
+        :object="object"
+        :uses="ingredientUses(object)" />
     </div>
   </div>
 </template>
@@ -19,19 +19,19 @@ import GameObject from '../models/GameObject';
 import ObjectImage from './ObjectImage';
 
 export default {
-  props: ['requirements'],
+  props: ['ingredients'],
   components: {
     ObjectImage
   },
   computed: {
     objects() {
-      const uniqueIDs = this.requirements.filter((id, i) => this.requirements.indexOf(id) == i);
+      const uniqueIDs = this.ingredients.filter((id, i) => this.ingredients.indexOf(id) == i);
       return uniqueIDs.map(id => GameObject.find(id))
     }
   },
   methods: {
-    requirementUses(object) {
-      const count = this.requirements.filter(id => id == object.id).length;
+    ingredientUses(object) {
+      const count = this.ingredients.filter(id => id == object.id).length;
       if (count > 1)
         return `x${count}`;
     }
@@ -40,7 +40,7 @@ export default {
 </script>
 
 <style scoped>
-  .requirements {
+  .ingredients {
     background-color: #3c3c3c;
     margin: 10px;
     border-radius: 5px;
@@ -48,39 +48,35 @@ export default {
     padding-bottom: 10px;
   }
 
-  .requirements h4 {
+  .ingredients h4 {
     text-align: center;
     font-size: 16px;
     margin-top: 5px;
     margin-bottom: 0;
   }
 
-  .requirements .requirementObjects {
+  .ingredients .ingredientObjects {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
     margin-left: 10px;
   }
 
-  .requirements .requirementWrap {
+  .ingredients .ingredientObject {
     display: flex;
     align-items: center;
     margin: 5px;
-    border: solid 2px #333;
-    border-radius: 5px;
-  }
-
-  .requirements .requirementObject {
     z-index: 1;
     position: relative;
     display: block;
-    border: 1px solid transparent;
     background-color: #555;
     width: 80px;
     height: 80px;
+    border: solid 2px #333;
+    border-radius: 5px;
   }
-  .requirements .requirementObject:hover {
-    border: 1px solid #aaa;
+  .ingredients .ingredientObject:hover {
+    border-color: #aaa;
     background-color: #666;
   }
 </style>
