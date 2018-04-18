@@ -53,12 +53,18 @@ export default {
       padding-top: 5px;
     }
 
+    .step .stepNumber::before {
+      content: "Step";
+      padding-right: 5px;
+    }
+
     .step .stepNumber {
       padding: 0;
       margin: 0;
       margin-bottom: 5px;
-      font-size: 24px;
-      color: #111;
+      font-size: 16px;
+      font-weight: bold;
+      color: inherit;
     }
 
     .stepTransitions {
