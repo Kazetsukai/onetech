@@ -1,1 +1,1 @@
-{"id":"527","name":"Willow Tree","transitionsToward":[],"transitionsAway":[{"actorID":"334","targetID":"527","newActorID":"334","newTargetID":"340","tool":true}],"version":52}
+{"id":"527","name":"Willow Tree","transitionsToward":[],"transitionsAway":[{"actorID":"334","targetID":"527","newActorID":"334","newTargetID":"340","tool":true}],"version":52,"mapChance":2,"biomes":"Swamp"}

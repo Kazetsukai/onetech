@@ -1,1 +1,1 @@
-{"id":"290","name":"Iron Ore","transitionsToward":[{"actorID":"289","newActorID":"239","newTargetID":"290"}],"transitionsAway":[{"actorID":"239","targetID":"290","newActorID":"289"}],"version":20}
+{"id":"290","name":"Iron Ore","transitionsToward":[{"actorID":"289","newActorID":"239","newTargetID":"290"}],"transitionsAway":[{"actorID":"239","targetID":"290","newActorID":"289"}],"version":20,"mapChance":1,"biomes":"Rocky"}
