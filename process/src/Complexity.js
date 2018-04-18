@@ -56,7 +56,6 @@ class Complexity {
   // For example, this removes the rabbit snare for the rabbit hole
   addToolWithLookup(object) {
     if (!object) return;
-    if (object.id == '179') debugger;
     for (let transition of object.transitionsAway) {
       if (!transition.decay && (transition.actorID === "0" || transition.targetID === "-1")) {
         const result = [this.addTool(transition.newActor), this.addTool(transition.newTarget)];

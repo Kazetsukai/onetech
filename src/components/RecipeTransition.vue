@@ -83,6 +83,7 @@ export default {
     background-color: #333;
     border-radius: 5px;
     margin: 10px;
+    margin-top: 0;
   }
 
   .recipeTransition .leftSide {

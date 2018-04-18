@@ -142,9 +142,8 @@ class Recipe {
     const newSteps = [];
     for (let i in this.steps) {
       let items = this.steps[i].filter(i => i);
-      // if (newSteps.length > 0 && items.length == 1)
-      //   items = items.concat(newSteps.pop());
-      newSteps.push(items);
+      if (items.length > 0)
+        newSteps.push(items);
     }
     this.steps = newSteps;
   }

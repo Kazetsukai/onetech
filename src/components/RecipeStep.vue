@@ -1,6 +1,8 @@
 <template>
   <div class="step">
-    <h4>Step {{number}}</h4>
+    <div class="stepNumber">
+      {{number}}
+    </div>
     <div class="stepTransitions">
       <RecipeTransition v-for="transition in transitions" :transition="transition" :key="transition.id" />
     </div>
@@ -21,19 +23,47 @@ export default {
 <style scoped>
   .step {
     background-color: #3c3c3c;
-    margin: 10px;
     border-radius: 5px;
+    display: flex;
+    margin: 10px;
+    padding-top: 10px;
   }
 
-  .step h4 {
-    text-align: center;
-    font-size: 16px;
-    margin-top: 6px;
-    margin-bottom: -5px;
+  .step .stepNumber {
+    display: flex;
+    justify-content: center;
+    margin-top: 14px;
+    margin-left: 10px;
+    font-size: 50px;
+    color: #222;
+    border-radius: 5px;
+    width: 55px;
   }
 
   .stepTransitions {
+    flex: 1;
     display: flex;
     flex-wrap: wrap;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .step {
+      flex-direction: column;
+      align-items: center;
+      padding-top: 5px;
+    }
+
+    .step .stepNumber {
+      padding: 0;
+      margin: 0;
+      margin-bottom: 5px;
+      font-size: 24px;
+      color: #111;
+    }
+
+    .stepTransitions {
+      align-items: center;
+      justify-content: center;
+    }
   }
 </style>
