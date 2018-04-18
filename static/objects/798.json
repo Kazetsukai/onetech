@@ -1,1 +1,1 @@
-{"id":"798","name":"Arrow Wound","transitionsToward":[{"actorID":"152","newActorID":"749","newTargetID":"798"}],"transitionsAway":[],"version":75,"complexity":40,"techTree":[{"id":"152","nodes":[{"id":"148","nodes":[{"id":"134","nodes":[]},{"id":"149","nodes":[]}]},{"id":"151","nodes":[{"id":"59","nodes":[]},{"id":"131","nodes":[]}]}]}]}
+{"id":"798","name":"Arrow Wound","transitionsToward":[],"transitionsAway":[],"version":75}
