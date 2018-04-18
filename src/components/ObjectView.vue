@@ -32,11 +32,6 @@ export default {
     border: 1px solid transparent;
   }
 
-  .objectView:hover {
-    border: 1px solid #eee;
-    background-color: #222;
-  }
-
   .objectView h3 {
     text-align: center;
   }
@@ -47,7 +42,20 @@ export default {
   }
 
   a.nostyle:visited {
-      text-decoration: inherit;
-      color: inherit;
+    text-decoration: inherit;
+    color: inherit;
+  }
+
+  @media only screen and (min-width: 768px) {
+    .objectView:hover {
+      border: 1px solid #eee;
+      background-color: #222;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    .objectView h3 {
+      font-size: 16px;
+    }
   }
 </style>
