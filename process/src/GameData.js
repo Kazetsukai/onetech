@@ -13,9 +13,9 @@ const SpriteProcessor = require('./SpriteProcessor');
 const ObjectFilters = require('./ObjectFilters');
 
 class GameData {
-  constructor(processDir) {
+  constructor(processDir, dataDir) {
     this.processDir = processDir;
-    this.dataDir = processDir + "/OneLifeData7";
+    this.dataDir = dataDir;
     this.staticDir = processDir + "/../static";
     this.staticDevDir = processDir + "/../static-dev";
     this.objects = {};

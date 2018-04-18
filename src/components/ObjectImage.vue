@@ -16,9 +16,9 @@ export default {
   props: ['object', 'clickable', 'hand', 'hover', 'decay', 'ground', 'uses', 'player'],
   computed: {
     imageUrl () {
-      return this.object
-        ? `${STATIC_PATH}/sprites/obj_${this.object.id}.png`
-        : 'about:blank';
+      if (!this.object) return "about:blank";
+      const suffix = this.uses == "last" ? "_last" : "";
+      return `${STATIC_PATH}/sprites/obj_${this.object.id}${suffix}.png`;
     },
     title () {
       if (!this.hover)

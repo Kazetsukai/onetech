@@ -165,9 +165,6 @@ export default {
     text-align: center;
   }
 
-  ul {
-  }
-
   li {
     text-align: left;
   }

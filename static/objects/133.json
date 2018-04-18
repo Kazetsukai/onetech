@@ -1,1 +1,1 @@
-{"id":"133","name":"Flint","transitionsToward":[],"transitionsAway":[{"actorID":"34","targetID":"133","newActorID":"34","newTargetID":"150","tool":true}],"version":20}
+{"id":"133","name":"Flint","transitionsToward":[],"transitionsAway":[{"actorID":"34","targetID":"133","newActorID":"34","newTargetID":"150","tool":true}],"version":20,"mapChance":1,"biomes":"Grassland, Rocky"}

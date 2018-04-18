@@ -17,6 +17,8 @@
           <li v-if="object.clothingPart()">Clothing: {{object.clothingPart()}}</li>
           <li v-if="object.hasInsulation()">Insulation: {{object.insulationPercent()}}%</li>
           <li v-if="object.data.numUses">Number of Uses: {{object.data.numUses}}</li>
+          <li v-if="object.data.biomes">Biome: {{object.data.biomes}}</li>
+          <li v-if="spawnText">Spawn Chance: {{spawnText}}</li>
           <li v-if="difficultyText">
             Difficulty: {{difficultyText}}
             <span class="helpTip" v-tippy :title="difficultyTip">?</span>
@@ -53,6 +55,14 @@ export default {
     TransitionView
   },
   computed: {
+    spawnText() {
+      if (!this.object.data || !this.object.data.mapChance) return;
+      const level = Math.ceil(parseFloat(this.object.data.mapChance)*15)-1;
+      if (level == 0) return "Very Rare";
+      if (level < 3) return "Rare";
+      if (level < 7) return "Uncommon";
+      return "Common";
+    },
     difficultyText() {
       if (!this.object.data || typeof this.object.data.difficulty == 'undefined') return;
       const levels = [

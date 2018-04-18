@@ -11,7 +11,7 @@ class Sprite {
     this.rotation = lines[2].split('=')[1];
     this.hFlip = lines[3].split('=')[1];
     this.color = lines[4].split('=')[1].split(',');
-    this.ageRange = lines[5].split('=')[1].split(',').map(parseFloat);
+    this.ageRange = lines[5].split('=')[1].split(',').map(f => parseFloat(f));
   }
 
   parseExtraData(data) {

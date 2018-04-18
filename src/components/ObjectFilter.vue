@@ -1,8 +1,8 @@
 <template>
   <a class="nostyle" :href="url">
     <div class="objectFilter" v-bind:class="{selected}">
-      <div v-if="selected" class="deselect">x</div>
       <h3>{{filter.name}}</h3>
+      <div v-if="selected" class="deselect">x</div>
     </div>
   </a>
 </template>
@@ -28,11 +28,6 @@ export default {
     border: 1px solid transparent;
   }
 
-  .objectFilter:hover {
-    border: 1px solid #eee;
-    background-color: #222;
-  }
-
   .objectFilter.selected {
     background-color: #777;
   }
@@ -56,12 +51,42 @@ export default {
     text-align: center;
   }
 
-  .objectFilter:hover .deselect {
-    background-color: #222;
-  }
-
   a.nostyle:link, a.nostyle:visited {
     text-decoration: inherit;
     color: inherit;
+  }
+
+  @media only screen and (min-width: 768px) {
+    .objectFilter:hover {
+      border: 1px solid #eee;
+      background-color: #222;
+    }
+
+    .objectFilter.selected:hover {
+      background-color: #777;
+    }
+
+    .objectFilter:hover .deselect {
+      background-color: #222;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    .objectFilter.selected h3 {
+      margin-left: 26px;
+      margin-right: 26px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .objectFilter h3 {
+      font-size: 16px;
+    }
+
+    .objectFilter .deselect {
+      right: 8px;
+      top: 11px;
+    }
   }
 </style>
