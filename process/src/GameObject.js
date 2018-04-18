@@ -127,7 +127,7 @@ class GameObject {
 
   isTool() {
     for (var transition of this.transitionsAway) {
-      if (transition.actor == this && transition.tool) return true;
+      if (transition.actor == this && transition.target && transition.tool) return true;
     }
     return false;
   }
