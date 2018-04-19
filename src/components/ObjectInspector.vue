@@ -9,7 +9,7 @@
       <div class="info">
         <h2>{{object.baseName()}}</h2>
         <h3>{{object.subName()}}</h3>
-        <ObjectImage :object="object" />
+        <ObjectImage :object="object" scaleUpTo="128" />
         <h3 v-if="!object.data">Loading...</h3>
         <ul v-if="object.data">
           <li v-if="object.data.foodValue">Food: {{object.data.foodValue}}</li>

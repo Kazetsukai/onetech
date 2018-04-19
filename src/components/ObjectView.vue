@@ -2,7 +2,7 @@
   <a class="nostyle" :href="object.url()">
     <div class="objectView">
       <h3>{{object.name}}</h3>
-      <ObjectImage :object="object" />
+      <ObjectImage :object="object" scaleUpTo="80" />
     </div>
   </a>
 </template>

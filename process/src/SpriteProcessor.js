@@ -66,7 +66,7 @@ class SpriteProcessor {
     const width = bounds.maxX - bounds.minX;
     const height = bounds.maxY - bounds.minY;
 
-    const newCanvas = new Canvas(Math.max(width, 128), Math.max(height, 128));
+    const newCanvas = new Canvas(width, height);
     const newContext = newCanvas.getContext('2d');
 
     newContext.setTransform(1, 0, 0, 1, 0, 0);
@@ -165,7 +165,65 @@ class SpriteProcessor {
       }
     }
 
+    // Trim transparent pixels off
+    const padding = 15;
+    const threshold = 3*255;
+    const image = this.context.getImageData(
+      minX + this.canvas.width / 2,
+      -maxY + this.canvas.height / 2,
+      maxX - minX,
+      maxY - minY
+    );
+    minX += this.leftTrim(image, threshold) - padding;
+    maxX -= this.rightTrim(image, threshold) - padding;
+    maxY -= this.topTrim(image, threshold) - padding;
+    minY += this.bottomTrim(image, threshold) - padding;
+
     return {minX, minY, maxX, maxY};
+  }
+
+  leftTrim(image, threshold) {
+    for (let col=0; col < image.width; col++) {
+      let opacity = 0;
+      for (let row=0; row < image.height; row++) {
+        opacity += image.data[(row*image.width+col)*4+3]; // Alpha pixel
+        if (opacity > threshold) return col;
+      }
+    }
+    throw "Unable to find opaque pixels in image";
+  }
+
+  rightTrim(image, threshold) {
+    for (let col=image.width-1; col >= 0; col--) {
+      let opacity = 0;
+      for (let row=image.height-1; row >= 0; row--) {
+        opacity += image.data[(row*image.width+col)*4+3]; // Alpha pixel
+        if (opacity > threshold) return image.width-1-col;
+      }
+    }
+    throw "Unable to find opaque pixels in image";
+  }
+
+  topTrim(image, threshold) {
+    for (let row=0; row < image.height; row++) {
+      let opacity = 0;
+      for (let col=0; col < image.width; col++) {
+        opacity += image.data[(row*image.width+col)*4+3]; // Alpha pixel
+        if (opacity > threshold) return row;
+      }
+    }
+    throw "Unable to find opaque pixels in image";
+  }
+
+  bottomTrim(image, threshold) {
+    for (let row=image.height-1; row >= 0; row--) {
+      let opacity = 0;
+      for (let col=image.width-1; col >= 0; col--) {
+        opacity += image.data[(row*image.width+col)*4+3]; // Alpha pixel
+        if (opacity > threshold) return image.height-1-row;
+      }
+    }
+    throw "Unable to find opaque pixels in image";
   }
 
   spritePoints(sprite) {
