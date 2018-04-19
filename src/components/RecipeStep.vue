@@ -32,12 +32,12 @@ export default {
   .step .stepNumber {
     display: flex;
     justify-content: center;
-    margin-top: 14px;
-    margin-left: 10px;
-    font-size: 50px;
-    color: #222;
+    margin-top: 20px;
+    margin-left: 12px;
+    font-size: 40px;
+    color: #ccc;
     border-radius: 5px;
-    width: 55px;
+    width: 45px;
   }
 
   .stepTransitions {

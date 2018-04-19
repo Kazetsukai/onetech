@@ -21,7 +21,7 @@ class Recipe {
         step.push(this.generateStepItem(this.remaining.shift()));
       }
     }
-    this.nextRemaining.forEach(r => this.addUsed(r.object, r.count));
+    this.nextRemaining.forEach(r => this.addIngredient(r.object, r.count));
     this.cleanupSteps();
   }
 
@@ -69,7 +69,7 @@ class Recipe {
   // Add the current object to the queue if it has a transition and isn't a tool
   enqueue(object, skipDecay, count) {
     if (!object.complexity.hasValue() || object.complexity.value == 0 || this.isTool(object)) {
-      this.addUsed(object, this.isTool(object) ? 1 : count || 1);
+      this.addIngredient(object, this.isTool(object) ? 1 : count || 1);
       return;
     }
 
@@ -88,7 +88,7 @@ class Recipe {
     }
   }
 
-  addUsed(object, count) {
+  addIngredient(object, count) {
     if (this.isTool(object) && this.ingredients.includes(object))
       return;
     for (let i=0; i < count; i++)
