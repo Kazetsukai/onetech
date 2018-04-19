@@ -1,9 +1,8 @@
 "use strict";
 
-const fs = require('fs');
-
 const Sprite = require('./Sprite');
 const Complexity = require('./Complexity');
+const Recipe = require('./Recipe');
 
 const BIOMES = {
   0: 'grassland',
@@ -101,14 +100,19 @@ class GameObject {
       result.insulation = this.insulation();
     }
 
-    let techTree = this.techTreeNodes(3);
-    if (techTree)
-      result.techTree = techTree;
-
     if (this.data.mapChance > 0) {
       result.mapChance = parseFloat(this.data.mapChance);
       result.biomes = this.biomes();
     }
+
+    let techTree = this.techTreeNodes(3);
+    if (techTree)
+      result.techTree = techTree;
+
+    let recipe = new Recipe(this);
+    recipe.generate();
+    if (recipe.hasData())
+      result.recipe = recipe.jsonData();
 
     return result;
   }

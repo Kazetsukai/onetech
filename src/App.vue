@@ -8,7 +8,8 @@
       <ObjectSearch :selectedObject="selectedObject" />
 
       <div v-if="selectedObject">
-        <TechTree :object="selectedObject" v-if="showTechTree" />
+        <TechTree :object="selectedObject" v-if="subpage == 'tech-tree'" />
+        <Recipe :object="selectedObject" v-else-if="subpage == 'recipe'" />
         <ObjectInspector :object="selectedObject" v-else />
       </div>
 
@@ -37,6 +38,7 @@ import ObjectSearch from './components/ObjectSearch';
 import ObjectFilter from './components/ObjectFilter';
 import ObjectInspector from './components/ObjectInspector';
 import TechTree from './components/TechTree';
+import Recipe from './components/Recipe';
 
 export default {
   name: 'app',
@@ -46,6 +48,7 @@ export default {
     ObjectFilter,
     ObjectInspector,
     TechTree,
+    Recipe,
   },
   data () {
     return {
@@ -53,7 +56,7 @@ export default {
       showAmount: 24,
       selectedObject: null,
       selectedFilter: null,
-      showTechTree: false,
+      subpage: false,
     }
   },
   created () {
@@ -80,7 +83,7 @@ export default {
       if (!window.location.hash) {
         this.selectedObject = null;
         this.selectedFilter = null;
-        this.showTechTree = false;
+        this.subpage = false;
         this.showAmount = 24;
         this.scrollTop();
       } else {
@@ -93,13 +96,13 @@ export default {
       if (path[0] == "filter") {
         this.selectedFilter = GameObject.findFilter(path[1]);
         this.selectedObject = null;
-        this.showTechTree = false;
+        this.subpage = false;
       } else {
         const object = GameObject.find(path[0]);
         if (object) {
           this.selectedObject = object;
           this.selectedObject.loadData();
-          this.showTechTree = (path[2] == "tech-tree");
+          this.subpage = path[2];
           this.selectedFilter = null;
           this.scrollTop();
         }
@@ -112,8 +115,10 @@ export default {
       var parts = []
       if (this.selectedObject) {
         parts.push(this.selectedObject.name);
-        if (this.showTechTree)
+        if (this.subpage == "tech-tree")
           parts.push("Tech Tree");
+        if (this.subpage == "recipe")
+          parts.push("Recipe");
       } else if (this.selectedFilter) {
         parts.push(this.selectedFilter.name);
       } else {

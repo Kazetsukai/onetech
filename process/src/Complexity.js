@@ -9,6 +9,10 @@ class Complexity {
     this.tools = tools || [];
   }
 
+  clone() {
+    return new Complexity({value: this.value, tools: this.tools.slice(0)});
+  }
+
   hasValue() {
     return this.value > 0 || this.value === 0;
   }
@@ -42,7 +46,25 @@ class Complexity {
   addTool(tool) {
     if (tool && tool.complexity.hasValue() && tool.complexity.value < this.value && !this.tools.includes(tool)) {
       this.tools.push(tool);
+      return true;
     }
+    return false;
+  }
+
+  // Looks for simple object transitions (ones that don't require a separate object)
+  // And adds the resulting objects as tools if they are applicable
+  // For example, this removes the rabbit snare for the rabbit hole
+  addToolWithLookup(object) {
+    if (!object) return;
+    for (let transition of object.transitionsAway) {
+      if (!transition.decay && (transition.actorID === "0" || transition.targetID === "-1")) {
+        const result = [this.addTool(transition.newActor), this.addTool(transition.newTarget)];
+        if (result.map(r => r).length > 0)
+          return; // Stop when we have added a tool
+      }
+    }
+    // No tool found within transitions so add this object
+    this.addTool(object);
   }
 
   reduceValueByTools(actor, target) {

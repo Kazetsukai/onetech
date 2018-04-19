@@ -26,9 +26,13 @@
           <li v-if="object.data.version">Added in v{{object.data.version}}</li>
           <li v-if="!object.data.version">Unreleased</li>
         </ul>
-        <div class="techTree" v-if="object.data && object.data.techTree">
-          <a :href="object.url('tech-tree')">
-          <img src="../assets/techtree.png" width="38" height="36" title="Tech Tree" v-tippy /></a>
+        <div class="actions" v-if="object.data">
+          <a :href="object.url('tech-tree')" v-if="object.data.techTree" title="Tech Tree" v-tippy>
+            <img src="../assets/techtree.png" width="38" height="36" />
+          </a>
+          <a :href="object.url('recipe')"  v-if="object.data.recipe" title="Crafting Recipe" v-tippy>
+            <img src="../assets/recipe.png" width="41" height="42" />
+          </a>
         </div>
       </div>
       <div class="away transitions" v-if="object.data">
@@ -134,20 +138,30 @@ export default {
     text-align: center;
   }
 
-  .info .techTree {
-    margin-top: 20px;
-    text-align: center;
+  .info .actions {
+    display: flex;
+    justify-content: center;
   }
 
-  .info .techTree img {
+  .info .actions a {
+    display: block;
+    margin: 20px 10px;
+  }
+
+  .info .actions a {
     padding: 8px 10px;
     background-color: #505050;
     border: 1px solid transparent;
     border-radius: 5px;
+    display: flex;
+    align-items: center;
   }
-  .info .techTree img:hover {
+  .info .actions a:hover {
     border: 1px solid #eee;
     background-color: #666;
+  }
+  .info .actions a img {
+    display: block;
   }
 
   .info .helpTip {
