@@ -7,7 +7,11 @@ class Recipe {
     this.nextRemaining = [];
     this.steps = [];
     this.ingredients = [];
+    this.availableTools = [];
     this.enqueue(object);
+    for (let tool of this.object.complexity.tools) {
+      this.addAvailableTool(tool, 0);
+    }
   }
 
   generate() {
@@ -67,8 +71,8 @@ class Recipe {
 
   // Add the current object to the queue if it has a transition and isn't a tool
   enqueue(object, skipDecay, count) {
-    if (!object.complexity.hasValue() || object.complexity.value == 0 || this.isTool(object)) {
-      this.addIngredient(object, this.isTool(object) ? 1 : count || 1);
+    if (!object.complexity.hasValue() || object.complexity.value == 0 || this.isAvailableTool(object)) {
+      this.addIngredient(object, this.isAvailableTool(object) ? 1 : count || 1);
       return;
     }
 
@@ -88,14 +92,30 @@ class Recipe {
   }
 
   addIngredient(object, count) {
-    if (this.isTool(object) && this.ingredients.includes(object))
+    if (this.isAvailableTool(object) && this.ingredients.includes(object))
       return;
     for (let i=0; i < count; i++)
       this.ingredients.push(object)
   }
 
-  isTool(otherObject) {
-    return this.object.complexity.tools.includes(otherObject);
+  addAvailableTool(object, depth) {
+    if (!object || this.availableTools.includes(object)) return;
+
+    this.availableTools.push(object);
+
+    if (depth > 5) return;
+
+    // Search simple transitions for more tools
+    for (let transition of object.transitionsAway) {
+      if (transition.decay || !transition.actor || !transition.target) {
+        this.addAvailableTool(transition.newActor, depth+1);
+        this.addAvailableTool(transition.newTarget, depth+1);
+      }
+    }
+  }
+
+  isAvailableTool(otherObject) {
+    return this.availableTools.includes(otherObject);
   }
 
   // Pluck an item and its descendents out of the earlier steps

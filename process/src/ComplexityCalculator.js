@@ -19,6 +19,9 @@ class ComplexityCalculator {
   setObjectComplexity(object, complexity) {
     if (!object.complexity.hasValue() || complexity.compare(object.complexity) < 0) {
       object.complexity = complexity;
+
+      // Favor transitions where the actor or target remains
+      const transitions = object.transitionsAway.sort((a, b) => (a.tool || a.targetRemains) ? -1 : 1);
       for (var transition of object.transitionsAway) {
         this.calculateTransition(transition);
       }
@@ -35,17 +38,15 @@ class ComplexityCalculator {
     if (complexity.hasValue()) {
       transition.complexity = complexity;
 
-      if (transition.newActor) {
-        const actorComplexity = complexity.clone();
-        actorComplexity.addToolWithLookup(transition.newTarget);
-        this.setObjectComplexity(transition.newActor, actorComplexity);
-      }
+      complexity.addTool(transition.newTarget);
+      complexity.addTool(transition.newActor);
+      complexity.addTool(transition.newExtraTarget);
 
-      if (transition.newTarget) {
-        const targetComplexity = complexity.clone();
-        targetComplexity.addToolWithLookup(transition.newActor);
-        this.setObjectComplexity(transition.newTarget, targetComplexity);
-      }
+      if (transition.newActor)
+        this.setObjectComplexity(transition.newActor, complexity);
+
+      if (transition.newTarget)
+        this.setObjectComplexity(transition.newTarget, complexity);
     }
   }
 
