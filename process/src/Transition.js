@@ -30,8 +30,6 @@ class Transition {
     this.move = data[7] || 0;
     this.desiredMoveDist = data[8] || 1;
 
-    this.fixAttack();
-
     this.hand = this.actorID == 0;
     this.tool = this.actorID >= 0 && this.actorID == this.newActorID;
     this.targetRemains = this.targetID >= 0 && this.targetID == this.newTargetID;
@@ -49,77 +47,46 @@ class Transition {
   }
 
   addToObjects(objects) {
-    this.target = objects[this.targetID];
     this.actor = objects[this.actorID];
-    this.newTarget = objects[this.newTargetID];
+    this.target = objects[this.targetID];
     this.newActor = objects[this.newActorID];
+    this.newTarget = objects[this.newTargetID];
+    this.newExtraTarget = objects[this.newExtraTargetID];
 
-    if (this.isUnimportant()) return;
+    if (this.actor)
+      this.actor.transitionsAway.push(this);
 
-    // Only add to the first category since the other
-    // categories will be added to recursively
-    if (this.firstCategory()) {
-      this.addToCategory(this.firstCategory(), objects);
-      return;
-    }
+    if (this.target && this.target != this.actor)
+      this.target.transitionsAway.push(this);
 
-    if (this.target)
-      this.target.transitionsAway.push(this)
+    if (this.newActor && !this.tool)
+      this.newActor.transitionsToward.push(this);
 
-    if (this.actor && this.actor != this.target)
-      this.actor.transitionsAway.push(this)
+    if (this.newTarget && !this.targetRemains && (this.newTarget != this.newActor || !this.tool))
+      this.newTarget.transitionsToward.push(this);
 
-    if (this.newTarget && !this.targetRemains)
-      this.newTarget.transitionsToward.push(this)
-
-    if (this.newActor && !this.tool && this.newActor != this.newTarget)
-      this.newActor.transitionsToward.push(this)
+    if (this.newExtraTarget)
+      this.newExtraTarget.transitionsToward.push(this);
   }
 
-  firstCategory() {
-    const objects = [this.target, this.actor, this.newTarget, this.newActor];
-    for (let object of objects) {
-      if (object && object.category)
-        return object.category;
-    }
+
+  hasID(id) {
+    return this.targetID == id || this.actorID == id || this.newTargetID == id || this.newActorID == id;
   }
 
-  addToCategory(category, objects) {
-    for (var object of category.objects) {
-      const transition = this.clone();
-      transition.replaceObjectID(category.parentID, object.id);
-      transition.addToObjects(objects);
-    }
-  }
-
-  replaceObjectID(oldID, newID) {
+  replaceID(oldID, newID) {
     if (this.targetID == oldID)    this.targetID = newID;
     if (this.actorID == oldID)     this.actorID = newID;
     if (this.newTargetID == oldID) this.newTargetID = newID;
     if (this.newActorID == oldID)  this.newActorID = newID;
   }
 
-  fixAttack() {
-    // Check for attack transition and replace target with fresh grave
-    if (this.targetID == 0 && this.newTargetID == 0 && this.actorID != this.newActorID)
-      this.newTargetID = '87'; // Fresh Grave
+  isGeneric() {
+    return this.targetID === '-1' && this.newTargetID === '0' && this.actorID != this.newActorID;
   }
 
-  isUnimportant() {
-    // Ignore transitions which don't have a target and the actors have categories
-    // This is a bit of a hack to remove the empty/full water bowl transitions
-    if (this.targetID <= 0 && this.newTargetID <= 0 && this.actor && this.actor.data.numUses <= 1 && this.actor.categories.length > 0 && this.newActor && this.newActor.categories.length > 0)
-      return true;
-
-    // Ignore move transitions which don't change the target
-    if (this.move > 0 && this.targetID == this.newTargetID)
-      return true;
-
-    // Ignore weapon transitions that don't result in a grave
-    if (this.targetID == 0 && this.actor && this.actor.data.deadlyDistance > 0 && this.newTarget && !this.newTarget.isGrave())
-      return true;
-
-    return false;
+  targetsPlayer() {
+    return this.targetID === '0' || this.targetID === '-1' && this.actor.data.foodValue > 0;
   }
 
   clone() {
@@ -155,7 +122,10 @@ class Transition {
     if (this.newTarget)
       result.newTargetID = this.newTarget.id;
 
-    if (this.targetID == 0 || this.targetID == -1 && this.actor.data.foodValue > 0)
+    if (this.newExtraTarget)
+      result.newExtraTargetID = this.newExtraTarget.id;
+
+    if (this.targetsPlayer())
       result.targetPlayer = true;
 
     if (this.targetRemains)

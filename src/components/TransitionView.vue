@@ -50,6 +50,7 @@
                 hover="true"
                 :uses="transition.newTargetUses"
                 :object="newTarget"
+                :extraObject="newExtraTarget"
                 :clickable="newTarget && newTarget != selectedObject" />
 
     <ObjectImage class="newTarget transitionObject"
@@ -81,6 +82,9 @@ export default {
     },
     newTarget () {
       return GameObject.find(this.transition.newTargetID);
+    },
+    newExtraTarget () {
+      return GameObject.find(this.transition.newExtraTargetID);
     },
   }
 }

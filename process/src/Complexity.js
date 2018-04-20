@@ -57,7 +57,7 @@ class Complexity {
   addToolWithLookup(object) {
     if (!object) return;
     for (let transition of object.transitionsAway) {
-      if (!transition.decay && (transition.actorID === "0" || transition.targetID === "-1")) {
+      if (!transition.decay && !transition.lastUseActor && !transition.lastUseTarget && (transition.actorID === "0" || transition.targetID === "-1")) {
         const result = [this.addTool(transition.newActor), this.addTool(transition.newTarget)];
         if (result.map(r => r).length > 0)
           return; // Stop when we have added a tool

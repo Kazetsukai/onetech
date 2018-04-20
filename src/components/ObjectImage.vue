@@ -16,7 +16,18 @@
 
 <script>
 export default {
-  props: ['object', 'clickable', 'hand', 'hover', 'decay', 'ground', 'uses', 'player', 'scaleUpTo'],
+  props: [
+    'object',
+    'extraObject',
+    'clickable',
+    'hand',
+    'hover',
+    'decay',
+    'ground',
+    'uses',
+    'player',
+    'scaleUpTo'
+  ],
   mounted() { // Enlarge small images up to a certain amount
     if (!this.scaleUpTo) return;
     const img = document.getElementById(this.imageID);
@@ -46,8 +57,11 @@ export default {
       if (!this.hover)
         return '';
 
-      if (this.object)
+      if (this.object) {
+        if (this.extraObject)
+          return `${this.object.name} with ${this.extraObject.name}`;
         return this.object.name;
+      }
 
       if (this.player)
         return "Player"
@@ -59,7 +73,7 @@ export default {
         return "Empty ground"
 
       if (this.decay)
-        return this.decay.replace("s", " second").replace("h", " hour") + (parseInt(this.decay) != 1 ? 's' : '');
+        return this.decay.replace("s", " second").replace("m", " minute").replace("h", " hour") + (parseInt(this.decay) != 1 ? 's' : '');
     }
   }
 }

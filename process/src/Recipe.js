@@ -37,7 +37,6 @@ class Recipe {
   }
 
   generateStepItem({object, count}) {
-    // if (this.object.id == '186' && object.id == '107') debugger;
     const item = {id: object.id};
 
     const existingItem = this.pluckStepItem(object);
@@ -96,7 +95,7 @@ class Recipe {
   }
 
   isTool(otherObject) {
-    return (otherObject.data.numUses || 0) <= 1 && this.object.complexity.tools.includes(otherObject);
+    return this.object.complexity.tools.includes(otherObject);
   }
 
   // Pluck an item and its descendents out of the earlier steps
