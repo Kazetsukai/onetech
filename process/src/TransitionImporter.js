@@ -25,7 +25,6 @@ class TransitionImporter {
     const newTransitions = [];
     for (let transition of this.transitions) {
       if (transition.hasID(category.parentID)) {
-        console.log("Category", transition.actorID, transition.targetID);
         for (let id of category.objectIDs) {
           const newTransition = transition.clone();
           newTransition.replaceID(category.parentID, id);
@@ -43,7 +42,6 @@ class TransitionImporter {
     const newTransitions = [];
     for (let transition of this.transitions) {
       if (transition.isGeneric()) {
-        console.log("Generic", transition.actorID, transition.targetID);
         this.mergeGenericTransition(transition, newTransitions);
       } else {
         newTransitions.push(transition);
@@ -108,7 +106,6 @@ class TransitionImporter {
     const newTransitions = [];
     for (let transition of this.transitions) {
       if (transition.targetID === "0") {
-        console.log("Attack", transition.actorID, transition.targetID);
         if (!transition.lastUseActor && !transition.lastUseTarget) {
           this.mergeAttackTransition(transition);
           newTransitions.push(transition);
