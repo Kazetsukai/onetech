@@ -81,7 +81,6 @@ class RecipeNode {
   }
 
   addAvailableTools() {
-    if (this.object.id == '180') debugger;
     for (let tool of this.object.complexity.tools)
       this.addAvailableTool(tool, 0);
 

@@ -18,6 +18,7 @@ class Recipe {
       if (this.nodes.length > 60) {
         // console.log("Reached recipe node limit for ", this.object.id, this.object.name);
         this.remainingNodes = nodes;
+        this.nodes = this.nodes.filter(n => !this.remainingNodes.includes(n));
         return;
       }
       for (let node of nodes) {
