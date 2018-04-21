@@ -1,170 +1,83 @@
 "use strict";
 
+const RecipeNode = require('./RecipeNode');
+
 class Recipe {
   constructor(object) {
     this.object = object;
-    this.remaining = [];
-    this.nextRemaining = [];
-    this.steps = [];
-    this.ingredients = [];
-    this.availableTools = [];
-    this.enqueue(object);
-    for (let tool of this.object.complexity.tools) {
-      this.addAvailableTool(tool, 0);
-    }
+    const node = new RecipeNode({object: object, count: 1});
+    this.nodes = [node];
+    this.remainingNodes = [];
   }
 
   generate() {
-    // console.log(this.object.id, this.object.name, this.object.complexity.value);
-    while (this.totalStepItems() < 40 && this.nextRemaining.length > 0) {
-      const step = [];
-      this.steps.push(step);
-      this.remaining = this.nextRemaining;
-      this.nextRemaining = [];
-      while (this.remaining.length > 0) {
-        step.push(this.generateStepItem(this.remaining.shift()));
+    for (let depth=0; depth < 40; depth++) {
+      const nodes = this.nodes.filter(n => n.depth() == depth);
+      if (nodes.length == 0)
+        return;
+      if (this.nodes.length > 60) {
+        console.log("Reached recipe node limit for ", this.object.id, this.object.name);
+        this.remainingNodes = nodes;
+        return;
+      }
+      for (let node of nodes) {
+        this.addNodes(node.generateNodes());
       }
     }
-    this.nextRemaining.forEach(r => this.addIngredient(r.object, r.count));
-    this.cleanupSteps();
+  }
+
+  addNodes(newNodes) {
+    for (let node of newNodes) {
+      let existingNode = this.nodes.find(n => n.object == node.object);
+      if (existingNode)
+        existingNode.merge(node)
+      else
+        this.nodes.push(node)
+    }
   }
 
   hasData() {
-    return this.totalStepItems() > 0;
+    return this.nodes.length > 1;
   }
 
   jsonData() {
+    // For now let's just merge tools and ingredients together when displaying
+    // We may eventually split them up for the user
+    const ingredients = this.tools().concat(this.ingredients());
     return {
-      steps: this.steps.reverse(),
-      ingredients: this.ingredients.sort((a,b) => a.complexity.compare(b.complexity)).reverse().map(o => o.id),
+      steps: this.steps().reverse(),
+      ingredients: ingredients.sort((a,b) => a.complexity.compare(b.complexity)).reverse().map(o => o.id),
     }
   }
 
-  generateStepItem({object, count}) {
-    const item = {id: object.id};
-
-    const existingItem = this.pluckStepItem(object);
-    if (existingItem)
-      item.count = (existingItem.count || 1) + count;
-    else if (count > 1)
-      item.count = count;
-
-    const transition = object.transitionsToward[0];
-
-    if (transition.actor) {
-      item.actorID = transition.actor.id;
-      this.enqueue(transition.actor, transition.decay, item.count);
-    }
-    if (transition.target) {
-      item.targetID = transition.target.id;
-      this.enqueue(transition.target, transition.decay, item.count);
-    }
-
-    if (transition.decay)
-      item.decay = transition.decay;
-
-    if (transition.hand)
-      item.hand = true;
-
-    return item;
+  tools() {
+    return this.nodes.filter(n => n.isTool()).map(n => n.object);
   }
 
-  // Add the current object to the queue if it has a transition and isn't a tool
-  enqueue(object, skipDecay, count) {
-    if (!object.complexity.hasValue() || object.complexity.value == 0 || this.isAvailableTool(object)) {
-      this.addIngredient(object, this.isAvailableTool(object) ? 1 : count || 1);
-      return;
-    }
-
-    const existingRemaining = this.nextRemaining.find(r => r.object == object);
-    if (existingRemaining) {
-      existingRemaining.count += count || 1;
-      return;
-    }
-
-    if (skipDecay && object.transitionsToward[0].decay) {
-      // Collapse chains of decay transitions
-      if (object.transitionsToward[0].target)
-        this.enqueue(object.transitionsToward[0].target, skipDecay, count);
-    } else {
-      this.nextRemaining.push({object, count: count || 1});
-    }
-  }
-
-  addIngredient(object, count) {
-    if (this.isAvailableTool(object) && this.ingredients.includes(object))
-      return;
-    for (let i=0; i < count; i++)
-      this.ingredients.push(object)
-  }
-
-  addAvailableTool(object, depth) {
-    if (!object || this.availableTools.includes(object)) return;
-
-    this.availableTools.push(object);
-
-    if (depth > 5) return;
-
-    // Search simple transitions for more tools
-    for (let transition of object.transitionsAway) {
-      if (transition.decay || !transition.actor || !transition.target) {
-        this.addAvailableTool(transition.newActor, depth+1);
-        this.addAvailableTool(transition.newTarget, depth+1);
+  ingredients() {
+    const ingredients = [];
+    const nodes = this.remainingNodes.concat(this.nodes.filter(n => n.isIngredient()));
+    for (let node of nodes) {
+      const count = node.count();
+      for (let i=0; i < count; i++) {
+        ingredients.push(node.object);
       }
     }
+    return ingredients;
   }
 
-  isAvailableTool(otherObject) {
-    return this.availableTools.includes(otherObject);
-  }
-
-  // Pluck an item and its descendents out of the earlier steps
-  // because it is being used in a later step
-  pluckStepItem(object, startIndex) {
-    for (let i=(startIndex || 0); i < this.steps.length;  i++) {
-      const step = this.steps[i];
-      const plucked = step.find(item => item && item.id == object.id);
-      if (plucked) {
-        step[step.indexOf(plucked)] = null;
-        this.pluckStepItemChildren(object, i);
-        return plucked;
+  steps() {
+    const steps = [];
+    for (let node of this.nodes) {
+      if (node.showInStep()) {
+        const depth = node.depth();
+        if (steps[depth])
+          steps[depth].push(node.jsonData());
+        else
+          steps[depth] = [node.jsonData()];
       }
     }
-    if (this.remaining.find(r => r.object == object))
-      this.remaining = this.remaining.filter(r => r.object != object);
-    if (this.nextRemaining.find(r => r.object == object))
-      this.nextRemaining = this.nextRemaining.filter(r => r.object != object);
-    return null;
-  }
-
-  pluckStepItemChildren(object, startIndex) {
-    if (object.isNatural() || object.transitionsToward.length == 0)
-      return;
-    const transition = object.transitionsToward[0];
-    if (transition.actor)
-      this.pluckStepItem(transition.actor, startIndex);
-    if (transition.target)
-      this.pluckStepItem(transition.target, startIndex);
-  }
-
-  totalStepItems() {
-    let count = 0;
-    for (const items of this.steps) {
-      for (const item of items) {
-        if (item) count++;
-      }
-    }
-    return count;
-  }
-
-  cleanupSteps() {
-    const newSteps = [];
-    for (let i in this.steps) {
-      let items = this.steps[i].filter(i => i);
-      if (items.length > 0)
-        newSteps.push(items);
-    }
-    this.steps = newSteps;
+    return steps.filter(s => s);
   }
 }
 
