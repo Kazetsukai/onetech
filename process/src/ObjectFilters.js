@@ -20,7 +20,7 @@ const Tools = {
   key: "tools",
   name: "Tools",
   filter(objects) {
-    return objects.filter(o => o.isTool() || o.isCraftableContainer());
+    return objects.filter(o => (o.isTool() || o.isCraftableContainer()) && !o.isClothing());
   }
 }
 
