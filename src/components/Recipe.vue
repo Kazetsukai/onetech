@@ -9,7 +9,8 @@
       <RecipeStep
         v-for="(transitions, index) in object.data.recipe.steps"
         :transitions="transitions"
-        :number="index+1" />
+        :number="index+1"
+        :key="index" />
     </div>
   </div>
 </template>

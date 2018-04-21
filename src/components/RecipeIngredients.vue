@@ -8,7 +8,8 @@
         hover="true"
         clickable="true"
         :object="object"
-        :uses="ingredientUses(object)" />
+        :uses="ingredientUses(object)"
+        :key="object.id" />
     </div>
   </div>
 </template>

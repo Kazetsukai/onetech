@@ -65,7 +65,6 @@ export default {
       return GameObject.find(this.transition.id);
     },
     resultCount() {
-      console.log(this.recipeTransition);
       if (this.transition.count)
         return `x${this.transition.count}`;
     }
