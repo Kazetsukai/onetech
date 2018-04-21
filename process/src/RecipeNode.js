@@ -51,9 +51,9 @@ class RecipeNode {
   }
 
   isAnotherDecay() {
-    if (this.parents.length == 0) return false;
+    if (this.parents.length == 0 || !this.isDecay()) return false;
     const parentsDecay = this.parents.filter(n => n.isDecay()).length == this.parents.length;
-    return this.isDecay() && parentsDecay;
+    return parentsDecay;
   }
 
   isTool() {
@@ -81,31 +81,28 @@ class RecipeNode {
   }
 
   addAvailableTools() {
+    if (this.object.id == '180') debugger;
     for (let tool of this.object.complexity.tools)
       this.addAvailableTool(tool, 0);
 
-    // Try add remaining object from this object's transition as an available tool
-    // const transition = this.object.transitionsToward[0];
-    // if (transition && transition.newActor && transition.newActor != this.object)
-    //   this.addAvailableTool(transition.newActor, 0);
-    // if (transition && transition.newTarget && transition.newTarget != this.object)
-    //   this.addAvailableTool(transition.newTarget, 0);
+    for (let object of this.object.complexity.unusedObjects)
+      this.addAvailableTool(object, 0);
   }
 
   addAvailableTool(object, depth) {
-    if (!object || this.availableTools.includes(object)) return;
+    if (!object || object == this.object || this.availableTools.includes(object)) return;
 
     this.availableTools.push(object);
 
-    if (depth > 5) return;
+    if (depth > 5 || object.isNatural()) return;
 
     // Search simple transitions for more tools
-    // for (let transition of object.transitionsAway) {
-    //   if (transition.decay || !transition.actor || !transition.target) {
-    //     this.addAvailableTool(transition.newActor, depth+1);
-    //     this.addAvailableTool(transition.newTarget, depth+1);
-    //   }
-    // }
+    for (let transition of object.transitionsAway) {
+      if (transition.decay || !transition.actor || !transition.target) {
+        this.addAvailableTool(transition.newActor, depth+1);
+        this.addAvailableTool(transition.newTarget, depth+1);
+      }
+    }
   }
 
   jsonData() {

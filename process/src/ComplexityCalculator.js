@@ -3,7 +3,7 @@
 const Complexity = require('./Complexity');
 
 class ComplexityCalculator {
-  // Calculates the complexity starting with natural and uncraftable objects.
+  // Calculates the complexity starting with natural objects.
   calculate(objects) {
     for (var object of objects) {
       if (object.isNatural())
@@ -21,6 +21,7 @@ class ComplexityCalculator {
       object.complexity = complexity;
 
       // Favor transitions where the actor or target remains
+      // Otherwise we get broken tools as the easiest transition
       const transitions = object.transitionsAway.sort((a, b) => (a.tool || a.targetRemains) ? -1 : 1);
       for (var transition of object.transitionsAway) {
         this.calculateTransition(transition);
