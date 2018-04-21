@@ -5,7 +5,7 @@ const RecipeNode = require('./RecipeNode');
 class Recipe {
   constructor(object) {
     this.object = object;
-    const node = new RecipeNode({object: object, count: 1});
+    const node = new RecipeNode({object: object});
     this.nodes = [node];
     this.remainingNodes = [];
   }
@@ -51,7 +51,7 @@ class Recipe {
   }
 
   tools() {
-    return this.nodes.filter(n => n.isTool()).map(n => n.object);
+    return this.nodes.filter(n => n.isTool() && !n.parentIsTool()).map(n => n.object);
   }
 
   ingredients() {

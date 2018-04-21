@@ -1,28 +1,26 @@
 "use strict";
 
 class RecipeNode {
-  constructor({object, availableTools, count, parent}) {
+  constructor({object, availableTools, parent}) {
     this.object = object;
     this.availableTools = availableTools || [];
-    this.extraCount = count || 0;
     this.parents = [];
     if (parent)
       this.parents.push(parent);
   }
 
   merge(node) {
-    this.extraCount += node.extraCount;
     this.parents = this.parents.concat(node.parents);
-    this.parents = this.parents.filter((o,i) => this.parents.indexOf(o) == i);
   }
 
   generateNodes() {
     if (this.generated) return [];
     this.generated = true;
-    this.addAvailableTools();
 
     if (this.isTool() || this.isIngredient())
       return [];
+
+    this.addAvailableTools();
 
     const nodes = [];
 
@@ -53,12 +51,17 @@ class RecipeNode {
   }
 
   isAnotherDecay() {
+    if (this.parents.length == 0) return false;
     const parentsDecay = this.parents.filter(n => n.isDecay()).length == this.parents.length;
     return this.isDecay() && parentsDecay;
   }
 
   isTool() {
-    return this.availableTools.includes(this.object);
+    return this.parentIsTool() || this.availableTools.includes(this.object);
+  }
+
+  parentIsTool() {
+    return this.parents.find(n => n.isTool());
   }
 
   isIngredient() {
@@ -72,14 +75,21 @@ class RecipeNode {
 
   count() {
     if (this.isTool()) return 1;
+    if (this.parents.length == 0) return 1;
     let count = this.parents.map(n => n.count()).reduce((t, c) => t + c, 0);
-    count += this.extraCount;
     return Math.ceil(count/(parseInt(this.object.data.numUses) || 1));
   }
 
   addAvailableTools() {
     for (let tool of this.object.complexity.tools)
       this.addAvailableTool(tool, 0);
+
+    // Try add remaining object from this object's transition as an available tool
+    // const transition = this.object.transitionsToward[0];
+    // if (transition && transition.newActor && transition.newActor != this.object)
+    //   this.addAvailableTool(transition.newActor, 0);
+    // if (transition && transition.newTarget && transition.newTarget != this.object)
+    //   this.addAvailableTool(transition.newTarget, 0);
   }
 
   addAvailableTool(object, depth) {
@@ -90,12 +100,12 @@ class RecipeNode {
     if (depth > 5) return;
 
     // Search simple transitions for more tools
-    for (let transition of object.transitionsAway) {
-      if (transition.decay || !transition.actor || !transition.target) {
-        this.addAvailableTool(transition.newActor, depth+1);
-        this.addAvailableTool(transition.newTarget, depth+1);
-      }
-    }
+    // for (let transition of object.transitionsAway) {
+    //   if (transition.decay || !transition.actor || !transition.target) {
+    //     this.addAvailableTool(transition.newActor, depth+1);
+    //     this.addAvailableTool(transition.newTarget, depth+1);
+    //   }
+    // }
   }
 
   jsonData() {
