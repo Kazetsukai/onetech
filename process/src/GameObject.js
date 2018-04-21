@@ -105,6 +105,11 @@ class GameObject {
       result.biomes = this.biomes();
     }
 
+    if (this.numSlots() > 0) {
+      result.numSlots = this.numSlots();
+      result.slotSize = parseInt(this.data.slotSize);
+    }
+
     let techTree = this.techTreeNodes(3);
     if (techTree)
       result.techTree = techTree;
@@ -136,8 +141,12 @@ class GameObject {
     return false;
   }
 
+  numSlots() {
+    return parseInt(this.data.numSlots.split('#')[0]);
+  }
+
   isCraftableContainer() {
-    return this.data.numSlots.split('#')[0] > 0 && !this.isGrave();
+    return this.numSlots() > 0 && !this.isGrave();
   }
 
   isGrave() {

@@ -23,6 +23,7 @@
             Difficulty: {{difficultyText}}
             <span class="helpTip" v-tippy :title="difficultyTip">?</span>
           </li>
+          <li v-if="containerText">{{containerText}}</li>
           <li v-if="object.data.version">Added in v{{object.data.version}}</li>
           <li v-if="!object.data.version">Unreleased</li>
         </ul>
@@ -83,6 +84,11 @@ export default {
       const complexityWithCommas = complexityStr.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       const stepWord = complexityStr == '1' ? "step" : "steps";
       return `${complexityWithCommas} ${stepWord} to create`;
+    },
+    containerText() {
+      if (!this.object.data.numSlots) return;
+      const size = this.object.data.slotSize > 1 ? "large" : "small";
+      return `Holds ${this.object.data.numSlots} ${size} items`;
     }
   }
 }
