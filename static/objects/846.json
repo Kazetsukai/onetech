@@ -1,1 +1,1 @@
-{"id":"846","name":"Broken Hand Cart","transitionsToward":[{"targetID":"861","newTargetID":"846","decay":"30m"}],"transitionsAway":[{"targetID":"846","decay":"1h"}],"version":79,"techTree":[{"decay":"30m"},{"id":"861","nodes":null}]}
+{"id":"846","name":"Broken Hand Cart","transitionsToward":[{"targetID":"861","newTargetID":"846","decay":"30m"}],"transitionsAway":[{"targetID":"846","decay":"1h"}],"version":79,"numSlots":3,"slotSize":2,"techTree":[{"decay":"30m"},{"id":"861","nodes":null}]}

@@ -1,1 +1,1 @@
-{"id":"861","name":"Old Hand Cart","transitionsToward":[],"transitionsAway":[{"targetID":"861","newTargetID":"846","decay":"30m"}],"version":79}
+{"id":"861","name":"Old Hand Cart","transitionsToward":[],"transitionsAway":[{"targetID":"861","newTargetID":"846","decay":"30m"}],"version":79,"numSlots":3,"slotSize":2}
