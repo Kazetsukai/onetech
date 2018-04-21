@@ -172,13 +172,13 @@ export default {
 
   .info .helpTip {
     display: inline-block;
-    width: 18px;
-    height: 18px;
-    font-size: 14px;
+    width: 1.18rem;
+    height: 1.18rem;
+    font-size: 0.9rem;
     border: 1px solid #999;
-    border-radius: 10px;
+    border-radius: 0.6rem;
     background-color: #222;
-    vertical-align: 2px;
+    vertical-align: 0.15rem;
     margin-left: 3px;
   }
 
@@ -216,6 +216,10 @@ export default {
 
     .info {
       order: -1;
+    }
+
+    .info > ul {
+      font-size: 1.1rem;
     }
   }
 </style>
