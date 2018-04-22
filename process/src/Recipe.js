@@ -15,7 +15,7 @@ class Recipe {
       const nodes = this.nodes.filter(n => n.depth() == depth);
       if (nodes.length == 0)
         return;
-      if (this.nodes.length > 60) {
+      if (this.nodes.length > 80) {
         // console.log("Reached recipe node limit for ", this.object.id, this.object.name);
         this.remainingNodes = nodes;
         this.nodes = this.nodes.filter(n => !this.remainingNodes.includes(n));

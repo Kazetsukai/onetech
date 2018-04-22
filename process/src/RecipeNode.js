@@ -76,8 +76,7 @@ class RecipeNode {
   count() {
     if (this.isTool()) return 1;
     if (this.parents.length == 0) return 1;
-    let count = this.parents.map(n => n.count()).reduce((t, c) => t + c, 0);
-    return Math.ceil(count/(parseInt(this.object.data.numUses) || 1));
+    return this.parents.map(n => n.count()).reduce((t, c) => t + c, 0);
   }
 
   addAvailableTools() {
