@@ -38,7 +38,7 @@
         :selectedObject="object" />
 
       <TransitionsPanel
-        title="Timed transitions"
+        title="Changes over time"
         limit="3"
         :transitions="this.object.data.transitionsTimed"
         :selectedObject="object" />
