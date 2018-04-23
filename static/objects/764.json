@@ -1,1 +1,1 @@
-{"id":"764","name":"Rattle Snake","transitionsToward":[],"transitionsAway":[{"actorID":"560","targetID":"764","newActorID":"560","newTargetID":"765","tool":true}],"version":71,"mapChance":0.1,"biomes":"Desert"}
+{"id":"764","name":"Rattle Snake","transitionsToward":[],"transitionsAway":[{"actorID":"560","targetID":"764","newActorID":"560","newTargetID":"765","tool":true}],"transitionsTimed":[],"version":71,"mapChance":0.1,"biomes":"Desert"}

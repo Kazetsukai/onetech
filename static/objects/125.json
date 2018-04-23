@@ -1,1 +1,1 @@
-{"id":"125","name":"Clay Deposit","transitionsToward":[{"actorID":"126","targetID":"409","targetUses":"max","newTargetID":"125"}],"transitionsAway":[{"targetID":"125","newActorID":"126","newTargetID":"409","hand":true}],"version":20,"mapChance":1,"biomes":"Swamp"}
+{"id":"125","name":"Clay Deposit","transitionsToward":[{"actorID":"126","targetID":"409","targetUses":"max","newTargetID":"125"}],"transitionsAway":[{"targetID":"125","newActorID":"126","newTargetID":"409","hand":true}],"transitionsTimed":[],"version":20,"mapChance":1,"biomes":"Swamp"}

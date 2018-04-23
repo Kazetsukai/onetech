@@ -1,1 +1,1 @@
-{"id":"490","name":"Long Play Phonorecord","transitionsToward":[{"actorID":"488","newActorID":"490","newTargetID":"489"}],"transitionsAway":[{"actorID":"490","targetID":"491","newTargetID":"492"}],"version":43,"techTree":[{"id":"488","nodes":null}]}
+{"id":"490","name":"Long Play Phonorecord","transitionsToward":[{"actorID":"488","newActorID":"490","newTargetID":"489"}],"transitionsAway":[{"actorID":"490","targetID":"491","newTargetID":"492"}],"transitionsTimed":[],"version":43,"techTree":[{"id":"488","nodes":null}]}

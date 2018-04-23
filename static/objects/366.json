@@ -1,1 +1,1 @@
-{"id":"366","name":"Edge","transitionsToward":[],"transitionsAway":[{"targetID":"366","newTargetID":"365","hand":true,"tool":true}],"version":29}
+{"id":"366","name":"Edge","transitionsToward":[],"transitionsAway":[{"targetID":"366","newTargetID":"365","hand":true,"tool":true}],"transitionsTimed":[],"version":29}

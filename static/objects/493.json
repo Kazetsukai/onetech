@@ -1,1 +1,1 @@
-{"id":"493","name":"Yew Bow - just shot","transitionsToward":[],"transitionsAway":[{"actorID":"148","targetID":"493","newActorID":"152"},{"actorID":"493","targetID":"148","newActorID":"152"}],"version":49}
+{"id":"493","name":"Yew Bow - just shot","transitionsToward":[],"transitionsAway":[{"actorID":"148","targetID":"493","newActorID":"152"},{"actorID":"493","targetID":"148","newActorID":"152"}],"transitionsTimed":[],"version":49}

@@ -1,1 +1,1 @@
-{"id":"729","name":"Alum","transitionsToward":[],"transitionsAway":[{"actorID":"729","targetID":"730","newTargetID":"731"}],"version":62,"mapChance":0.05,"biomes":"Desert"}
+{"id":"729","name":"Alum","transitionsToward":[],"transitionsAway":[{"actorID":"729","targetID":"730","newTargetID":"731"}],"transitionsTimed":[],"version":62,"mapChance":0.05,"biomes":"Desert"}
