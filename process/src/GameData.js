@@ -35,7 +35,7 @@ class GameData {
   }
 
   importObjects() {
-    this.eachFileInDir("objects", (content, _filename) => {
+    this.eachFileInDir("objects", ".txt", (content, _filename) => {
       const object = new GameObject(content);
       if (object.id) {
         this.objects[object.id] = object;
@@ -44,7 +44,7 @@ class GameData {
   }
 
   importCategories() {
-    this.eachFileInDir("categories", (content, _filename) => {
+    this.eachFileInDir("categories", ".txt", (content, _filename) => {
       const category = new Category(content);
       category.addToObjects(this.objects);
       this.categories.push(category);
@@ -53,7 +53,7 @@ class GameData {
 
   importTransitions() {
     const importer = new TransitionImporter();
-    this.eachFileInDir("transitions", (content, filename) => {
+    this.eachFileInDir("transitions", ".txt", (content, filename) => {
       importer.importFromFile(content, filename);
     });
     importer.splitCategories(this.categories);
@@ -126,10 +126,12 @@ class GameData {
   convertSpriteImages() {
     const dir = this.dataDir + "/sprites";
     for (var filename of fs.readdirSync(dir)) {
-      const id = filename.split('.')[0];
-      const inPath = dir + "/" + filename;
-      const outPath = this.staticDevDir + "/sprites/sprite_" + id + ".png";
-      spawnSync("convert", [inPath, outPath]);
+      if (filename.endsWith(".tga")) {
+        const id = filename.split('.')[0];
+        const inPath = dir + "/" + filename;
+        const outPath = this.staticDevDir + "/sprites/sprite_" + id + ".png";
+        spawnSync("convert", [inPath, outPath]);
+      }
     }
   }
 
@@ -138,11 +140,13 @@ class GameData {
     processor.process(this.objects)
   }
 
-  eachFileInDir(dirName, callback) {
+  eachFileInDir(dirName, extension, callback) {
     const dir = this.dataDir + "/" + dirName;
-    for (var filename of fs.readdirSync(dir)) {
-      const content = fs.readFileSync(dir + "/" + filename, "utf8");
-      callback(content, filename);
+    for (let filename of fs.readdirSync(dir)) {
+      if (filename.endsWith(extension)) {
+        const content = fs.readFileSync(dir + "/" + filename, "utf8");
+        callback(content, filename);
+      }
     }
   }
 
