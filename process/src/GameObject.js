@@ -70,9 +70,9 @@ class GameObject {
   }
 
   jsonData() {
-    const transitionsToward = this.transitionsToward.filter(t => !t.decay);
+    const transitionsToward = this.transitionsToward;
     const transitionsAway = this.transitionsAway.filter(t => !t.decay);
-    const transitionsTimed = this.transitionsToward.concat(this.transitionsAway).filter(t => t.decay);
+    const transitionsTimed = this.transitionsAway.filter(t => t.decay);
     const result = {
       id: this.id,
       name: this.name,
