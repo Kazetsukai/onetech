@@ -1,62 +1,70 @@
 <template>
-  <!-- :style="{ backgroundColor: transition.hand ? 'blue' : (transition.tool ? 'red' : 'inherit') }" -->
   <div class="transitionView">
+    <!-- What object is being used -->
+    <div class="leftSide">
+      <ObjectImage class="transitionObject"
+                  v-if="transition.decay"
+                  hover="true"
+                  :decay="transition.decay" />
+
+      <ObjectImage class="transitionObject"
+                  v-else-if="transition.actorID || transition.hand"
+                  hand="true" hover="true"
+                  :object="actor"
+                  :uses="transition.actorUses"
+                  :clickable="transition.actorID && actor != selectedObject" />
+
+      <div v-else class="placeholder"></div>
+
+      <div v-if="twoOnLeft" class="plus">+</div>
+      <div v-else class="gap"></div>
+
+      <!-- What object is the target -->
+      <ObjectImage class="transitionObject"
+                  v-if="transition.targetID"
+                  hover="true"
+                  :object="target"
+                  :uses="transition.targetUses"
+                  :clickable="transition.targetID && target != selectedObject" />
+
+      <ObjectImage class="transitionObject"
+                  v-else-if="transition.targetPlayer"
+                  hover="true"
+                  player="true" />
+
+      <ObjectImage class="transitionObject"
+                  v-else
+                  ground="true"
+                  hover="true" />
+    </div>
+
     <div class="arrow"></div>
 
-    <!-- What object is being used -->
-    <ObjectImage class="actor transitionObject"
-                v-if="transition.decay"
-                hover="true"
-                :decay="transition.decay" />
+    <div class="rightSide">
+      <!-- What does the used object become? -->
+      <ObjectImage class="transitionObject"
+                  v-if="!transition.decay && (!transition.tool || transition.newActorUses)"
+                  hand="true" hover="true"
+                  :uses="transition.newActorUses"
+                  :object="newActor"
+                  :clickable="newActor && newActor != selectedObject" />
 
-    <ObjectImage class="actor transitionObject"
-                v-else-if="transition.actorID || transition.hand"
-                hand="true" hover="true"
-                :object="actor"
-                :uses="transition.actorUses"
-                :clickable="transition.actorID && actor != selectedObject" />
+      <div class="gap" v-if="twoOnRight"></div>
 
-    <span class="plus" v-if="transition.actorID || transition.decay || transition.hand">+</span>
+      <!-- What does the target item become? -->
+      <ObjectImage class="transitionObject"
+                  v-if="transition.newTargetID && (!transition.targetRemains || transition.newTargetUses)"
+                  hover="true"
+                  :uses="transition.newTargetUses"
+                  :object="newTarget"
+                  :extraObject="newExtraTarget"
+                  :clickable="newTarget && newTarget != selectedObject" />
 
-    <!-- What object is the target -->
-    <ObjectImage class="target transitionObject"
-                v-if="transition.targetID"
-                hover="true"
-                :object="target"
-                :uses="transition.targetUses"
-                :clickable="transition.targetID && target != selectedObject" />
-
-    <ObjectImage class="target transitionObject"
-                v-else-if="transition.targetPlayer"
-                hover="true"
-                player="true" />
-
-    <ObjectImage class="target transitionObject"
-                v-else
-                ground="true"
-                hover="true" />
-
-    <!-- What does the used object become? -->
-    <ObjectImage class="newActor transitionObject"
-                v-if="!transition.decay && (!transition.tool || transition.newActorUses)"
-                hand="true" hover="true"
-                :uses="transition.newActorUses"
-                :object="newActor"
-                :clickable="newActor && newActor != selectedObject" />
-
-    <!-- What does the target item become? -->
-    <ObjectImage class="newTarget transitionObject"
-                v-if="transition.newTargetID && (!transition.targetRemains || transition.newTargetUses)"
-                hover="true"
-                :uses="transition.newTargetUses"
-                :object="newTarget"
-                :extraObject="newExtraTarget"
-                :clickable="newTarget && newTarget != selectedObject" />
-
-    <ObjectImage class="newTarget transitionObject"
-                v-else
-                ground="true"
-                hover="true" />
+      <ObjectImage class="transitionObject"
+                  v-else
+                  ground="true"
+                  hover="true" />
+    </div>
   </div>
 </template>
 
@@ -71,6 +79,12 @@ export default {
     ObjectImage
   },
   computed: {
+    twoOnLeft() {
+      return this.transition.actorID || this.transition.decay || this.transition.hand;
+    },
+    twoOnRight() {
+      return !this.transition.decay && (!this.transition.tool || this.transition.newActorUses);
+    },
     actor () {
       return GameObject.find(this.transition.actorID);
     },
@@ -91,71 +105,78 @@ export default {
 </script>
 
 <style scoped>
-  .arrow {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-
-
-    background-color: #2b2b2b;
-
-    z-index: 0;
-
-    transform: translateY(-57%) rotateX(100deg) scale(5) rotateZ(45deg);
-  }
-
   .transitionView {
-    width: 200px;
-    height: 200px;
-
-    position: relative;
     overflow: hidden;
 
+    display: flex;
+    align-items: center;
+
     background-color: #333733;
-    margin: 10px;
     border-radius: 5px;
+    margin-top: 10px;
   }
 
-  .transitionObject {
-    position: absolute;
+  .transitionView .leftSide {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    padding-right: 3px;
+    background-color: #2b2b2b;
+  }
+
+  .transitionView .rightSide {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    padding-left: 10px;
+  }
+
+  .transitionView .transitionObject {
+    z-index: 1;
+    position: relative;
+    display: block;
     border: 1px solid transparent;
     background-color: #555;
-    width: 64px;
-    height: 64px;
+    width: 70px;
+    height: 70px;
   }
-  .transitionObject:hover {
+  .transitionView .transitionObject:hover {
     border: 1px solid #aaa;
     background-color: #666;
   }
 
-  .transitionObject.current {
+  .transitionView .transitionObject.current {
     background-color: #444;
   }
-  .transitionObject.current:hover {
+  .transitionView .transitionObject.current:hover {
     border: 1px solid transparent;
   }
 
-  .plus {
-    position: absolute;
-    font-size: 16pt;
-    left: calc(50% - 0.3em);
-    top: calc(25% - 0.5em);
-  }
-  .actor{
-    left: calc(30% - 32px);
-    top: calc(25% - 32px);
-  }
-  .target{
-    left: calc(70% - 32px);
-    top: calc(25% - 32px);
-  }
-  .newActor{
-    left: calc(30% - 32px);
-    top: calc(75% - 32px);
-  }
-  .newTarget{
-    left: calc(70% - 32px);
-    top: calc(75% - 32px);
+  .transitionView .placeholder {
+    width: 75px;
+    height: 70px;
   }
 
+  .transitionView .plus {
+    z-index: 1;
+    font-size: 16pt;
+    margin: 0 2px;
+  }
+
+  .transitionView .arrow {
+    z-index: 0;
+    height: 0;
+    width: 0;
+    background-color: #333733;
+    border-top: 50px solid transparent;
+    border-left: 25px solid #2b2b2b;
+    border-bottom: 50px solid transparent;
+    margin: -10px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .transitionView .gap {
+    width: 15px;
+  }
 </style>

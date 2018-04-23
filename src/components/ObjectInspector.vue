@@ -1,59 +1,66 @@
 <template>
   <div class="objectInspector">
-    <div class="panels">
-      <div class="toward transitions" v-if="object.data">
-        <div v-for="transition in object.data.transitionsToward">
-          <TransitionView :transition="transition" :selectedObject="object" />
-        </div>
+    <div class="info">
+      <h2>{{object.baseName()}}</h2>
+      <h3>{{object.subName()}}</h3>
+      <ObjectImage :object="object" scaleUpTo="128" />
+      <h3 v-if="!object.data">Loading...</h3>
+      <ul v-if="object.data">
+        <li v-if="object.data.foodValue">Food: {{object.data.foodValue}}</li>
+        <li v-if="object.data.heatValue">Heat: {{object.data.heatValue}}</li>
+        <li v-if="object.clothingPart()">Clothing: {{object.clothingPart()}}</li>
+        <li v-if="object.hasInsulation()">Insulation: {{object.insulationPercent()}}%</li>
+        <li v-if="object.data.numUses">Number of Uses: {{object.data.numUses}}</li>
+        <li v-if="object.data.biomes">Biome: {{object.data.biomes}}</li>
+        <li v-if="spawnText">Spawn Chance: {{spawnText}}</li>
+        <li v-if="difficultyText">
+          Difficulty: {{difficultyText}}
+          <span class="helpTip" v-tippy :title="difficultyTip">?</span>
+        </li>
+        <li v-if="containerText">{{containerText}}</li>
+        <li v-if="object.data.version">Added in v{{object.data.version}}</li>
+        <li v-if="!object.data.version">Unreleased</li>
+      </ul>
+      <div class="actions" v-if="object.data">
+        <a :href="object.url('tech-tree')" v-if="object.data.techTree" title="Tech Tree" v-tippy>
+          <img src="../assets/techtree.png" width="38" height="36" />
+        </a>
+        <a :href="object.url('recipe')"  v-if="object.data.recipe" title="Crafting Recipe" v-tippy>
+          <img src="../assets/recipe.png" width="41" height="42" />
+        </a>
       </div>
-      <div class="info">
-        <h2>{{object.baseName()}}</h2>
-        <h3>{{object.subName()}}</h3>
-        <ObjectImage :object="object" scaleUpTo="128" />
-        <h3 v-if="!object.data">Loading...</h3>
-        <ul v-if="object.data">
-          <li v-if="object.data.foodValue">Food: {{object.data.foodValue}}</li>
-          <li v-if="object.data.heatValue">Heat: {{object.data.heatValue}}</li>
-          <li v-if="object.clothingPart()">Clothing: {{object.clothingPart()}}</li>
-          <li v-if="object.hasInsulation()">Insulation: {{object.insulationPercent()}}%</li>
-          <li v-if="object.data.numUses">Number of Uses: {{object.data.numUses}}</li>
-          <li v-if="object.data.biomes">Biome: {{object.data.biomes}}</li>
-          <li v-if="spawnText">Spawn Chance: {{spawnText}}</li>
-          <li v-if="difficultyText">
-            Difficulty: {{difficultyText}}
-            <span class="helpTip" v-tippy :title="difficultyTip">?</span>
-          </li>
-          <li v-if="containerText">{{containerText}}</li>
-          <li v-if="object.data.version">Added in v{{object.data.version}}</li>
-          <li v-if="!object.data.version">Unreleased</li>
-        </ul>
-        <div class="actions" v-if="object.data">
-          <a :href="object.url('tech-tree')" v-if="object.data.techTree" title="Tech Tree" v-tippy>
-            <img src="../assets/techtree.png" width="38" height="36" />
-          </a>
-          <a :href="object.url('recipe')"  v-if="object.data.recipe" title="Crafting Recipe" v-tippy>
-            <img src="../assets/recipe.png" width="41" height="42" />
-          </a>
-        </div>
-      </div>
-      <div class="away transitions" v-if="object.data">
-        <div v-for="transition in object.data.transitionsAway">
-          <TransitionView :transition="transition" :selectedObject="object" />
-        </div>
-      </div>
+    </div>
+    <div class="transitionsPanels" v-if="object.data">
+      <TransitionsPanel
+        title="How to get"
+        limit="3"
+        :transitions="this.object.data.transitionsToward"
+        :selectedObject="object" />
+
+      <TransitionsPanel
+        title="Changes over time"
+        limit="3"
+        :transitions="this.object.data.transitionsTimed"
+        :selectedObject="object" />
+
+      <TransitionsPanel
+        title="How to use"
+        limit="3"
+        :transitions="this.object.data.transitionsAway"
+        :selectedObject="object" />
     </div>
   </div>
 </template>
 
 <script>
 import ObjectImage from './ObjectImage';
-import TransitionView from './TransitionView';
+import TransitionsPanel from './TransitionsPanel';
 
 export default {
   props: ['object'],
   components: {
     ObjectImage,
-    TransitionView
+    TransitionsPanel
   },
   computed: {
     spawnText() {
@@ -97,64 +104,53 @@ export default {
 <style scoped>
   .objectInspector {
     display: flex;
-    flex-direction: column;
-    align-content: center;
-
-    background-color: #222;
-    margin-top: 10px;
-    border-radius: 5px;
+    flex-direction: row;
+    align-items: flex-start;
   }
 
-  .objectInspector > h3 {
-    text-align: center;
-  }
-
-  .info {
+  .objectInspector .info {
     flex: 1 1 0;
-    min-width: 220px;
 
-    background-color: #333;
-    margin: 10px;
+    background-color: #2b2b2b;
+    margin: 10px 0;
     border-radius: 5px;
 
     padding-bottom: 30px;
   }
-  .info > h2 {
+  .objectInspector .info > h2 {
     text-align: center;
     font-weight: bolder;
     margin-bottom: 0px;
   }
-  .info > h3 {
+  .objectInspector .info > h3 {
     text-align: center;
     font-weight: lighter;
     font-style: italic;
     margin-top: 0px;
   }
-  .info > .imgContainer {
+  .objectInspector .info > .imgContainer {
     width: 100%;
     height: 256px;
   }
-  .info > ul {
+  .objectInspector .info > ul {
     padding: 0;
     margin: 5px 30px;
     font-size: 1.3rem;
     list-style-type: none;
   }
-  .info li {
+  .objectInspector .info li {
     text-align: center;
   }
 
-  .info .actions {
+  .objectInspector .info .actions {
     display: flex;
     justify-content: center;
   }
-
-  .info .actions a {
+  .objectInspector .info .actions a {
     display: block;
     margin: 20px 10px;
   }
-
-  .info .actions a {
+  .objectInspector .info .actions a {
     padding: 8px 10px;
     background-color: #505050;
     border: 1px solid transparent;
@@ -162,15 +158,15 @@ export default {
     display: flex;
     align-items: center;
   }
-  .info .actions a:hover {
+  .objectInspector .info .actions a:hover {
     border: 1px solid #eee;
     background-color: #666;
   }
-  .info .actions a img {
+  .objectInspector .info .actions a img {
     display: block;
   }
 
-  .info .helpTip {
+  .objectInspector .info .helpTip {
     display: inline-block;
     width: 1.18rem;
     height: 1.18rem;
@@ -181,45 +177,32 @@ export default {
     vertical-align: 0.15rem;
     margin-left: 3px;
   }
-
-  .info .helpTip:hover {
+  .objectInspector .info .helpTip:hover {
     background-color: #555;
     cursor: default;
   }
 
-  .panels {
-    display: flex;
-    flex-direction: row;
-
-    padding: 10px;
-  }
-  .panels > .transitions {
-    width: 220px;
-
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-  }
-  .panels > .transitions > div {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+  .objectInspector .transitionsPanel {
+    margin-bottom: 10px;
+    margin-left: 10px;
   }
 
   @media only screen and (max-width: 768px) {
-    .panels {
+    .objectInspector {
       flex-direction: column;
+      align-items: center;
     }
-    .panels .transitions {
+
+    .objectInspector .info {
       width: 100%;
     }
 
-    .info {
-      order: -1;
+    .objectInspector .info > ul {
+      font-size: 1.1rem;
     }
 
-    .info > ul {
-      font-size: 1.1rem;
+    .objectInspector .transitionsPanel {
+      margin-left: 0;
     }
   }
 </style>

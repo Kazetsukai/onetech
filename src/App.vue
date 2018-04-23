@@ -200,19 +200,6 @@ export default {
     height: 128px;
   }
 
-  .showMore {
-    width: 100%;
-    padding: 10px;
-    text-align: center;
-
-    display: flex;
-    flex-direction: column;
-
-    > a {
-      color: #ccc;
-    }
-  }
-
   .filterList > .filter {
     min-width: 200px;
     width: 33.3333%;
