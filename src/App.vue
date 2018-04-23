@@ -147,9 +147,8 @@ export default {
   body {
     background-color: #151515;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 10px;
     max-width: 1024px;
-    padding-left: calc(100vw - 100%);
   }
 
   #app {
