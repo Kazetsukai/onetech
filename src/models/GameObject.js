@@ -7,6 +7,8 @@ export default class GameObject {
       }
       this.ids = data.ids;
       this.filters = data.filters;
+      this.date = new Date(data.date);
+      this.version = data.version;
       callback();
     });
   }

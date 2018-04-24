@@ -63,7 +63,7 @@ class GameData {
   }
 
   populateVersions() {
-    var populator = new VersionPopulator(this.dataDir, this.objects);
+    const populator = new VersionPopulator(this.dataDir, this.objects);
     populator.populate();
   }
 
@@ -120,6 +120,8 @@ class GameData {
       ids: objects.map(o => o.id),
       names: objects.map(o => o.name),
       filters: ObjectFilters.jsonData(objects),
+      date: new Date(),
+      version: (new VersionPopulator(this.dataDir, this.objects)).lastVersion(),
     }
   }
 

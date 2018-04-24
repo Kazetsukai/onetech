@@ -8,6 +8,11 @@ class VersionPopulator {
     this.objects = objects;
   }
 
+  lastVersion() {
+    const versions = this.fetchVersions();
+    return versions[versions.length-1];
+  }
+
   populate() {
     const versions = this.fetchVersions();
     for (let i in versions) {

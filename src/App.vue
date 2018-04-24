@@ -5,6 +5,10 @@
     <h2 v-if="loading">Loading...</h2>
 
     <div v-else>
+      <div class="updated">
+        Updated {{lastDate}} (v{{lastVersion}})
+      </div>
+
       <ObjectSearch :selectedObject="selectedObject" />
 
       <div v-if="selectedObject">
@@ -75,6 +79,21 @@ export default {
     },
     filters () {
       return GameObject.filters;
+    },
+    lastDate () {
+      const months = [
+        "January", "February", "March",
+        "April", "May", "June", "July",
+        "August", "September", "October",
+        "November", "December"
+      ];
+      var month = GameObject.date.getMonth();
+      var day = GameObject.date.getDate();
+      var year = GameObject.date.getFullYear();
+      return `${months[month]} ${day}, ${year}`;
+    },
+    lastVersion () {
+      return GameObject.version;
     }
   },
   methods: {
@@ -172,6 +191,18 @@ export default {
     color: #42b983;
   }
 
+  #app > h1 {
+    padding-bottom: 0;
+    margin-bottom: 5px;
+  }
+
+  .updated {
+    color: #999;
+    text-align: center;
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+
   .filterList {
     background-color: #222;
     border-radius: 5px;
@@ -210,6 +241,10 @@ export default {
   }
 
   @media only screen and (max-width: 768px) {
+    #app {
+      margin-top: 40px;
+    }
+
     .filterList > .filter {
       min-width: 150px;
       width: 50%;
