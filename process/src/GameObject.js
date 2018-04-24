@@ -97,7 +97,7 @@ class GameObject {
       result.complexity = this.complexity.value;
 
     if (this.complexity.difficulty)
-      result.difficulty = this.complexity.difficulty;
+      result.difficulty = this.complexity.difficulty.toFixed(2);
 
     if (this.data.clothing != "n") {
       result.clothing = this.data.clothing;
