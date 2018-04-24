@@ -1,6 +1,5 @@
 <template>
-  <div class="transitionsPanel" v-if="transitions.length > 0">
-    <h3>{{title}}</h3>
+  <div class="transitionsList">
     <div class="transitions">
       <TransitionView
         v-for="(transition, index) in visibleTransitions"
@@ -8,8 +7,10 @@
         :transition="transition"
         :selectedObject="selectedObject" />
     </div>
-    <div v-if="canShowMore" class="showMore" @click="expand">
-      Show more...
+    <div v-if="canShowMore" class="showMoreWrapper">
+      <span class="showMore" @click="expand">
+        Show more...
+      </span>
     </div>
   </div>
 </template>
@@ -51,34 +52,20 @@ export default {
 </script>
 
 <style scoped>
-  .transitionsPanel {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #222;
-    border-radius: 5px;
-    padding: 10px;
-    margin-top: 10px;
-  }
-
-  .transitionsPanel > h3 {
-    font-size: 18px;
-    margin: 0;
-    padding: 0;
-  }
-
-  .transitionsPanel .transitions {
-    flex: 1;
+  .transitionsList .transitions {
     display: flex;
     flex-direction: column;
     width: 100%;
   }
 
-  .transitionsPanel .showMore {
+  .transitionsList .showMoreWrapper {
+    text-align: center;
     margin-top: 10px;
+  }
+  .transitionsList .showMore {
     cursor: pointer;
   }
-  .transitionsPanel .showMore:hover {
+  .transitionsList .showMore:hover {
     text-decoration: underline;
   }
 </style>

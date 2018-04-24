@@ -4,15 +4,6 @@ const Sprite = require('./Sprite');
 const Complexity = require('./Complexity');
 const Recipe = require('./Recipe');
 
-const BIOMES = {
-  0: 'grassland',
-  1: 'swamp',
-  2: 'prairie',
-  3: 'rocky',
-  4: 'snow',
-  5: 'desert'
-}
-
 class GameObject {
   constructor(dataText) {
     this.data = {};
@@ -60,8 +51,7 @@ class GameObject {
     const parts = value.split('#');
     this.data.mapChance = parts[0];
     if (parts[1].includes("_")) {
-      const ids = parts[1].split('_')[1].split(',');
-      this.data.biomes = ids.map(id => BIOMES[id]);
+      this.data.biomes = parts[1].split('_')[1].split(',');
     }
   }
 
@@ -106,7 +96,7 @@ class GameObject {
 
     if (this.data.mapChance > 0) {
       result.mapChance = parseFloat(this.data.mapChance);
-      result.biomes = this.biomes();
+      result.biomes = this.data.biomes;
     }
 
     if (this.numSlots() > 0) {
@@ -124,10 +114,6 @@ class GameObject {
       result.recipe = recipe.jsonData();
 
     return result;
-  }
-
-  biomes() {
-    return this.data.biomes.map(name => name[0].toUpperCase() + name.substring(1)).join(", ");
   }
 
   hasSprite() {
