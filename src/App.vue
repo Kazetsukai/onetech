@@ -175,7 +175,7 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #d3d3d3;
-    margin-top: 60px;
+    margin-top: 40px;
   }
 
   h1, h2 {
@@ -192,8 +192,7 @@ export default {
   }
 
   #app > h1 {
-    padding-bottom: 0;
-    margin-bottom: 5px;
+    margin-bottom: 0;
   }
 
   .updated {
@@ -241,10 +240,6 @@ export default {
   }
 
   @media only screen and (max-width: 768px) {
-    #app {
-      margin-top: 40px;
-    }
-
     .filterList > .filter {
       min-width: 150px;
       width: 50%;
