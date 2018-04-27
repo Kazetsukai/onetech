@@ -26,11 +26,10 @@ gameData.calculateObjectComplexity();
 console.log("Exporting objects...");
 gameData.exportObjects();
 
-if (process.argv.includes('download') || process.argv.includes('sprites')) {
-  if (process.argv.includes('download')) {
-    console.log("Converting sprite images...");
-    gameData.convertSpriteImages();
-  }
+if (process.argv.includes('sprites') || process.argv.includes('download')) {
+  console.log("Converting sprite images...");
+  gameData.convertSpriteImages();
+  gameData.convertGroundImages();
 
   console.log("Processing sprites...");
   gameData.processSprites();

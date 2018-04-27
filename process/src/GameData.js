@@ -90,6 +90,7 @@ class GameData {
     if (!fs.existsSync(this.staticDevDir))
       spawnSync("cp", ["-R", this.staticDir, this.staticDevDir]);
     this.makeDir(this.staticDevDir + "/sprites");
+    this.makeDir(this.staticDevDir + "/ground");
     this.makeDir(this.staticDevDir + "/objects");
     this.makeDir(this.staticDevDir + "/pretty-json");
     this.makeDir(this.staticDevDir + "/pretty-json/objects");
@@ -133,6 +134,18 @@ class GameData {
         const inPath = dir + "/" + filename;
         const outPath = this.staticDevDir + "/sprites/sprite_" + id + ".png";
         spawnSync("convert", [inPath, outPath]);
+      }
+    }
+  }
+
+  convertGroundImages() {
+    const dir = this.dataDir + "/ground";
+    for (var filename of fs.readdirSync(dir)) {
+      if (filename.endsWith(".tga")) {
+        const name = filename.split('.')[0];
+        const inPath = dir + "/" + filename;
+        const outPath = this.staticDevDir + "/ground/" + name + ".png";
+        spawnSync("convert", [inPath, "-sigmoidal-contrast", "3,44%", "-level", "0%,108%,1.1", "-scale", "128x128", outPath]);
       }
     }
   }

@@ -11,8 +11,6 @@
         <li v-if="object.clothingPart()">Clothing: {{object.clothingPart()}}</li>
         <li v-if="object.hasInsulation()">Insulation: {{object.insulationPercent()}}%</li>
         <li v-if="object.data.numUses">Number of Uses: {{object.data.numUses}}</li>
-        <li v-if="object.data.biomes">Biome: {{object.data.biomes}}</li>
-        <li v-if="spawnText">Spawn Chance: {{spawnText}}</li>
         <li v-if="difficultyText">
           Difficulty: {{difficultyText}}
           <span class="helpTip" v-tippy :title="difficultyTip">?</span>
@@ -31,36 +29,53 @@
       </div>
     </div>
     <div class="transitionsPanels" v-if="object.data">
-      <TransitionsPanel
-        title="How to get"
-        limit="3"
-        :transitions="this.object.data.transitionsToward"
-        :selectedObject="object" />
-
-      <TransitionsPanel
-        title="Changes over time"
-        limit="3"
-        :transitions="this.object.data.transitionsTimed"
-        :selectedObject="object" />
-
-      <TransitionsPanel
-        title="How to use"
-        limit="3"
-        :transitions="this.object.data.transitionsAway"
-        :selectedObject="object" />
+      <div class="transitionsPanel" v-if="object.data.transitionsToward.length > 0 || object.data.mapChance">
+        <h3>How to get</h3>
+        <div v-if="object.data.mapChance" class="spawn">
+          <div class="spawnChance">
+            Spawn Chance: {{spawnText}}
+          </div>
+          <div class="biomes">
+            <BiomeImage v-for="biome in object.data.biomes"
+              class="biome"
+              :biome="biome"
+              :key="biome" />
+          </div>
+        </div>
+        <TransitionsList
+          limit="3"
+          :transitions="object.data.transitionsToward"
+          :selectedObject="object" />
+      </div>
+      <div class="transitionsPanel" v-if="object.data.transitionsTimed.length > 0">
+        <h3>Changes over time</h3>
+        <TransitionsList
+          limit="3"
+          :transitions="object.data.transitionsTimed"
+          :selectedObject="object" />
+      </div>
+      <div class="transitionsPanel" v-if="object.data.transitionsAway.length > 0">
+        <h3>How to use</h3>
+        <TransitionsList
+          limit="3"
+          :transitions="object.data.transitionsAway"
+          :selectedObject="object" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import ObjectImage from './ObjectImage';
-import TransitionsPanel from './TransitionsPanel';
+import BiomeImage from './BiomeImage';
+import TransitionsList from './TransitionsList';
 
 export default {
   props: ['object'],
   components: {
     ObjectImage,
-    TransitionsPanel
+    BiomeImage,
+    TransitionsList,
   },
   computed: {
     spawnText() {
@@ -183,8 +198,45 @@ export default {
   }
 
   .objectInspector .transitionsPanel {
+    background-color: #222;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 10px;
     margin-bottom: 10px;
     margin-left: 10px;
+  }
+
+  .objectInspector .transitionsPanel > h3 {
+    font-size: 18px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+
+  .objectInspector .spawn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    background-color: #2b2b2b;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+
+  .objectInspector .spawnChance {
+    margin-bottom: 10px;
+  }
+
+  .objectInspector .biomes {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .objectInspector .biome {
+    width: 64px;
+    height: 64px;
+    border-radius: 5px;
+    margin: 0 5px;
   }
 
   @media only screen and (max-width: 768px) {
