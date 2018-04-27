@@ -145,7 +145,7 @@ class GameData {
         const name = filename.split('.')[0];
         const inPath = dir + "/" + filename;
         const outPath = this.staticDevDir + "/ground/" + name + ".png";
-        spawnSync("convert", [inPath, "-scale", "128x128", outPath]);
+        spawnSync("convert", [inPath, "-sigmoidal-contrast", "3,44%", "-level", "0%,108%,1.1", "-scale", "128x128", outPath]);
       }
     }
   }
