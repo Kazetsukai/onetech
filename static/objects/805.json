@@ -1,1 +1,1 @@
-{"id":"805","name":"Wild Onion","transitionsToward":[],"transitionsAway":[{"targetID":"805","newActorID":"808","hand":true}],"transitionsTimed":[],"version":75,"mapChance":1,"biomes":["0"]}
+{"id":"805","name":"Wild Onion","transitionsToward":[],"transitionsAway":[{"targetID":"805","newActorID":"808","hand":true}],"transitionsTimed":[],"version":75,"depth":0,"mapChance":1,"biomes":["0"]}

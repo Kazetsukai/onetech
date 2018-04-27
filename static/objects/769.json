@@ -1,1 +1,1 @@
-{"id":"769","name":"Wild Horse","transitionsToward":[{"actorID":"771","newActorID":"767","newTargetID":"769"}],"transitionsAway":[{"actorID":"767","targetID":"769","newActorID":"771"}],"transitionsTimed":[],"version":71,"mapChance":0.1,"biomes":["5"]}
+{"id":"769","name":"Wild Horse","transitionsToward":[{"actorID":"771","newActorID":"767","newTargetID":"769"}],"transitionsAway":[{"actorID":"767","targetID":"769","newActorID":"771"}],"transitionsTimed":[],"version":71,"depth":0,"mapChance":0.1,"biomes":["5"]}

@@ -1,1 +1,1 @@
-{"id":"674","name":"Limestone","transitionsToward":[{"actorID":"675","newActorID":"235","newTargetID":"674"}],"transitionsAway":[{"actorID":"674","targetID":"235","newTargetID":"675"}],"transitionsTimed":[],"version":62,"mapChance":1,"biomes":["3"]}
+{"id":"674","name":"Limestone","transitionsToward":[{"actorID":"675","newActorID":"235","newTargetID":"674"}],"transitionsAway":[{"actorID":"674","targetID":"235","newTargetID":"675"}],"transitionsTimed":[],"version":62,"depth":0,"mapChance":1,"biomes":["3"]}
