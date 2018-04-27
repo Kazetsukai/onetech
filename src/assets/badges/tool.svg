@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="10px" height="16px" viewBox="0 0 10 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>Hammer</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Tool" transform="translate(-67.000000, -1.000000)" fill="#D3D3D3" fill-rule="nonzero">
+            <g id="Hammer" transform="translate(67.000000, 1.000000)">
+                <path d="M8.7515202,0 L2.88314692,0 C2.81913008,0 2.75674217,0.0212223843 2.70597393,0.0604782973 L0.114730775,2.06373942 C0.0423521083,2.11959938 0,2.2064682 0,2.29867012 L0,3.63089705 C0,3.79407849 0.130694262,3.926416 0.291849464,3.926416 L2.88227816,3.926416 L2.88227816,15.0783391 C2.88227816,15.2417405 3.01291812,15.373913 3.17412762,15.373913 L5.86940494,15.373913 C6.03072303,15.373913 6.1613087,15.2417405 6.1613087,15.0783391 L6.1613087,3.92647098 L8.7515745,3.92647098 C8.91300119,3.92647098 9.04347826,3.79413347 9.04347826,3.63095203 L9.04347826,0.295573933 C9.04342396,0.13228253 8.91316408,0 8.7515202,0 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

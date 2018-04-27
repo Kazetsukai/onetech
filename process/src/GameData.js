@@ -11,6 +11,7 @@ const VersionPopulator = require('./VersionPopulator');
 const DepthCalculator = require('./DepthCalculator');
 const SpriteProcessor = require('./SpriteProcessor');
 const ObjectFilters = require('./ObjectFilters');
+const ObjectBadges = require('./ObjectBadges');
 
 class GameData {
   constructor(processDir, dataDir) {
@@ -121,9 +122,10 @@ class GameData {
       ids: objects.map(o => o.id),
       names: objects.map(o => o.name),
       filters: ObjectFilters.jsonData(objects),
+      badges: ObjectBadges.jsonData(objects),
       date: new Date(),
       version: (new VersionPopulator(this.dataDir, this.objects)).lastVersion(),
-    }
+    };
   }
 
   convertSpriteImages() {

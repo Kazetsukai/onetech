@@ -7,6 +7,7 @@ export default class GameObject {
       }
       this.ids = data.ids;
       this.filters = data.filters;
+      this.badges = data.badges;
       this.date = new Date(data.date);
       this.version = data.version;
       callback();
@@ -50,8 +51,20 @@ export default class GameObject {
     return this.name.split(' - ')[1];
   }
 
+  badges() {
+    const badges = [];
+    for (let key in GameObject.badges) {
+      const index = GameObject.badges[key].ids.indexOf(this.id);
+      if (index != -1) {
+        const values = GameObject.badges[key].values || [];
+        badges.push({key: key, value: values[index]});
+      }
+    }
+    return badges;
+  }
+
   url(subpath) {
-    var path = [this.id, this.name.split(' ').join('-')];
+    const path = [this.id, this.name.split(' ').join('-')];
     if (subpath) path.push(subpath);
     return '#' + path.map(encodeURIComponent).join('/');
   }
