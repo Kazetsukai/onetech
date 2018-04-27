@@ -10,7 +10,11 @@
         <li v-if="object.data.heatValue">Heat: {{object.data.heatValue}}</li>
         <li v-if="object.clothingPart()">Clothing: {{object.clothingPart()}}</li>
         <li v-if="object.hasInsulation()">Insulation: {{object.insulationPercent()}}%</li>
-        <li v-if="object.data.numUses">Number of Uses: {{object.data.numUses}}</li>
+        <li v-if="object.data.numUses">Number of uses: {{object.data.numUses}}</li>
+        <li v-if="object.data.useChance">
+          Chance to use:
+          {{Math.round(object.data.useChance*100)}}%
+        </li>
         <li v-if="difficultyText">
           Difficulty: {{difficultyText}}
           <span class="helpTip" v-tippy :title="difficultyTip">?</span>

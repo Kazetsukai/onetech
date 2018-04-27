@@ -80,8 +80,11 @@ class GameObject {
     if (this.data.heatValue > 0)
       result.heatValue = parseInt(this.data.heatValue);
 
-    if (this.data.numUses > 1)
-      result.numUses = parseInt(this.data.numUses);
+    if (this.numUses() > 1) {
+      result.numUses = this.numUses();
+      if (this.useChance())
+        result.useChance = this.useChance();
+    }
 
     if (this.depth.hasValue())
       result.depth = this.depth.value;
@@ -129,6 +132,15 @@ class GameObject {
       if (transition.actor == this && transition.target && transition.tool) return true;
     }
     return false;
+  }
+
+  numUses() {
+    return parseInt(this.data.numUses.split(',')[0]);
+  }
+
+  useChance() {
+    if (this.data.numUses.includes(','))
+      return parseFloat(this.data.numUses.split(',')[1]);
   }
 
   numSlots() {

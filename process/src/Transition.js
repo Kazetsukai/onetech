@@ -102,7 +102,7 @@ class Transition {
 
     if (this.actor) {
       result.actorID = this.actor.id;
-      if (this.actor.data.numUses > 1) {
+      if (this.actor.numUses() > 1) {
         if (this.lastUseActor)
           result.actorUses = this.reverseUseActor ? "max" : "last";
         else if (this.tool)
@@ -112,7 +112,7 @@ class Transition {
 
     if (this.target) {
       result.targetID = this.target.id;
-      if (this.target.data.numUses > 1) {
+      if (this.target.numUses() > 1) {
         if (this.lastUseTarget)
           result.targetUses = this.reverseUseTarget ? "max" : "last";
         else if (this.targetRemains)
