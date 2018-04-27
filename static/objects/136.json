@@ -1,1 +1,1 @@
-{"id":"136","name":"Sapling","transitionsToward":[{"targetID":"137","newTargetID":"136","decay":"1h"}],"transitionsAway":[{"actorID":"34","targetID":"136","newActorID":"34","newTargetID":"138","tool":true}],"transitionsTimed":[],"version":20,"mapChance":1,"biomes":"Grassland"}
+{"id":"136","name":"Sapling","transitionsToward":[{"targetID":"137","newTargetID":"136","decay":"1h"}],"transitionsAway":[{"actorID":"34","targetID":"136","newActorID":"34","newTargetID":"138","tool":true}],"transitionsTimed":[],"version":20,"mapChance":1,"biomes":["0"]}
