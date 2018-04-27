@@ -51,23 +51,26 @@ class TransitionImporter {
   }
 
   mergeGenericTransition(transition, newTransitions) {
-    const transitions = this.transitions.filter(t => t.actorID == transition.actorID && t != transition);
-    const toolTransitions = transitions.filter(t => t.tool);
+    const toolTransitions = this.transitions.filter(t => t != transition && t.actorID == transition.actorID && t.tool && t.targetID > 0);
 
     if (toolTransitions.length == 0) {
+      console.log("Generic transition:", transition.actorID);
       newTransitions.push(transition);
       return;
     }
 
+    console.log("Generic tool transition:", transition.actorID);
     for (let otherTransition of toolTransitions) {
       // Clone last use transition since it doesn't always take effect
       if (transition.lastUseActor) {
+        console.log("last use", otherTransition.targetID);
         const newTransition = transition.clone();
         newTransition.targetID = otherTransition.targetID;
         newTransition.newTargetID = otherTransition.newTargetID;
         newTransition.targetRemains = otherTransition.targetRemains;
         newTransitions.push(newTransition);
       } else {
+        console.log("not last use", otherTransition.targetID);
         otherTransition.newActorID = transition.newActorID;
         otherTransition.tool = transition.tool;
       }

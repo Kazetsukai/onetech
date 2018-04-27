@@ -53,19 +53,19 @@ class Transition {
     this.newTarget = objects[this.newTargetID];
     this.newExtraTarget = objects[this.newExtraTargetID];
 
-    if (this.actor)
+    if (this.actor && !this.actor.transitionsAway.includes(this))
       this.actor.transitionsAway.push(this);
 
-    if (this.target && this.target != this.actor)
+    if (this.target && !this.target.transitionsAway.includes(this))
       this.target.transitionsAway.push(this);
 
-    if (this.newActor && !this.tool)
+    if (this.newActor && !this.newActor.transitionsAway.includes(this) && !this.newActor.transitionsToward.includes(this))
       this.newActor.transitionsToward.push(this);
 
-    if (this.newTarget && !this.targetRemains && (this.newTarget != this.newActor || !this.tool))
+    if (this.newTarget && !this.newTarget.transitionsAway.includes(this) && !this.newTarget.transitionsToward.includes(this))
       this.newTarget.transitionsToward.push(this);
 
-    if (this.newExtraTarget)
+    if (this.newExtraTarget && !this.newExtraTarget.transitionsAway.includes(this) && !this.newExtraTarget.transitionsToward.includes(this))
       this.newExtraTarget.transitionsToward.push(this);
   }
 
@@ -83,6 +83,10 @@ class Transition {
 
   isGeneric() {
     return this.targetID === '-1' && this.newTargetID === '0' && this.actorID != this.newActorID;
+  }
+
+  isLastUse() {
+    return this.lastUseActor || this.lastUseTarget;
   }
 
   targetsPlayer() {

@@ -83,8 +83,8 @@ class GameObject {
     if (this.data.numUses > 1)
       result.numUses = parseInt(this.data.numUses);
 
-    if (this.complexity.value)
-      result.complexity = this.complexity.value;
+    if (this.complexity.hasValue())
+      result.complexity = this.complexity.value();
 
     if (this.complexity.difficulty)
       result.difficulty = this.complexity.difficulty.toFixed(2);
@@ -108,10 +108,10 @@ class GameObject {
     if (techTree)
       result.techTree = techTree;
 
-    let recipe = new Recipe(this);
-    recipe.generate();
-    if (recipe.hasData())
-      result.recipe = recipe.jsonData();
+    // let recipe = new Recipe(this);
+    // recipe.generate();
+    // if (recipe.hasData())
+    //   result.recipe = recipe.jsonData();
 
     return result;
   }

@@ -65,7 +65,7 @@ class RecipeNode {
   }
 
   isIngredient() {
-    return !this.isTool() && (!this.object.complexity.hasValue() || this.object.complexity.value == 0);
+    return !this.isTool() && (!this.object.complexity.hasValue() || this.object.complexity.rawValue == 0);
   }
 
   depth() {

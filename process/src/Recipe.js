@@ -11,6 +11,7 @@ class Recipe {
   }
 
   generate() {
+    console.log("Generate Recipe", this.object.id, this.object.name);
     for (let depth=0; depth < 40; depth++) {
       const nodes = this.nodes.filter(n => n.depth() == depth);
       if (nodes.length == 0)
