@@ -26,7 +26,7 @@ class Depth {
   addObject(object) {
     if (!object) return;
     if (!this.hasValue() || !object.depth.hasValue())
-      throw "Unable to add null object complexities together";
+      throw "Unable to add null object depths together";
     this.value = Math.max(this.value, object.depth.value);
     this.difficulty = Math.max(this.difficulty, object.depth.difficulty);
   }

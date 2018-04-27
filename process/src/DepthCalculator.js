@@ -30,8 +30,7 @@ class DepthCalculator {
     }
   }
 
-  // Calculates the transition depth by combining the actor and target complexities
-  // Tools are not counted toward depth if used in previous depth
+  // Calculates the transition depth by finding max of actor and target depths
   // If the depth was calculated, it sets it to the resulting object
   calculateTransition(transition) {
     if (transition.actor && !transition.actor.depth.hasValue())
@@ -57,9 +56,9 @@ class DepthCalculator {
   }
 
   calculateDifficulty(objects) {
-    const complexities = objects.map(o => o.depth).filter(c => c.difficulty > 0).sort((a,b) => a.difficulty - b.difficulty);
-    for (let i in complexities) {
-      complexities[i].difficulty = parseFloat(i) / complexities.length;
+    const depths = objects.map(o => o.depth).filter(c => c.difficulty > 0).sort((a,b) => a.difficulty - b.difficulty);
+    for (let i in depths) {
+      depths[i].difficulty = parseFloat(i) / depths.length;
     }
   }
 
