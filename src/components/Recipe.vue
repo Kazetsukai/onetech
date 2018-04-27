@@ -1,6 +1,6 @@
 <template>
   <div class="recipe">
-    <h2>{{object.name}}</h2>
+    <h2><a :href="object.url()">{{object.name}}</a></h2>
     <h3>Crafting Recipe</h3>
 
     <h3 v-if="!object.data">Loading...</h3>
@@ -41,6 +41,13 @@ export default {
     text-align: center;
     font-weight: bolder;
     margin-bottom: 0px;
+  }
+  .recipe > h2 a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .recipe > h2 a:hover {
+    text-decoration: underline;
   }
 
   .recipe h3 {

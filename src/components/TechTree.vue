@@ -1,6 +1,6 @@
 <template>
   <div class="techTree">
-    <h2>{{object.name}}</h2>
+    <h2><a :href="object.url()">{{object.name}}</a></h2>
     <h3>Tech Tree</h3>
 
     <TechTreeView :object="object" />
@@ -31,6 +31,13 @@ export default {
     text-align: center;
     font-weight: bolder;
     margin-bottom: 0px;
+  }
+  .techTree > h2 a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .techTree > h2 a:hover {
+    text-decoration: underline;
   }
 
   .techTree h3 {
