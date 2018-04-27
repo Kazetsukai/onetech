@@ -78,12 +78,12 @@ class RecipeNode {
   }
 
   addAvailableTool(object, depth) {
-    if (!object || object == this.object || object.isNatural() || this.availableTools.includes(object)) return;
+    if (!object || object == this.object || this.availableTools.includes(object)) return;
 
     if (object.depth.compare(this.object.depth) < 0)
       this.availableTools.push(object);
 
-    if (depth > 5) return;
+    if (depth > 5 || object.isNatural()) return;
 
     // Search simple transitions for more tools
     for (let transition of object.transitionsAway) {
