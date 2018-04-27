@@ -20,8 +20,8 @@ gameData.importTransitions();
 console.log("Populating versions...");
 gameData.populateVersions();
 
-console.log("Calculating object complexity...");
-gameData.calculateObjectComplexity();
+console.log("Calculating object depth...");
+gameData.calculateObjectDepth();
 
 console.log("Exporting objects...");
 gameData.exportObjects();

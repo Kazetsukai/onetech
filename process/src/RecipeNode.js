@@ -42,18 +42,7 @@ class RecipeNode {
   }
 
   showInStep() {
-    return !this.isTool() && !this.isIngredient() && !this.isAnotherDecay();
-  }
-
-  isDecay() {
-    const transition = this.object.transitionsToward[0];
-    return transition && transition.decay;
-  }
-
-  isAnotherDecay() {
-    if (this.parents.length == 0 || !this.isDecay()) return false;
-    const parentsDecay = this.parents.filter(n => n.isDecay()).length == this.parents.length;
-    return parentsDecay;
+    return !this.isTool() && !this.isIngredient();
   }
 
   isTool() {
@@ -65,7 +54,7 @@ class RecipeNode {
   }
 
   isIngredient() {
-    return !this.isTool() && (!this.object.complexity.hasValue() || this.object.complexity.rawValue == 0);
+    return !this.isTool() && (!this.object.depth.hasValue() || this.object.depth.difficulty == 0);
   }
 
   depth() {
@@ -80,19 +69,21 @@ class RecipeNode {
   }
 
   addAvailableTools() {
-    for (let tool of this.object.complexity.tools)
-      this.addAvailableTool(tool, 0);
+    // if (this.parents.length == 0)
+    //   return; // Don't look for tools in root transition
 
-    for (let object of this.object.complexity.unusedObjects)
-      this.addAvailableTool(object, 0);
+    const transition = this.object.transitionsToward[0];
+    this.addAvailableTool(transition.newActor, 0);
+    this.addAvailableTool(transition.newTarget, 0);
   }
 
   addAvailableTool(object, depth) {
-    if (!object || object == this.object || this.availableTools.includes(object)) return;
+    if (!object || object == this.object || object.isNatural() || this.availableTools.includes(object)) return;
 
-    this.availableTools.push(object);
+    if (object.depth.compare(this.object.depth) < 0)
+      this.availableTools.push(object);
 
-    if (depth > 5 || object.isNatural()) return;
+    if (depth > 5) return;
 
     // Search simple transitions for more tools
     for (let transition of object.transitionsAway) {

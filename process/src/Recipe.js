@@ -11,12 +11,12 @@ class Recipe {
   }
 
   generate() {
-    console.log("Generate Recipe", this.object.id, this.object.name);
-    for (let depth=0; depth < 40; depth++) {
+    // console.log("Generate Recipe", this.object.id, this.object.name);
+    for (let depth=0; depth < 100; depth++) {
       const nodes = this.nodes.filter(n => n.depth() == depth);
       if (nodes.length == 0)
         return;
-      if (this.nodes.length > 80) {
+      if (this.nodes.length > 100) {
         // console.log("Reached recipe node limit for ", this.object.id, this.object.name);
         this.remainingNodes = nodes;
         this.nodes = this.nodes.filter(n => !this.remainingNodes.includes(n));
@@ -48,12 +48,12 @@ class Recipe {
     const ingredients = this.tools().concat(this.ingredients());
     return {
       steps: this.steps().reverse(),
-      ingredients: ingredients.sort((a,b) => a.complexity.compare(b.complexity)).reverse().map(o => o.id),
+      ingredients: ingredients.sort((a,b) => a.depth.compare(b.depth)).reverse().map(o => o.id),
     }
   }
 
   tools() {
-    return this.nodes.filter(n => n.isTool() && !n.parentIsTool()).map(n => n.object);
+    return this.nodes.filter(n => n.isTool()).map(n => n.object);
   }
 
   ingredients() {

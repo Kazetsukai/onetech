@@ -1,10 +1,10 @@
 "use strict";
 
-const Complexity = require('./Complexity');
+const Depth = require('./Depth');
 
 class Transition {
   constructor(dataText, filename) {
-    this.complexity = new Complexity({});
+    this.depth = new Depth({});
     this.parseFilename(filename);
     this.parseData(dataText);
   }

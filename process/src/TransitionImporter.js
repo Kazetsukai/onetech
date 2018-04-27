@@ -54,55 +54,23 @@ class TransitionImporter {
     const toolTransitions = this.transitions.filter(t => t != transition && t.actorID == transition.actorID && t.tool && t.targetID > 0);
 
     if (toolTransitions.length == 0) {
-      console.log("Generic transition:", transition.actorID);
       newTransitions.push(transition);
       return;
     }
 
-    console.log("Generic tool transition:", transition.actorID);
     for (let otherTransition of toolTransitions) {
       // Clone last use transition since it doesn't always take effect
       if (transition.lastUseActor) {
-        console.log("last use", otherTransition.targetID);
         const newTransition = transition.clone();
         newTransition.targetID = otherTransition.targetID;
         newTransition.newTargetID = otherTransition.newTargetID;
         newTransition.targetRemains = otherTransition.targetRemains;
         newTransitions.push(newTransition);
       } else {
-        console.log("not last use", otherTransition.targetID);
         otherTransition.newActorID = transition.newActorID;
         otherTransition.tool = transition.tool;
       }
     }
-
-    // const missingNewActor = transitions.filter(t => !t.newActorID);
-
-    // // Keep this transition if no other transitions to merge into
-    // if (transitions.length == 0) {
-    //   newTransitions.push(transition);
-    //   return;
-    // }
-
-    // // Set this as the new actor on tool transitions
-    // const toolTransitions = transitions.filter(t => t.tool);
-    // if (toolTransitions.length > 0) {
-    //   for (let otherTransition of toolTransitions) {
-    //     otherTransition.newActorID = transition.newActorID;
-    //     otherTransition.tool = transition.tool;
-    //     otherTransition.lastUse = transition.tool;
-    //     // No need to push onto newTransitions since it will be pushed outside this
-    //   }
-    //   return;
-    // }
-
-    // // Looks like all transitions have a newActorID already so have to
-    // // create a new transition replacing the newActor with this one
-    // // We should technically duplicate all transitions but that will
-    // // make too many (unless we change how we display them)
-    // const newTransition = transitions[0].clone();
-    // newTransition.newActorID = transition.newActorID;
-    // newTransitions.push(newTransition);
   }
 
   mergeAttackTransitions() {

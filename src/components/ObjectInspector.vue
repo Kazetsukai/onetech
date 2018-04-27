@@ -102,10 +102,8 @@ export default {
       return levels[Math.floor(this.object.data.difficulty*levels.length)];
     },
     difficultyTip() {
-      const complexityStr = this.object.data.complexity.toString();
-      const complexityWithCommas = complexityStr.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      const stepWord = complexityStr == '1' ? "step" : "steps";
-      return `${complexityWithCommas} ${stepWord} to create`;
+      const stepWord = this.object.data.depth == 1 ? "step" : "steps";
+      return `${this.object.data.depth} ${stepWord} to create`;
     },
     containerText() {
       if (!this.object.data.numSlots) return;

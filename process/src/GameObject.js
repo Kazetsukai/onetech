@@ -1,7 +1,7 @@
 "use strict";
 
 const Sprite = require('./Sprite');
-const Complexity = require('./Complexity');
+const Depth = require('./Depth');
 const Recipe = require('./Recipe');
 
 class GameObject {
@@ -12,7 +12,7 @@ class GameObject {
     this.transitionsAway = [];
     this.categories = [];
     this.parseData(dataText);
-    this.complexity = new Complexity({});
+    this.depth = new Depth({});
     this.id = this.data.id;
   }
 
@@ -83,11 +83,11 @@ class GameObject {
     if (this.data.numUses > 1)
       result.numUses = parseInt(this.data.numUses);
 
-    if (this.complexity.hasValue())
-      result.complexity = this.complexity.value();
+    if (this.depth.hasValue())
+      result.depth = this.depth.value;
 
-    if (this.complexity.difficulty)
-      result.difficulty = this.complexity.difficulty.toFixed(2);
+    if (this.depth.difficulty)
+      result.difficulty = this.depth.difficulty.toFixed(2);
 
     if (this.data.clothing != "n") {
       result.clothing = this.data.clothing;
@@ -108,10 +108,10 @@ class GameObject {
     if (techTree)
       result.techTree = techTree;
 
-    // let recipe = new Recipe(this);
-    // recipe.generate();
-    // if (recipe.hasData())
-    //   result.recipe = recipe.jsonData();
+    let recipe = new Recipe(this);
+    recipe.generate();
+    if (recipe.hasData())
+      result.recipe = recipe.jsonData();
 
     return result;
   }

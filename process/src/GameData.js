@@ -8,7 +8,7 @@ const GameObject = require('./GameObject');
 const Category = require('./Category');
 const TransitionImporter = require('./TransitionImporter');
 const VersionPopulator = require('./VersionPopulator');
-const ComplexityCalculator = require('./ComplexityCalculator');
+const DepthCalculator = require('./DepthCalculator');
 const SpriteProcessor = require('./SpriteProcessor');
 const ObjectFilters = require('./ObjectFilters');
 
@@ -67,8 +67,8 @@ class GameData {
     populator.populate();
   }
 
-  calculateObjectComplexity() {
-    var calculator = new ComplexityCalculator();
+  calculateObjectDepth() {
+    var calculator = new DepthCalculator();
     calculator.calculate(Object.values(this.objects));
   }
 
