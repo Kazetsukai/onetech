@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="10px" height="16px" viewBox="0 0 10 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>flame 2</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Heat" transform="translate(-9.000000, 0.000000)" fill="#D3D3D3" fill-rule="nonzero">
+            <g id="flame-2" transform="translate(9.000000, 0.000000)">
+                <path d="M7.91794985,6.84903158 C5.32280118,3.13751804 5.91308055,0 5.91308055,0 C-3.23591505,8.42428735 0.8748092,12.6613931 1.1995754,13.0121516 C1.97610028,13.850712 2.59284276,14.385198 2.6004471,15.8520754 C3.17831618,15.2239568 5.08767496,13.8295191 3.30387906,10.7449008 C3.30387906,10.7449008 1.71067836,8.32695179 4.59272361,6.05768418 C4.49906855,11.2157087 8.11873487,10.5709928 5.93130055,15.8285019 C5.93133097,15.828535 12.6357438,13.5962311 7.91794985,6.84903158 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

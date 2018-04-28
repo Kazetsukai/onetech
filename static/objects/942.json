@@ -1,0 +1,1 @@
+{"id":"942","name":"Iron Vein","transitionsToward":[],"transitionsAway":[{"actorID":"684","newActorUses":"-1","targetID":"942","newActorID":"684","newTargetID":"943","tool":true},{"actorID":"684","actorUses":"last","targetID":"942","newActorID":"858","newTargetID":"943"}],"transitionsTimed":[],"version":86,"depth":0,"mapChance":0.01,"biomes":["3"]}
