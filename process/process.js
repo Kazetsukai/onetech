@@ -36,6 +36,7 @@ if (process.argv.includes('sprites') || process.argv.includes('download')) {
 }
 
 if (!process.argv.includes('dev')) {
-  console.log("Copying static-dev to static...");
+  const mod = process.env.ONETECH_MOD_NAME ? "-mod" : "";
+  console.log(`Copying static${mod}-dev to static${mod}...`);
   gameData.syncStaticDir();
 }

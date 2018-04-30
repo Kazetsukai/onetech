@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <h1>Crafting reference for One Hour One Life</h1>
+    <h1>
+      Crafting reference for
+      <a v-if="gameUrl" :href="gameUrl">{{gameName}}</a>
+      <span v-else>{{gameName}}</span>
+    </h1>
 
     <h2 v-if="loading">Loading...</h2>
 
@@ -94,6 +98,14 @@ export default {
     },
     lastVersion () {
       return GameObject.version;
+    },
+    gameName () {
+      return process.env.ONETECH_MOD_NAME || "One Hour One Life";
+    },
+    gameUrl () {
+      if (process.env.ONETECH_MOD_NAME && !process.env.ONETECH_MOD_URL)
+        return null;
+      return process.env.ONETECH_MOD_URL || "https://onehouronelife.com";
     }
   },
   methods: {
@@ -188,11 +200,17 @@ export default {
   }
 
   a {
-    color: #42b983;
+    color: inherit;
   }
 
   #app > h1 {
     margin-bottom: 0;
+    a {
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 
   .updated {

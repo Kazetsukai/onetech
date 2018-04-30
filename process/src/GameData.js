@@ -17,8 +17,9 @@ class GameData {
   constructor(processDir, dataDir) {
     this.processDir = processDir;
     this.dataDir = dataDir;
-    this.staticDir = processDir + "/../static";
-    this.staticDevDir = processDir + "/../static-dev";
+    const mod = process.env.ONETECH_MOD_NAME ? "-mod" : "";
+    this.staticDir = processDir + `/../static${mod}`;
+    this.staticDevDir = processDir + `/../static${mod}-dev`;
     this.objects = {};
     this.categories = [];
   }
@@ -88,8 +89,9 @@ class GameData {
   }
 
   prepareStaticDir() {
-    if (!fs.existsSync(this.staticDevDir))
+    if (!fs.existsSync(this.staticDevDir) && fs.existsSync(this.staticDir))
       spawnSync("cp", ["-R", this.staticDir, this.staticDevDir]);
+    this.makeDir(this.staticDevDir);
     this.makeDir(this.staticDevDir + "/sprites");
     this.makeDir(this.staticDevDir + "/ground");
     this.makeDir(this.staticDevDir + "/objects");

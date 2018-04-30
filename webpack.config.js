@@ -2,10 +2,12 @@ var path = require('path')
 var webpack = require('webpack')
 var fs = require('fs')
 
-if (process.env.NODE_ENV === 'development' && fs.existsSync('static-dev'))
-  var staticPath = "./static-dev";
+var mod = process.env.ONETECH_MOD_NAME ? "-mod" : "";
+
+if (process.env.NODE_ENV === 'development' && fs.existsSync(`static${mod}-dev`))
+  var staticPath = `./static${mod}-dev`;
 else
-  var staticPath = "./static";
+  var staticPath = `./static${mod}`;
 
 var staticTimestamp = fs.readFileSync(staticPath + "/timestamp.txt", "utf8");
 var processTimestamp = fs.readFileSync("process/timestamp.txt", "utf8");
@@ -97,7 +99,9 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+        ONETECH_MOD_NAME: JSON.stringify(process.env.ONETECH_MOD_NAME),
+        ONETECH_MOD_URL: JSON.stringify(process.env.ONETECH_MOD_URL),
       },
       'STATIC_PATH': JSON.stringify(staticPath)
     })
