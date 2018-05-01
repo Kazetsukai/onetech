@@ -59,10 +59,19 @@ node process.js dev sprites
 node process.js
 ```
 
-You can override the Git URL or path if you want to supply your own data content.
+
+### Modded Support
+
+If you have a modded version of `OneLifeData7`, consider forking this repository and setting these environment variables before processing:
 
 ``` bash
-export ONETECH_PROCESS_GIT_URL="https://github.com/custom-ohol-data"
+export ONETECH_MOD_NAME="My Awesome Mod"
+export ONETECH_MOD_URL="https://my-awesome-mod.com"
+export ONETECH_PROCESS_GIT_PATH="/path/to/my/awesome-mod-data"
 # or
-export ONETECH_PROCESS_GIT_PATH="/path/to/custom-ohol-data"
+export ONETECH_PROCESS_GIT_URL="https://github.com/my/awesome-mod-data"
 ```
+
+This will use the given name and URL in the header of each page. It will also use a separate `static-mod` directory to avoid conflicts.
+
+After you have run the process and build scripts, and pushed the changes up to your fork, you can go to the GitHub project settings and setup GitHub Pages to use the master branch. This will make the site publicly accessible.
