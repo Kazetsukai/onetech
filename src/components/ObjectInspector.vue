@@ -10,6 +10,7 @@
         <li v-if="object.data.heatValue">Heat: {{object.data.heatValue}}</li>
         <li v-if="object.clothingPart()">Clothing: {{object.clothingPart()}}</li>
         <li v-if="object.hasInsulation()">Insulation: {{object.insulationPercent()}}%</li>
+        <li v-if="sizeText">Item Size: {{sizeText}}</li>
         <li v-if="object.data.numUses">Number of uses: {{object.data.numUses}}</li>
         <li v-if="object.data.useChance">
           Chance to use:
@@ -109,10 +110,13 @@ export default {
       const stepWord = this.object.data.depth == 1 ? "step" : "steps";
       return `${this.object.data.depth} ${stepWord} to create`;
     },
+    sizeText() {
+      if (!this.object.data.size) return;
+      return this.object.size();
+    },
     containerText() {
       if (!this.object.data.numSlots) return;
-      const size = this.object.data.slotSize > 1 ? "large" : "small";
-      return `Holds ${this.object.data.numSlots} ${size} items`;
+      return `Holds ${this.object.data.numSlots} ${this.object.slotSize()} items`;
     }
   }
 }

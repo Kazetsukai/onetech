@@ -89,6 +89,20 @@ export default class GameObject {
     this.fetchData(data => this.data = data);
   }
 
+  sizeText(size) {
+    if (size > 1) return "Large";
+    if (size == 1) return "Small";
+    return "Tiny";
+  }
+
+  slotSize() {
+    return this.sizeText(this.data.slotSize).toLowerCase();
+  }
+
+  size() {
+    return this.sizeText(this.data.size);
+  }
+
   fetchData(callback) {
     fetch(`${STATIC_PATH}/objects/${this.id}.json`).
       then(data => data.json()).
