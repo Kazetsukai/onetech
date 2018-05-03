@@ -20,7 +20,15 @@ const Tools = {
   key: "tools",
   name: "Tools",
   filter(objects) {
-    return objects.filter(o => (o.isTool() || o.isCraftableContainer()) && !o.isClothing());
+    return objects.filter(o => o.isTool());
+  }
+}
+
+const Containers = {
+  key: "containers",
+  name: "Containers",
+  filter(objects) {
+    return objects.filter(o => o.isCraftableContainer());
   }
 }
 
@@ -53,8 +61,8 @@ const ObjectFilters = {
     Clothing,
     Food,
     Tools,
+    Containers,
     HeatSources,
-    WaterSources,
     Natural,
   ],
   jsonData(objects) {
