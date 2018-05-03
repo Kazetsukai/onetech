@@ -11,11 +11,12 @@
         <li v-if="object.clothingPart()">Clothing: {{object.clothingPart()}}</li>
         <li v-if="object.hasInsulation()">Insulation: {{object.insulationPercent()}}%</li>
         <li v-if="sizeText">Item Size: {{sizeText}}</li>
-        <li v-if="object.data.numUses">Number of uses: {{object.data.numUses}}</li>
+        <li v-if="numUses">Number of uses: {{numUses}}</li>
         <li v-if="object.data.useChance">
           Chance to use:
           {{Math.round(object.data.useChance*100)}}%
         </li>
+        <li v-if="estimatedUses">Estimated uses: {{estimatedUses}}</li>
         <li v-if="difficultyText">
           Difficulty: {{difficultyText}}
           <span class="helpTip" v-tippy :title="difficultyTip">?</span>
@@ -109,6 +110,17 @@ export default {
     difficultyTip() {
       const stepWord = this.object.data.depth == 1 ? "step" : "steps";
       return `${this.object.data.depth} ${stepWord} to create`;
+    },
+    numUses() {
+      if (!this.object.data.numUses) return;
+      // Subtract one if there is a use chance since last use doesn't count
+      if (this.object.data.useChance)
+        return this.object.data.numUses - 1;
+      return this.object.data.numUses;
+    },
+    estimatedUses() {
+      if (!this.object.data.useChance) return;
+      return this.numUses * (1/this.object.data.useChance);
     },
     sizeText() {
       if (!this.object.data.size) return;
