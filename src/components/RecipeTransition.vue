@@ -23,6 +23,11 @@
                   clickable="true" />
 
       <ObjectImage class="recipeTransitionObject"
+                  v-else-if="transition.targetPlayer"
+                  hover="true"
+                  player="true" />
+
+      <ObjectImage class="recipeTransitionObject"
                   v-else
                   ground="true"
                   hover="true" />

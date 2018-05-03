@@ -5,6 +5,7 @@ class RecipeNode {
     this.object = object;
     this.availableTools = availableTools || [];
     this.parents = [];
+    this.decaySeconds = 0;
     if (parent)
       this.parents.push(parent);
   }
@@ -22,14 +23,26 @@ class RecipeNode {
 
     this.addAvailableTools();
 
+    return this.generateNodesForTransition(this.object.transitionsToward[0]);
+  }
+
+  generateNodesForTransition(transition) {
+    if (!transition) return [];
+
+    // Collapse decay transitions
+    if (transition.autoDecaySeconds > 0) {
+      this.decaySeconds += parseInt(transition.autoDecaySeconds);
+      const nextTransition = transition.target.transitionsToward[0];
+      if (nextTransition.autoDecaySeconds > 0) {
+        return this.generateNodesForTransition(nextTransition);
+      }
+    }
+
     const nodes = [];
-
-    const transition = this.object.transitionsToward[0];
-    if (transition && transition.actor)
+    if (transition.actor)
       nodes.push(this.generateNode(transition.actor));
-    if (transition && transition.target)
+    if (transition.target)
       nodes.push(this.generateNode(transition.target));
-
     return nodes;
   }
 
@@ -69,9 +82,6 @@ class RecipeNode {
   }
 
   addAvailableTools() {
-    // if (this.parents.length == 0)
-    //   return; // Don't look for tools in root transition
-
     const transition = this.object.transitionsToward[0];
     this.addAvailableTool(transition.newActor, 0);
     this.addAvailableTool(transition.newTarget, 0);
@@ -104,10 +114,14 @@ class RecipeNode {
       data.actorID = transition.actor.id;
     if (transition.target)
       data.targetID = transition.target.id;
-    if (transition.decay)
+    if (this.decaySeconds)
+      data.decay = transition.calculateDecay(this.decaySeconds);
+    else if (transition.decay)
       data.decay = transition.decay;
     if (transition.hand)
       data.hand = true;
+    if (transition.targetsPlayer())
+      data.targetPlayer = true;
 
     return data;
   }
