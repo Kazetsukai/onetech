@@ -69,18 +69,6 @@ class Transition {
       this.newExtraTarget.transitionsToward.push(this);
   }
 
-
-  hasID(id) {
-    return this.targetID == id || this.actorID == id || this.newTargetID == id || this.newActorID == id;
-  }
-
-  replaceID(oldID, newID) {
-    if (this.targetID == oldID)    this.targetID = newID;
-    if (this.actorID == oldID)     this.actorID = newID;
-    if (this.newTargetID == oldID) this.newTargetID = newID;
-    if (this.newActorID == oldID)  this.newActorID = newID;
-  }
-
   isGeneric() {
     return this.targetID === '-1' && this.newTargetID === '0' && this.actorID != this.newActorID;
   }
