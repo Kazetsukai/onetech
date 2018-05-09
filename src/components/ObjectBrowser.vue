@@ -59,6 +59,11 @@ export default {
       }
     }
   },
+  metaInfo() {
+    if (this.selectedFilter)
+      return {title: this.selectedFilter.name};
+    return {};
+  }
 }
 </script>
 

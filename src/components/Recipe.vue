@@ -36,6 +36,9 @@ export default {
       this.object = GameObject.findAndLoad(this.$route.params.id);
     }
   },
+  metaInfo() {
+    return {title: `${this.object.name} Recipe`};
+  }
 }
 </script>
 

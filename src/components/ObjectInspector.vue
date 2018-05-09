@@ -141,6 +141,9 @@ export default {
       if (!this.object.data.numSlots) return;
       return `Holds ${this.object.data.numSlots} ${this.object.slotSize()} items`;
     }
+  },
+  metaInfo() {
+    return {title: this.object.name};
   }
 }
 </script>

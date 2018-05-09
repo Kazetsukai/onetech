@@ -67,29 +67,17 @@ export default {
       this.$router.replace("/" + path.join("/"));
     }
   },
+  metaInfo: {
+    title: "Crafting reference for One Hour One Life",
+    titleTemplate: '%s | onetech'
+  },
   routes: [
     {path: "/", component: ObjectBrowser},
     {path: "/filter/:filter", component: ObjectBrowser},
     {path: "/:id/tech-tree", component: TechTree},
     {path: "/:id/recipe", component: Recipe},
     {path: "/:id", component: ObjectInspector},
-  ],
-  // updateTitle () {
-  //   var parts = []
-  //   if (this.selectedObject) {
-  //     parts.push(this.selectedObject.name);
-  //     if (this.subpage == "tech-tree")
-  //       parts.push("Tech Tree");
-  //     if (this.subpage == "recipe")
-  //       parts.push("Recipe");
-  //   } else if (this.selectedFilter) {
-  //     parts.push(this.selectedFilter.name);
-  //   } else {
-  //     parts.push("Crafting reference for One Hour One Life");
-  //   }
-  //   parts.push("onetech");
-  //   document.title = parts.join(" - ");
-  // }
+  ]
 }
 </script>
 
