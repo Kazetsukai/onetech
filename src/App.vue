@@ -36,6 +36,7 @@ export default {
     }
   },
   beforeMount () {
+    this.redirectOldHash();
     GameObject.load(() => {
       this.loading = false;
     });
@@ -55,6 +56,15 @@ export default {
     },
     lastVersion () {
       return GameObject.version;
+    },
+  },
+  methods: {
+    redirectOldHash () {
+      if (!window.location.hash) return;
+      const path = window.location.hash.substr(1).split("/");
+      if (parseInt(path[0]) > 0) // Object ID route
+        path.unshift([path.shift(), path.shift()].join("-"));
+      this.$router.replace("/" + path.join("/"));
     }
   },
   routes: [
@@ -63,11 +73,6 @@ export default {
     {path: "/:id/tech-tree", component: TechTree},
     {path: "/:id/recipe", component: Recipe},
     {path: "/:id", component: ObjectInspector},
-
-    // Legacy routes
-    {path: "/:id/:name/tech-tree", redirect: "/:id/tech-tree"},
-    {path: "/:id/:name/recipe", redirect: "/:id/recipe"},
-    {path: "/:id/:name", redirect: "/:id"}
   ],
   // updateTitle () {
   //   var parts = []
