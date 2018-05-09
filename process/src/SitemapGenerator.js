@@ -11,7 +11,7 @@ class SitemapGenerator {
   }
 
   generate(objects) {
-    const sitemap = sm.createSitemap({hostname: 'https://kazetsukai.github.io/onetech', cacheTime: 600000});
+    const sitemap = sm.createSitemap({hostname: 'https://kazetsukai.github.io/onetech'});
 
     sitemap.add({url: "/"});
 
