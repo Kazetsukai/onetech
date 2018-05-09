@@ -15,6 +15,15 @@
     <link rel="icon" type="image/png" href="./favicons/favicon-16x16.png" sizes="16x16">
     <link rel="icon" type="image/png" href="./favicons/favicon-32x32.png" sizes="32x32">
     <link rel="icon" type="image/png" href="./favicons/favicon-96x96.png" sizes="96x96">
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script type="text/javascript">
+      var script = document.createElement("script");
+      script.src = window.location.pathname.replace(/\/$/, '') + "/dist/build.js";
+      document.body.appendChild(script);
+    </script>
 
     <!-- Start Single Page Apps for GitHub Pages -->
     <script type="text/javascript">
@@ -47,9 +56,5 @@
       }(window.location))
     </script>
     <!-- End Single Page Apps for GitHub Pages -->
-  </head>
-  <body>
-    <div id="app"></div>
-    <script src="./dist/build.js"></script>
   </body>
 </html>
