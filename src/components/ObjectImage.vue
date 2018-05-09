@@ -1,8 +1,9 @@
 <template>
-  <a class="imgContainer"
-      :title="title" v-tippy
-      :href="clickable ? object.url() : undefined"
-      :class="clickable ? '' : 'current'">
+  <ObjectImageWrapper
+      className="imgContainer"
+      :clickable="clickable"
+      :title="title"
+      :object="object">
     <div v-if="hand" class="hand" :style="object ? {} : { width: '100%', height: '100%' }" />
     <div v-if="player" class="player" />
     <div v-if="uses" class="uses">{{uses}}</div>
@@ -11,10 +12,12 @@
     <div v-if="object" class="image">
       <img :id="imageID" :src="imageUrl" :alt="title" />
     </div>
-  </a>
+  </ObjectImageWrapper>
 </template>
 
 <script>
+import ObjectImageWrapper from './ObjectImageWrapper'
+
 export default {
   props: [
     'object',
@@ -28,6 +31,9 @@ export default {
     'player',
     'scaleUpTo'
   ],
+  components: {
+    ObjectImageWrapper,
+  },
   mounted() { // Enlarge small images up to a certain amount
     if (!this.scaleUpTo) return;
     const img = document.getElementById(this.imageID);

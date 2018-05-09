@@ -26,12 +26,12 @@
         <li v-if="!object.data.version">Unreleased</li>
       </ul>
       <div class="actions" v-if="object.data">
-        <a :href="object.url('tech-tree')" v-if="object.data.techTree" title="Tech Tree" v-tippy>
+        <router-link :to="object.url('tech-tree')" v-if="object.data.techTree" title="Tech Tree" v-tippy>
           <img src="../assets/techtree.png" width="38" height="36" />
-        </a>
-        <a :href="object.url('recipe')"  v-if="object.data.recipe" title="Crafting Recipe" v-tippy>
+        </router-link>
+        <router-link :to="object.url('recipe')"  v-if="object.data.recipe" title="Crafting Recipe" v-tippy>
           <img src="../assets/recipe.png" width="41" height="42" />
-        </a>
+        </router-link>
       </div>
     </div>
     <div class="transitionsPanels" v-if="object.data">
@@ -72,16 +72,27 @@
 </template>
 
 <script>
+import GameObject from '../models/GameObject';
+
 import ObjectImage from './ObjectImage';
 import BiomeImage from './BiomeImage';
 import TransitionsList from './TransitionsList';
 
 export default {
-  props: ['object'],
   components: {
     ObjectImage,
     BiomeImage,
     TransitionsList,
+  },
+  data() {
+    return {
+      object: GameObject.findAndLoad(this.$route.params.id),
+    };
+  },
+  watch: {
+    '$route' (to, from) {
+      this.object = GameObject.findAndLoad(this.$route.params.id);
+    }
   },
   computed: {
     spawnText() {

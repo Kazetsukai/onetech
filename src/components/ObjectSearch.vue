@@ -18,10 +18,19 @@ import VueSelect from './Select';
 import ObjectImage from './ObjectImage';
 
 export default {
-  props: ['selectedObject'],
   components: {
     VueSelect,
     ObjectImage
+  },
+  data() {
+    return {
+      selectedObject: GameObject.find(this.$route.params.id),
+    };
+  },
+  watch: {
+    '$route' (to, from) {
+      this.selectedObject = GameObject.find(this.$route.params.id);
+    }
   },
   computed: {
     objects () {
@@ -31,7 +40,7 @@ export default {
   methods: {
     selectObject (object) {
       if (object == this.selectedObject) return;
-      window.location = object ? object.url() : '#';
+      this.$router.push(object ? object.url() : "/");
     }
   }
 }

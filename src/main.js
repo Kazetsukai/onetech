@@ -12,7 +12,18 @@ Vue.use(Tippy, {
   hideOnClick: false
 });
 
+Vue.use(VueRouter);
+
+const router = new VueRouter({
+  // mode: 'history',
+  routes: App.routes,
+  scrollBehavior (to, from, savedPosition) {
+    return savedPosition ? savedPosition : {x: 0, y: 0};
+  }
+});
+
 let v = new Vue({
+  router: router,
   el: '#app',
   render: h => h(App)
 });

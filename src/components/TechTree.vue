@@ -1,6 +1,6 @@
 <template>
   <div class="techTree">
-    <h2><a :href="object.url()">{{object.name}}</a></h2>
+    <h2><router-link :to="object.url()">{{object.name}}</router-link></h2>
     <h3>Tech Tree</h3>
 
     <TechTreeView :object="object" />
@@ -8,13 +8,24 @@
 </template>
 
 <script>
+import GameObject from '../models/GameObject';
+
 import TechTreeView from './TechTreeView';
 
 export default {
-  props: ['object'],
   components: {
     TechTreeView
-  }
+  },
+  data() {
+    return {
+      object: GameObject.findAndLoad(this.$route.params.id),
+    };
+  },
+  watch: {
+    '$route' (to, from) {
+      this.object = GameObject.findAndLoad(this.$route.params.id);
+    }
+  },
 }
 </script>
 
