@@ -2,10 +2,12 @@ var path = require('path')
 var webpack = require('webpack')
 var fs = require('fs')
 
+var rootPath = process.env.NODE_ENV === 'development' ? "/" : "/onetech/";
+
 if (process.env.NODE_ENV === 'development' && fs.existsSync('static-dev'))
-  var staticPath = "./static-dev";
+  var staticPath = "static-dev";
 else
-  var staticPath = "./static";
+  var staticPath = "static";
 
 var staticTimestamp = fs.readFileSync(staticPath + "/timestamp.txt", "utf8");
 var processTimestamp = fs.readFileSync("process/timestamp.txt", "utf8");
@@ -16,7 +18,7 @@ module.exports = {
   entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, './dist'),
-    publicPath: 'dist/',
+    publicPath: rootPath + 'dist/',
     filename: 'build.js'
   },
   module: {
@@ -87,7 +89,7 @@ module.exports = {
     extensions: ['*', '.js', '.vue', '.json']
   },
   devServer: {
-    historyApiFallback: true,
+    historyApiFallback: {index: "/404-dev.html"},
     noInfo: true,
     overlay: true
   },
@@ -99,7 +101,8 @@ module.exports = {
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV)
       },
-      'STATIC_PATH': JSON.stringify(staticPath)
+      'ROOT_PATH': JSON.stringify(rootPath),
+      'STATIC_PATH': JSON.stringify(rootPath + staticPath),
     })
   ],
   devtool: '#eval-source-map'
