@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
 <url> <loc>https://kazetsukai.github.io/onetech/</loc> </url>
-<url> <loc>https://kazetsukai.github.io/onetech/filters/clothing</loc> </url>
-<url> <loc>https://kazetsukai.github.io/onetech/filters/food</loc> </url>
-<url> <loc>https://kazetsukai.github.io/onetech/filters/tools</loc> </url>
-<url> <loc>https://kazetsukai.github.io/onetech/filters/containers</loc> </url>
-<url> <loc>https://kazetsukai.github.io/onetech/filters/heat</loc> </url>
-<url> <loc>https://kazetsukai.github.io/onetech/filters/natural</loc> </url>
+<url> <loc>https://kazetsukai.github.io/onetech/filter/clothing</loc> </url>
+<url> <loc>https://kazetsukai.github.io/onetech/filter/food</loc> </url>
+<url> <loc>https://kazetsukai.github.io/onetech/filter/tools</loc> </url>
+<url> <loc>https://kazetsukai.github.io/onetech/filter/containers</loc> </url>
+<url> <loc>https://kazetsukai.github.io/onetech/filter/heat</loc> </url>
+<url> <loc>https://kazetsukai.github.io/onetech/filter/natural</loc> </url>
 <url> <loc>https://kazetsukai.github.io/onetech/11-Skin-Tone-A%2CB%2CC%2CD%2CE%2CF</loc> </url>
 <url> <loc>https://kazetsukai.github.io/onetech/19-Female001-D</loc> </url>
 <url> <loc>https://kazetsukai.github.io/onetech/30-Wild-Gooseberry-Bush</loc> </url>

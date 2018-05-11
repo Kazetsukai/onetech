@@ -16,7 +16,7 @@ class SitemapGenerator {
     sitemap.add({url: "/"});
 
     for (let filter of ObjectFilters.filters) {
-      sitemap.add({url: `/filters/${filter.key}`});
+      sitemap.add({url: `/filter/${filter.key}`});
     }
 
     for (let object of objects) {
