@@ -30,7 +30,15 @@ export default class GameObject {
   }
 
   static find(id) {
-    return this.objectsMap[id];
+    if (!id) return;
+    return this.objectsMap[id.split("-")[0]];
+  }
+
+  static findAndLoad(id) {
+    const object = this.find(id);
+    if (!object) return;
+    object.loadData();
+    return object;
   }
 
   static findFilter(key) {
@@ -64,9 +72,9 @@ export default class GameObject {
   }
 
   url(subpath) {
-    const path = [this.id, this.name.split(' ').join('-')];
+    const path = [`${this.id}-${this.name.replace(/[\s-]+/g, '-')}`];
     if (subpath) path.push(subpath);
-    return '#' + path.map(encodeURIComponent).join('/');
+    return '/' + path.map(encodeURIComponent).join("/");
   }
 
   clothingPart() {

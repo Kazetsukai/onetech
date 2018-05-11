@@ -38,4 +38,7 @@ if (process.argv.includes('sprites') || process.argv.includes('download')) {
 if (!process.argv.includes('dev')) {
   console.log("Copying static-dev to static...");
   gameData.syncStaticDir();
+
+  console.log("Generating sitemap...");
+  gameData.generateSitemap();
 }
