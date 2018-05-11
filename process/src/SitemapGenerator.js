@@ -21,9 +21,13 @@ class SitemapGenerator {
 
     for (let object of objects) {
       const path = encodeURIComponent(`${object.id}-${object.name.replace(/[\s-]+/g, '-')}`);
-      sitemap.add({url: `/${path}`});
-      sitemap.add({url: `/${path}/tech-tree`});
-      sitemap.add({url: `/${path}/recipe`});
+      if (!object.category) {
+        sitemap.add({url: `/${path}`});
+        if (!object.isNatural() && object.transitionsToward[0]) {
+          sitemap.add({url: `/${path}/tech-tree`});
+          sitemap.add({url: `/${path}/recipe`});
+        }
+      }
     }
 
     fs.writeFileSync(this.rootDir + "sitemap.xml", sitemap.toString());

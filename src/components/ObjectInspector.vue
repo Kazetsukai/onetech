@@ -29,7 +29,7 @@
         <router-link :to="object.url('tech-tree')" v-if="object.data.techTree" title="Tech Tree" v-tippy>
           <img src="../assets/techtree.png" width="38" height="36" />
         </router-link>
-        <router-link :to="object.url('recipe')"  v-if="object.data.recipe" title="Crafting Recipe" v-tippy>
+        <router-link :to="object.url('recipe')" v-if="object.data.recipe" title="Crafting Recipe" v-tippy>
           <img src="../assets/recipe.png" width="41" height="42" />
         </router-link>
       </div>
