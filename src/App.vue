@@ -24,6 +24,7 @@ import ObjectBrowser from './components/ObjectBrowser';
 import ObjectInspector from './components/ObjectInspector';
 import TechTree from './components/TechTree';
 import Recipe from './components/Recipe';
+import RecipeForLetters from './components/RecipeForLetters';
 
 export default {
   name: 'app',
@@ -74,6 +75,7 @@ export default {
   routes: [
     {path: "/", component: ObjectBrowser},
     {path: "/filter/:filter", component: ObjectBrowser},
+    {path: "/letters", component: RecipeForLetters},
     {path: "/:id/tech-tree", component: TechTree},
     {path: "/:id/recipe", component: Recipe},
     {path: "/:id", component: ObjectInspector},
