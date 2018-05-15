@@ -152,7 +152,7 @@ class GameObject {
   }
 
   isCraftableContainer() {
-    return this.numSlots() > 0 && !this.isGrave();
+    return this.numSlots() > 0 && this.data.slotSize >= 1 && !this.isGrave();
   }
 
   isGrave() {
