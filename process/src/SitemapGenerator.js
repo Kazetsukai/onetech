@@ -20,7 +20,7 @@ class SitemapGenerator {
     }
 
     for (let object of objects) {
-      const path = encodeURIComponent(`${object.id}-${object.name.replace(/[\s-]+/g, '-')}`);
+      const path = encodeURIComponent(`${object.id}-${object.name.replace(/\W+/g, '-')}`);
       if (!object.category) {
         sitemap.add({url: `/${path}`});
         if (!object.isNatural() && object.transitionsToward[0]) {

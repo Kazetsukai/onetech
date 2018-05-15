@@ -72,7 +72,7 @@ export default class GameObject {
   }
 
   url(subpath) {
-    const path = [`${this.id}-${this.name.replace(/[\s-]+/g, '-')}`];
+    const path = [`${this.id}-${this.name.replace(/\W+/g, '-')}`];
     if (subpath) path.push(subpath);
     return '/' + path.map(encodeURIComponent).join("/");
   }
