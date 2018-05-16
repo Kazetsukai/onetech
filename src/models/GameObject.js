@@ -34,8 +34,20 @@ export default class GameObject {
     return this.objectsMap[id.split("-")[0]];
   }
 
+  static findByName(name) {
+    if (!name) return;
+    return Object.values(this.objectsMap).find(o => o.name == name);
+  }
+
   static findAndLoad(id) {
     const object = this.find(id);
+    if (!object) return;
+    object.loadData();
+    return object;
+  }
+
+  static findAndLoadByName(name) {
+    const object = this.findByName(name);
     if (!object) return;
     object.loadData();
     return object;
@@ -93,8 +105,12 @@ export default class GameObject {
   }
 
   loadData() {
-    if (this.data) return;
-    this.fetchData(data => this.data = data);
+    if (this.data || this.loading) return;
+    this.loading = true;
+    this.fetchData(data => {
+      this.loading = false;
+      this.data = data;
+    });
   }
 
   sizeText(size) {

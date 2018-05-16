@@ -32,6 +32,9 @@
         <router-link :to="object.url('recipe')" v-if="object.data.recipe" title="Crafting Recipe" v-tippy>
           <img src="../assets/recipe.png" width="41" height="42" />
         </router-link>
+        <router-link to="/letters" v-if="isLetterOrSign" title="Letters Recipe" v-tippy>
+          <img src="../assets/sign.png" width="40" height="41" />
+        </router-link>
       </div>
     </div>
     <div class="transitionsPanels" v-if="object.data">
@@ -144,6 +147,9 @@ export default {
     containerText() {
       if (!this.object.data.numSlots) return;
       return `Holds ${this.object.data.numSlots} ${this.object.slotSize()} items`;
+    },
+    isLetterOrSign() {
+      return this.object.name.includes("Letter") || this.object.name.includes("Sign");
     }
   },
   metaInfo() {
