@@ -31,6 +31,10 @@ export default {
       object: GameObject.findAndLoad(this.$route.params.id),
     };
   },
+  created() {
+    if (!this.object)
+      this.$router.replace("/not-found");
+  },
   watch: {
     '$route' (to, from) {
       this.object = GameObject.findAndLoad(this.$route.params.id);
