@@ -19,7 +19,8 @@ class VersionPopulator {
       if (i > 0)
         this.populateVersion(versions[i], versions[i-1]);
     }
-    this.reportMissing();
+    if (!process.env.ONETECH_MOD_NAME)
+      this.reportMissing();
   }
 
   fetchVersions() {

@@ -22,8 +22,8 @@
           <span class="helpTip" v-tippy :title="difficultyTip">?</span>
         </li>
         <li v-if="containerText">{{containerText}}</li>
-        <li v-if="object.data.version">Added in v{{object.data.version}}</li>
-        <li v-if="!object.data.version">Unreleased</li>
+        <li v-if="version">Added in {{version}}</li>
+        <li v-else>Unreleased</li>
       </ul>
       <div class="actions" v-if="object.data">
         <router-link :to="object.url('tech-tree')" v-if="object.data.techTree" title="Tech Tree" v-tippy>
@@ -150,6 +150,12 @@ export default {
     },
     isLetterOrSign() {
       return this.object.name.includes("Letter") || this.object.name.includes("Sign");
+    },
+    version() {
+      if (this.object.data.version)
+        return `v${this.object.data.version}`;
+      if (process.env.ONETECH_MOD_NAME)
+        return process.env.ONETECH_MOD_NAME;
     }
   },
   metaInfo() {

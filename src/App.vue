@@ -10,7 +10,8 @@
 
     <div v-else>
       <div class="updated">
-        Updated {{lastDate}} (v{{lastVersion}})
+        Updated {{lastDate}}
+        <span  v-if="isVanilla">(v{{lastVersion}})</span>
       </div>
 
       <ObjectSearch />
@@ -63,13 +64,14 @@ export default {
     lastVersion () {
       return GameObject.version;
     },
+    isVanilla () {
+      return !process.env.ONETECH_MOD_NAME;
+    },
     gameName () {
       return process.env.ONETECH_MOD_NAME || "One Hour One Life";
     },
     gameUrl () {
-      if (process.env.ONETECH_MOD_NAME && !process.env.ONETECH_MOD_URL)
-        return null;
-      return process.env.ONETECH_MOD_URL || "https://onehouronelife.com";
+      return process.env.ONETECH_MOD_URL;
     }
   },
   methods: {
