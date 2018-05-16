@@ -104,7 +104,11 @@ class GameObject {
 
     if (this.numSlots() > 0) {
       result.numSlots = this.numSlots();
-      result.slotSize = parseInt(this.data.slotSize);
+      result.slotSize = parseFloat(this.data.slotSize);
+    }
+
+    if (this.data.containable == "1") {
+      result.size = parseFloat(this.data.containSize.split(","));
     }
 
     let techTree = this.techTreeNodes(3);
@@ -148,7 +152,7 @@ class GameObject {
   }
 
   isCraftableContainer() {
-    return this.numSlots() > 0 && !this.isGrave();
+    return this.numSlots() > 0 && this.data.slotSize >= 1 && !this.isGrave();
   }
 
   isGrave() {

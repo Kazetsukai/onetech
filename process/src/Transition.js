@@ -34,16 +34,16 @@ class Transition {
     this.tool = this.actorID >= 0 && this.actorID == this.newActorID;
     this.targetRemains = this.targetID >= 0 && this.targetID == this.newTargetID;
 
-    this.decay = this.calculateDecay();
+    this.decay = this.calculateDecay(this.autoDecaySeconds);
   }
 
-  calculateDecay() {
-    if (this.autoDecaySeconds < 0)
-      return -this.autoDecaySeconds + "h";
-    if (this.autoDecaySeconds > 0 && this.autoDecaySeconds % 60 == 0)
-      return this.autoDecaySeconds/60 + "m";
-    if (this.autoDecaySeconds > 0)
-      return this.autoDecaySeconds + "s";
+  calculateDecay(seconds) {
+    if (seconds < 0)
+      return -seconds + "h";
+    if (seconds > 0 && seconds % 60 == 0)
+      return seconds/60 + "m";
+    if (seconds > 0)
+      return seconds + "s";
   }
 
   addToObjects(objects) {
@@ -67,18 +67,6 @@ class Transition {
 
     if (this.newExtraTarget && !this.newExtraTarget.transitionsAway.includes(this) && !this.newExtraTarget.transitionsToward.includes(this))
       this.newExtraTarget.transitionsToward.push(this);
-  }
-
-
-  hasID(id) {
-    return this.targetID == id || this.actorID == id || this.newTargetID == id || this.newActorID == id;
-  }
-
-  replaceID(oldID, newID) {
-    if (this.targetID == oldID)    this.targetID = newID;
-    if (this.actorID == oldID)     this.actorID = newID;
-    if (this.newTargetID == oldID) this.newTargetID = newID;
-    if (this.newActorID == oldID)  this.newActorID = newID;
   }
 
   isGeneric() {

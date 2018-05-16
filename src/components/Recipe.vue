@@ -1,6 +1,6 @@
 <template>
   <div class="recipe">
-    <h2><a :href="object.url()">{{object.name}}</a></h2>
+    <h2><router-link :to="object.url()">{{object.name}}</router-link></h2>
     <h3>Crafting Recipe</h3>
 
     <h3 v-if="!object.data">Loading...</h3>
@@ -16,14 +16,32 @@
 </template>
 
 <script>
+import GameObject from '../models/GameObject';
+
 import RecipeIngredients from './RecipeIngredients';
 import RecipeStep from './RecipeStep';
 
 export default {
-  props: ['object'],
   components: {
     RecipeIngredients,
     RecipeStep
+  },
+  data() {
+    return {
+      object: GameObject.findAndLoad(this.$route.params.id),
+    };
+  },
+  created() {
+    if (!this.object)
+      this.$router.replace("/not-found");
+  },
+  watch: {
+    '$route' (to, from) {
+      this.object = GameObject.findAndLoad(this.$route.params.id);
+    }
+  },
+  metaInfo() {
+    return {title: `${this.object.name} Recipe`};
   }
 }
 </script>

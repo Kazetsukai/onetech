@@ -39,4 +39,7 @@ if (!process.argv.includes('dev')) {
   const mod = process.env.ONETECH_MOD_NAME ? "-mod" : "";
   console.log(`Copying static${mod}-dev to static${mod}...`);
   gameData.syncStaticDir();
+
+  console.log("Generating sitemap...");
+  gameData.generateSitemap();
 }

@@ -12,6 +12,7 @@ const DepthCalculator = require('./DepthCalculator');
 const SpriteProcessor = require('./SpriteProcessor');
 const ObjectFilters = require('./ObjectFilters');
 const ObjectBadges = require('./ObjectBadges');
+const SitemapGenerator = require('./SitemapGenerator');
 
 class GameData {
   constructor(processDir, dataDir) {
@@ -171,6 +172,11 @@ class GameData {
 
   syncStaticDir() {
     spawnSync("rsync", ["-aq", this.staticDevDir + "/", this.staticDir]);
+  }
+
+  generateSitemap() {
+    var generator = new SitemapGenerator(this.processDir + "/../");
+    generator.generate(Object.values(this.objects));
   }
 }
 

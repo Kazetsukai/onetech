@@ -1,10 +1,10 @@
 <template>
-  <a class="nostyle" :href="url">
-    <div class="objectFilter" v-bind:class="{selected}">
+  <router-link class="nostyle" :to="url">
+    <div class="objectFilter" :class="{selected}">
       <h3>{{filter.name}}</h3>
       <div v-if="selected" class="deselect">x</div>
     </div>
-  </a>
+  </router-link>
 </template>
 
 <script>
@@ -12,8 +12,8 @@ export default {
   props: ['filter', 'selected'],
   computed: {
     url() {
-      if (this.selected) return "#";
-      return `#filter/${this.filter.key}`;
+      if (this.selected) return "/";
+      return `/filter/${this.filter.key}`;
     }
   }
 }

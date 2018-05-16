@@ -2,12 +2,13 @@ var path = require('path')
 var webpack = require('webpack')
 var fs = require('fs')
 
+var rootPath = process.env.NODE_ENV === 'development' ? "/" : "/onetech/";
 var mod = process.env.ONETECH_MOD_NAME ? "-mod" : "";
 
 if (process.env.NODE_ENV === 'development' && fs.existsSync(`static${mod}-dev`))
-  var staticPath = `./static${mod}-dev`;
+  var staticPath = `static${mod}-dev`;
 else
-  var staticPath = `./static${mod}`;
+  var staticPath = `static${mod}`;
 
 var staticTimestamp = fs.readFileSync(staticPath + "/timestamp.txt", "utf8");
 var processTimestamp = fs.readFileSync("process/timestamp.txt", "utf8");
@@ -18,7 +19,7 @@ module.exports = {
   entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, './dist'),
-    publicPath: 'dist/',
+    publicPath: rootPath + 'dist/',
     filename: 'build.js'
   },
   module: {
@@ -89,7 +90,7 @@ module.exports = {
     extensions: ['*', '.js', '.vue', '.json']
   },
   devServer: {
-    historyApiFallback: true,
+    historyApiFallback: {index: "/404.html"},
     noInfo: true,
     overlay: true
   },
@@ -103,7 +104,8 @@ module.exports = {
         ONETECH_MOD_NAME: JSON.stringify(process.env.ONETECH_MOD_NAME),
         ONETECH_MOD_URL: JSON.stringify(process.env.ONETECH_MOD_URL),
       },
-      'STATIC_PATH': JSON.stringify(staticPath)
+      'ROOT_PATH': JSON.stringify(rootPath),
+      'STATIC_PATH': JSON.stringify(rootPath + staticPath),
     })
   ],
   devtool: '#eval-source-map'

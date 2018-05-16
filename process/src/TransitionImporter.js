@@ -17,17 +17,21 @@ class TransitionImporter {
 
   splitCategories(categories) {
     for (let category of categories) {
-      this.splitCategory(category);
+      this.splitCategory(category, "actorID", "newActorID");
+      this.splitCategory(category, "targetID", "newTargetID");
     }
   }
 
-  splitCategory(category) {
+  splitCategory(category, attr, newAttr) {
     const newTransitions = [];
     for (let transition of this.transitions) {
-      if (transition.hasID(category.parentID)) {
+      if (transition[attr] == category.parentID || transition[newAttr] == category.parentID) {
         for (let id of category.objectIDs) {
           const newTransition = transition.clone();
-          newTransition.replaceID(category.parentID, id);
+          if (transition[attr] == category.parentID)
+            newTransition[attr] = id;
+          if (transition[newAttr] == category.parentID)
+            newTransition[newAttr] = id;
           newTransitions.push(newTransition);
         }
       } else {

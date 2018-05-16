@@ -1,5 +1,5 @@
 <template>
-  <a class="nostyle" :href="object.url()">
+  <router-link class="nostyle" :to="object.url()">
     <div class="objectView">
       <h3>{{object.name}}</h3>
       <div class="badges">
@@ -10,7 +10,7 @@
       </div>
       <ObjectImage :object="object" scaleUpTo="80" />
     </div>
-  </a>
+  </router-link>
 </template>
 
 <script>

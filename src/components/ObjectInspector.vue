@@ -10,11 +10,13 @@
         <li v-if="object.data.heatValue">Heat: {{object.data.heatValue}}</li>
         <li v-if="object.clothingPart()">Clothing: {{object.clothingPart()}}</li>
         <li v-if="object.hasInsulation()">Insulation: {{object.insulationPercent()}}%</li>
-        <li v-if="object.data.numUses">Number of uses: {{object.data.numUses}}</li>
+        <li v-if="sizeText">Item Size: {{sizeText}}</li>
+        <li v-if="numUses">Number of uses: {{numUses}}</li>
         <li v-if="object.data.useChance">
           Chance to use:
           {{Math.round(object.data.useChance*100)}}%
         </li>
+        <li v-if="estimatedUses">Estimated uses: {{estimatedUses}}</li>
         <li v-if="difficultyText">
           Difficulty: {{difficultyText}}
           <span class="helpTip" v-tippy :title="difficultyTip">?</span>
@@ -24,12 +26,15 @@
         <li v-if="!object.data.version">Unreleased</li>
       </ul>
       <div class="actions" v-if="object.data">
-        <a :href="object.url('tech-tree')" v-if="object.data.techTree" title="Tech Tree" v-tippy>
+        <router-link :to="object.url('tech-tree')" v-if="object.data.techTree" title="Tech Tree" v-tippy>
           <img src="../assets/techtree.png" width="38" height="36" />
-        </a>
-        <a :href="object.url('recipe')"  v-if="object.data.recipe" title="Crafting Recipe" v-tippy>
+        </router-link>
+        <router-link :to="object.url('recipe')" v-if="object.data.recipe" title="Crafting Recipe" v-tippy>
           <img src="../assets/recipe.png" width="41" height="42" />
-        </a>
+        </router-link>
+        <router-link to="/letters" v-if="isLetterOrSign" title="Letters Recipe" v-tippy>
+          <img src="../assets/sign.png" width="40" height="41" />
+        </router-link>
       </div>
     </div>
     <div class="transitionsPanels" v-if="object.data">
@@ -70,16 +75,31 @@
 </template>
 
 <script>
+import GameObject from '../models/GameObject';
+
 import ObjectImage from './ObjectImage';
 import BiomeImage from './BiomeImage';
 import TransitionsList from './TransitionsList';
 
 export default {
-  props: ['object'],
   components: {
     ObjectImage,
     BiomeImage,
     TransitionsList,
+  },
+  data() {
+    return {
+      object: GameObject.findAndLoad(this.$route.params.id),
+    };
+  },
+  created() {
+    if (!this.object)
+      this.$router.replace("/not-found");
+  },
+  watch: {
+    '$route' (to, from) {
+      this.object = GameObject.findAndLoad(this.$route.params.id);
+    }
   },
   computed: {
     spawnText() {
@@ -109,11 +129,31 @@ export default {
       const stepWord = this.object.data.depth == 1 ? "step" : "steps";
       return `${this.object.data.depth} ${stepWord} to create`;
     },
+    numUses() {
+      if (!this.object.data.numUses) return;
+      // Subtract one if there is a use chance since last use doesn't count
+      if (this.object.data.useChance)
+        return this.object.data.numUses - 1;
+      return this.object.data.numUses;
+    },
+    estimatedUses() {
+      if (!this.object.data.useChance) return;
+      return this.numUses * (1/this.object.data.useChance);
+    },
+    sizeText() {
+      if (!this.object.data.size) return;
+      return this.object.size();
+    },
     containerText() {
       if (!this.object.data.numSlots) return;
-      const size = this.object.data.slotSize > 1 ? "large" : "small";
-      return `Holds ${this.object.data.numSlots} ${size} items`;
+      return `Holds ${this.object.data.numSlots} ${this.object.slotSize()} items`;
+    },
+    isLetterOrSign() {
+      return this.object.name.includes("Letter") || this.object.name.includes("Sign");
     }
+  },
+  metaInfo() {
+    return {title: this.object.name};
   }
 }
 </script>
