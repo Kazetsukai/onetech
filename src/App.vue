@@ -62,7 +62,7 @@ export default {
       return `${months[month]} ${day}, ${year}`;
     },
     lastVersion () {
-      return GameObject.version;
+      return GameObject.versions[0];
     },
     isVanilla () {
       return !process.env.ONETECH_MOD_NAME;

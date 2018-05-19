@@ -9,7 +9,7 @@ export default class GameObject {
       this.filters = data.filters;
       this.badges = data.badges;
       this.date = new Date(data.date);
-      this.version = data.version;
+      this.versions = data.versions;
       callback();
     });
   }
