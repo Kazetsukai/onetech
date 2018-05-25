@@ -4,7 +4,8 @@ class Category {
   constructor(dataText) {
     const lines = dataText.split('\n');
     this.parentID = lines[0].split('=')[1];
-    this.objectIDs = lines.slice(2, lines.length);
+    this.pattern = lines[1] == "pattern";
+    this.objectIDs = lines.slice(this.pattern ? 3 : 2, lines.length);
   }
 
   addToObjects(objects) {

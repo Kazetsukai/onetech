@@ -21,28 +21,26 @@ class SpriteProcessor {
     this.renderSprites(this.visibleSprites(object), object.id);
 
     // Draw only the last sprite
-    if (object.numUses() > 1 && object.transitionsAway.filter(t => t.lastUseActor || t.lastUseTarget).length > 0) {
+    if (object.data.numUses > 1 && object.transitionsAway.filter(t => t.lastUseActor || t.lastUseTarget).length > 0) {
       this.renderSprites(this.lastSprites(object), object.id + "_last");
     }
   }
 
   visibleSprites(object) {
-    const hideIndexes = object.data.useVanishIndex == -1 && object.numUses() > 1 ?
-      object.data.useAppearIndex.split(",").map(i => parseInt(i)) :
-      [];
+    const hideIndexes = object.data.useVanishIndex == -1 && object.data.numUses > 1
+      ? object.data.useAppearIndex : [];
     // Draw sprites as if they were 20 years old
     return object.sprites.filter((s,i) => !s.beyondAge(20) && !hideIndexes.includes(i))
   }
 
   lastSprites(object) {
     if (object.data.useVanishIndex != -1) {
-      const hideIndexes = object.data.useVanishIndex.split(",").map(i => parseInt(i));
+      const hideIndexes = object.data.useVanishIndex.slice(0);
       hideIndexes.shift(); // still draw the first sprite
       return this.visibleSprites(object).filter((s,i) => !hideIndexes.includes(i));
     }
     if (object.data.useAppearIndex != -1) {
-      const useIndexes = object.data.useAppearIndex.split(",").map(i => parseInt(i))
-      const indexes = useIndexes.filter((_, i) => i+1 < object.numUses());
+      const indexes = object.data.useAppearIndex.filter((_, i) => i+1 < object.data.numUses);
       const useSprites = object.sprites.filter((s,i) => indexes.includes(i));
       const sprites = this.visibleSprites(object);
       // Insert the use sprites after the last index

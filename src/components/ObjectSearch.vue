@@ -47,6 +47,9 @@ export default {
 </script>
 
 <style>
+  .objectSearch {
+    margin-top: 20px;
+  }
   .objectSearch .v-select .dropdown-toggle {
     background-color: #222;
     border: 2px solid #777;

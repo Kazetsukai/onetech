@@ -7,7 +7,7 @@ const _ = require('lodash');
 const GameObject = require('./GameObject');
 const Category = require('./Category');
 const TransitionImporter = require('./TransitionImporter');
-const VersionPopulator = require('./VersionPopulator');
+const ChangeLog = require('./ChangeLog');
 const DepthCalculator = require('./DepthCalculator');
 const SpriteProcessor = require('./SpriteProcessor');
 const ObjectFilters = require('./ObjectFilters');
@@ -66,8 +66,8 @@ class GameData {
   }
 
   populateVersions() {
-    const populator = new VersionPopulator(this.dataDir, this.objects);
-    populator.populate();
+    this.changeLog = new ChangeLog(this.dataDir, this.objects);
+    this.changeLog.populateObjects();
   }
 
   calculateObjectDepth() {
@@ -84,8 +84,17 @@ class GameData {
     this.prepareStaticDir();
     this.updateTimestamp();
     this.saveJSON("objects.json", this.objectsData());
-    for (var id in this.objects) {
+    for (let id in this.objects) {
       this.saveJSON(`objects/${id}.json`, this.objects[id].jsonData());
+    }
+  }
+
+  exportVersions() {
+    const versions = this.changeLog.versions.reverse();
+    for (let version of versions) {
+      const path = `versions/${version.id}.json`;
+      if (version.id > 0 && !fs.existsSync(this.staticDevDir + "/" + path))
+        this.saveJSON(path, version.jsonData());
     }
   }
 
@@ -96,8 +105,10 @@ class GameData {
     this.makeDir(this.staticDevDir + "/sprites");
     this.makeDir(this.staticDevDir + "/ground");
     this.makeDir(this.staticDevDir + "/objects");
+    this.makeDir(this.staticDevDir + "/versions");
     this.makeDir(this.staticDevDir + "/pretty-json");
     this.makeDir(this.staticDevDir + "/pretty-json/objects");
+    this.makeDir(this.staticDevDir + "/pretty-json/versions");
   }
 
   makeDir(path) {
@@ -127,7 +138,7 @@ class GameData {
       filters: ObjectFilters.jsonData(objects),
       badges: ObjectBadges.jsonData(objects),
       date: new Date(),
-      version: (new VersionPopulator(this.dataDir, this.objects)).lastVersion(),
+      versions: this.changeLog.versions.slice(1).reverse().map(v => v.id),
     };
   }
 

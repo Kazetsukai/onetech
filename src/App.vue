@@ -1,17 +1,19 @@
 <template>
   <div id="app">
     <h1>
-      Crafting reference for
-      <a v-if="gameUrl" :href="gameUrl">{{gameName}}</a>
-      <span v-else>{{gameName}}</span>
+      <router-link to="/">Crafting reference for {{gameName}}</router-link>
     </h1>
 
     <h2 v-if="loading">Loading...</h2>
 
     <div v-else>
-      <div class="updated">
-        Updated {{lastDate}}
-        <span  v-if="isVanilla">(v{{lastVersion}})</span>
+      <div class="subtitle" v-if="showWhatsNew">
+        <router-link to="/versions">
+          See what's new in Version {{lastVersion}}!
+        </router-link>
+      </div>
+      <div class="subtitle" v-else-if="gameUrl">
+        <a :href="gameUrl">Visit "{{gameName}}</a>
       </div>
 
       <ObjectSearch />
@@ -30,6 +32,7 @@ import ObjectInspector from './components/ObjectInspector';
 import TechTree from './components/TechTree';
 import Recipe from './components/Recipe';
 import RecipeForLetters from './components/RecipeForLetters';
+import ChangeLog from './components/ChangeLog';
 import NotFound from './components/NotFound';
 
 export default {
@@ -62,10 +65,14 @@ export default {
       return `${months[month]} ${day}, ${year}`;
     },
     lastVersion () {
-      return GameObject.version;
+      return GameObject.versions[0];
     },
-    isVanilla () {
-      return !process.env.ONETECH_MOD_NAME;
+    showWhatsNew () {
+      if (process.env.ONETECH_MOD_NAME)
+        return false;
+      if (this.$route.path == "/versions")
+        return false;
+      return true;
     },
     gameName () {
       return process.env.ONETECH_MOD_NAME || "One Hour One Life";
@@ -92,6 +99,7 @@ export default {
     {path: "/not-found", component: NotFound},
     {path: "/filter/:filter", component: ObjectBrowser},
     {path: "/letters", component: RecipeForLetters},
+    {path: "/versions", component: ChangeLog, alias: "/versions/:id"},
     {path: "/:id/tech-tree", component: TechTree},
     {path: "/:id/recipe", component: Recipe},
     {path: "/:id", component: ObjectInspector},
@@ -133,16 +141,17 @@ export default {
     margin-bottom: 0;
     a {
       text-decoration: none;
-      &:hover {
-        text-decoration: underline;
+      &.router-link-exact-active {
+        cursor: default;
       }
     }
   }
 
-  .updated {
-    color: #999;
+  .subtitle {
     text-align: center;
-    margin-bottom: 20px;
-    font-style: italic;
+    a {
+      color: #ccc;
+      text-decoration: underline;
+    }
   }
 </style>
