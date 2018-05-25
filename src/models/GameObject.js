@@ -57,6 +57,14 @@ export default class GameObject {
     return this.filters.find(f => f.key == key);
   }
 
+  static addLegacyObject(attributes) {
+    if (this.objectsMap[attributes.id])
+      return;
+    const object = new GameObject(attributes.id, attributes.name);
+    object.legacy = true;
+    this.objectsMap[object.id] = object;
+  }
+
   constructor(id, name) {
     this.id = id;
     this.name = name;
@@ -84,6 +92,8 @@ export default class GameObject {
   }
 
   url(subpath) {
+    if (this.legacy)
+      return "/not-found";
     const path = [`${this.id}-${this.name.replace(/\W+/g, '-')}`];
     if (subpath) path.push(subpath);
     return '/' + path.map(encodeURIComponent).join("/");

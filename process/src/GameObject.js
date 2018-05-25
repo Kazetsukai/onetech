@@ -11,9 +11,12 @@ class GameObject {
     this.transitionsToward = [];
     this.transitionsAway = [];
     this.categories = [];
-    this.parseData(dataText);
     this.depth = new Depth({});
-    this.id = this.data.id;
+    this.parseData(dataText);
+    if (!this.data.id)
+      return;
+    this.id = this.data.id.toString();
+    this.name = this.data.name;
   }
 
   parseData(dataText) {
@@ -31,27 +34,45 @@ class GameObject {
   }
 
   parseName(name) {
-    if (name) this.name = name.replace('#', ' - ');
+    if (name)
+      this.data.name = name.replace('#', ' - ');
   }
 
   parseLine(line) {
-    for (var value of line.split(',')) {
-      const parts = line.split('=');
-      if (parts.length < 2) {
-        // console.log("Skipping line: " + line);
-      } else if (parts[0] == "mapChance") {
-        this.parseMapChance(parts[1]);
-      } else {
-        this.data[parts[0]] = parts[1];
+    const assignments = line.split(/[,#]/);
+    let attribute = null;
+    let values = [];
+    for (let assignment of assignments) {
+      const parts = assignment.split(/[_=]/);
+      if (parts.length > 1) {
+        this.assignData(attribute, values);
+        attribute = parts.shift();
+        values = [];
       }
+      values.push(this.parseValue(parts[0]));
     }
+    this.assignData(attribute, values);
   }
 
-  parseMapChance(value) {
-    const parts = value.split('#');
-    this.data.mapChance = parts[0];
-    if (parts[1].includes("_")) {
-      this.data.biomes = parts[1].split('_')[1].split(',');
+  parseValue(value) {
+    if (isNaN(value))
+      return value;
+    if (value.includes("."))
+      return parseFloat(value);
+    return parseInt(value);
+  }
+
+  assignData(attribute, values) {
+    if (!attribute) return;
+    if (attribute == "numUses") {
+      this.data.numUses = values[0];
+      this.data.useChance = parseFloat(values[1] || 1.0);
+    } else if (attribute == "biomes" || attribute == "useAppearIndex") {
+      this.data[attribute] = values;
+    } else if (values.length == 1) {
+      this.data[attribute] = values[0];
+    } else {
+      this.data[attribute] = values;
     }
   }
 
@@ -75,15 +96,15 @@ class GameObject {
       result.version = this.version;
 
     if (this.data.foodValue > 0)
-      result.foodValue = parseInt(this.data.foodValue);
+      result.foodValue = this.data.foodValue;
 
     if (this.data.heatValue > 0)
-      result.heatValue = parseInt(this.data.heatValue);
+      result.heatValue = this.data.heatValue;
 
-    if (this.numUses() > 1) {
-      result.numUses = this.numUses();
-      if (this.useChance())
-        result.useChance = this.useChance();
+    if (this.data.numUses > 1) {
+      result.numUses = this.data.numUses;
+      if (this.data.useChance != 1)
+        result.useChance = this.data.useChance;
     }
 
     if (this.depth.hasValue())
@@ -98,17 +119,17 @@ class GameObject {
     }
 
     if (this.data.mapChance > 0) {
-      result.mapChance = parseFloat(this.data.mapChance);
+      result.mapChance = this.data.mapChance;
       result.biomes = this.data.biomes;
     }
 
-    if (this.numSlots() > 0) {
-      result.numSlots = this.numSlots();
-      result.slotSize = parseFloat(this.data.slotSize);
+    if (this.data.numSlots > 0) {
+      result.numSlots = this.data.numSlots;
+      result.slotSize = this.data.slotSize;
     }
 
-    if (this.data.containable == "1") {
-      result.size = parseFloat(this.data.containSize.split(","));
+    if (this.data.containable == 1) {
+      result.size = this.data.containSize;
     }
 
     let techTree = this.techTreeNodes(3);
@@ -128,7 +149,7 @@ class GameObject {
   }
 
   sortWeight() {
-    return -parseInt(this.id);
+    return -this.id;
   }
 
   isTool() {
@@ -138,21 +159,8 @@ class GameObject {
     return false;
   }
 
-  numUses() {
-    return parseInt(this.data.numUses.split(',')[0]);
-  }
-
-  useChance() {
-    if (this.data.numUses.includes(','))
-      return parseFloat(this.data.numUses.split(',')[1]);
-  }
-
-  numSlots() {
-    return parseInt(this.data.numSlots.split('#')[0]);
-  }
-
   isCraftableContainer() {
-    return this.numSlots() > 0 && this.data.slotSize >= 1 && !this.isGrave();
+    return this.data.numSlots > 0 && this.data.slotSize >= 1 && !this.isGrave();
   }
 
   isGrave() {
@@ -168,7 +176,6 @@ class GameObject {
   }
 
   isWaterSource() {
-    // TODO: We need to fix water transitions to do this properly
     for (var transition of this.transitionsAway) {
       if (transition.actorID == '209' && transition.target == this && (transition.tool || transition.targetRemains)) return true;
     }
@@ -201,7 +208,7 @@ class GameObject {
   insulation() {
     const parts = {'h': 0.25, 't': 0.35, 'b': 0.2, 's': 0.1, 'p': 0.1};
     if (parts[this.data.clothing])
-      return parts[this.data.clothing]*parseFloat(this.data.rValue);
+      return parts[this.data.clothing]*this.data.rValue;
   }
 }
 

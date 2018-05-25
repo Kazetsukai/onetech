@@ -26,6 +26,9 @@ gameData.calculateObjectDepth();
 console.log("Exporting objects...");
 gameData.exportObjects();
 
+console.log("Exporting versions...");
+gameData.exportVersions();
+
 if (process.argv.includes('sprites') || process.argv.includes('download')) {
   console.log("Converting sprite images...");
   gameData.convertSpriteImages();

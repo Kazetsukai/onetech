@@ -17,8 +17,8 @@ const Food = {
     return objects.filter(o => o.data.foodValue > 0);
   },
   value(object) {
-    if (object.numUses() > 1)
-      return `${object.data.foodValue} x ${object.numUses()}`;
+    if (object.data.numUses > 1)
+      return `${object.data.foodValue} x ${object.data.numUses}`;
     return object.data.foodValue;
   }
 }
@@ -29,10 +29,10 @@ const Tool = {
     return objects.filter(o => o.isTool());
   },
   value(object) {
-    if (object.numUses() > 1) {
-      if (object.useChance())
-        return `~${(object.numUses()-1) * (1 / object.useChance())}`;
-      return object.numUses();
+    if (object.data.numUses > 1) {
+      if (object.data.useChance && object.data.useChance != 1)
+        return `~${(object.data.numUses-1) * (1 / object.data.useChance)}`;
+      return object.data.numUses;
     }
   }
 }
@@ -43,7 +43,7 @@ const Container = {
     return objects.filter(o => o.isCraftableContainer());
   },
   value(object) {
-    return object.numSlots();
+    return object.data.numSlots;
   }
 }
 
@@ -63,7 +63,7 @@ const WaterSource = {
     return objects.filter(o => o.isWaterSource());
   },
   value(object) {
-    return object.numUses() > 1 ? object.numUses() : "";
+    return object.data.numUses > 1 ? object.data.numUses : "";
   }
 }
 

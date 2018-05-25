@@ -1,6 +1,6 @@
 "use strict";
 
-const Git = require('./Git');
+const ChangeLogCommit = require('./ChangeLogCommit');
 
 class ChangeLogVersion {
   constructor(git, objects, id, previous) {
@@ -27,7 +27,7 @@ class ChangeLogVersion {
 
   diff() {
     if (!this.previous) return [];
-    return this.git.diff(this.previous.tag(), this.tag()).map(line => line.split(/\s+/));
+    return this.git.fileChanges(this.previous.tag(), this.tag());
   }
 
   populateObjectAtPath(path) {
@@ -37,6 +37,24 @@ class ChangeLogVersion {
       if (object)
         object.version = this.id;
     }
+  }
+
+  jsonData() {
+    let commits = this.fetchCommits();
+    let date = commits[0] && commits[0].date;
+    commits = commits.filter(c => c.isRelavent());
+    return {
+      id: this.id,
+      date: date,
+      commits: commits.map(c => c.jsonData()),
+    };
+  }
+
+  fetchCommits() {
+    if (!this.previous) return [];
+    return this.git.log(this.previous.tag(), this.tag()).map(entry => {
+      return new ChangeLogCommit(this, entry);
+    });
   }
 }
 

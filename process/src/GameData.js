@@ -90,10 +90,11 @@ class GameData {
   }
 
   exportVersions() {
-    const versions = this.changeLog.versions();
+    debugger;
+    const versions = this.changeLog.versions.reverse();
     for (let version of versions) {
-      const path = `versions/${version.version}.json`;
-      if (!fs.existsSync(this.staticDevDir + "/" + path))
+      const path = `versions/${version.id}.json`;
+      if (version.id > 0 && !fs.existsSync(this.staticDevDir + "/" + path))
         this.saveJSON(path, version.jsonData());
     }
   }
@@ -108,6 +109,7 @@ class GameData {
     this.makeDir(this.staticDevDir + "/versions");
     this.makeDir(this.staticDevDir + "/pretty-json");
     this.makeDir(this.staticDevDir + "/pretty-json/objects");
+    this.makeDir(this.staticDevDir + "/pretty-json/versions");
   }
 
   makeDir(path) {
