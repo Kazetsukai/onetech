@@ -90,7 +90,6 @@ class GameData {
   }
 
   exportVersions() {
-    debugger;
     const versions = this.changeLog.versions.reverse();
     for (let version of versions) {
       const path = `versions/${version.id}.json`;
