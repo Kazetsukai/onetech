@@ -16,9 +16,14 @@ class TransitionImporter {
   }
 
   splitCategories(categories) {
-    for (let category of categories) {
+    const nonPatternCategories = categories.filter(c => !c.pattern);
+    for (let category of nonPatternCategories) {
       this.splitCategory(category, "actorID", "newActorID");
       this.splitCategory(category, "targetID", "newTargetID");
+    }
+    const patternCategories = categories.filter(c => c.pattern);
+    for (let transition of this.transitions) {
+      this.splitPatternCategories(transition, patternCategories);
     }
   }
 
@@ -39,6 +44,35 @@ class TransitionImporter {
       }
     }
     this.transitions = newTransitions;
+  }
+
+  // Pattern categories work differently than regular categories:
+  // 1. The parentID is an actual object and should stick around
+  // 2. A transition is only considered if there are two pattern
+  //    categories with the same number of objectIDs
+  // 3. For each objectID, a new transition is created which maps
+  //    each other pattern category objectID to the new object
+  splitPatternCategories(transition, patternCategories) {
+    // if (transition.actorID == 969 && transition.targetID == 1012)
+    //   debugger;
+    const attrs = ["actorID", "targetID", "newActorID", "newTargetID"];
+    let categories = attrs.map(attr => {
+      return patternCategories.find(c => c.parentID == transition[attr]);
+    });
+    if (categories.filter(c => c).length <= 1)
+      return;
+    const count = categories.find(c => c).objectIDs.length;
+    categories = categories.map(c => c && c.objectIDs.length == count && c);
+    if (categories.filter(c => c).length <= 1)
+      return;
+    for (let i=0; i < count; i++) {
+      const newTransition = transition.clone()
+      for (let j=0; j < attrs.length; j++) {
+        if (categories[j])
+          newTransition[attrs[j]] = categories[j].objectIDs[i];
+      }
+      this.transitions.push(newTransition);
+    }
   }
 
   // Generic transitions are played along with another successful transition of the same actor

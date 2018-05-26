@@ -67,7 +67,7 @@ class ChangeLogCommit {
     const id = path.split("/")[1].split(".")[0];
 
     if (this.objects[id]) {
-      if (this.objects[id].category)
+      if (!this.objects[id].isVisible())
         this.legacyObjects[id] = this.objects[id];
       return this.objects[id];
     }

@@ -21,7 +21,7 @@ class SitemapGenerator {
 
     for (let object of objects) {
       const path = encodeURIComponent(`${object.id}-${object.name.replace(/\W+/g, '-')}`);
-      if (!object.category) {
+      if (object.isVisible()) {
         sitemap.add({url: `/${path}`});
         if (!object.isNatural() && object.transitionsToward[0]) {
           sitemap.add({url: `/${path}/tech-tree`});

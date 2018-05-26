@@ -63,7 +63,7 @@ class DepthCalculator {
   }
 
   reportMissing(allObjects) {
-    const objects = allObjects.filter(o => !o.depth.hasValue() && !o.category);
+    const objects = allObjects.filter(o => !o.depth.hasValue() && o.isVisible());
     console.log(objects.length + " objects are missing depth");
     // for (var object of objects) {
     //   console.log(object.id, object.name, "unable to calculate depth");

@@ -182,6 +182,10 @@ class GameObject {
     return false;
   }
 
+  isVisible() {
+    return !this.category || this.category.pattern;
+  }
+
   techTreeNodes(depth) {
     const transition = this.transitionsToward[0];
     if (this.isNatural() || !transition)
