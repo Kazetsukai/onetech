@@ -1,0 +1,1 @@
+{"id":"1020","name":"Snow Bank","transitionsToward":[{"targetID":"1021","newActorID":"235","newTargetID":"1020","hand":true}],"transitionsAway":[{"actorID":"235","targetID":"1020","newTargetID":"1061"}],"transitionsTimed":[],"version":101,"depth":0,"mapChance":0.25,"biomes":[4]}
