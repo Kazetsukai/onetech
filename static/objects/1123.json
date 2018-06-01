@@ -1,0 +1,1 @@
+{"id":"1123","name":"Bare Teosinte","transitionsToward":[{"targetID":"1107","targetUses":"last","newActorID":"1108","newTargetID":"1123","hand":true}],"transitionsAway":[],"transitionsTimed":[],"version":103,"depth":0,"mapChance":1,"biomes":[2]}
