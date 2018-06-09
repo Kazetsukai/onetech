@@ -34,12 +34,12 @@ class SpriteProcessor {
   }
 
   lastSprites(object) {
-    if (object.data.useVanishIndex != -1) {
+    if (object.data.useVanishIndex != -1 && Array.isArray(object.data.useVanishIndex)) {
       const hideIndexes = object.data.useVanishIndex.slice(0);
       hideIndexes.shift(); // still draw the first sprite
       return this.visibleSprites(object).filter((s,i) => !hideIndexes.includes(i));
     }
-    if (object.data.useAppearIndex != -1) {
+    if (object.data.useAppearIndex != -1 && Array.isArray(object.data.useAppearIndex)) {
       const indexes = object.data.useAppearIndex.filter((_, i) => i+1 < object.data.numUses);
       const useSprites = object.sprites.filter((s,i) => indexes.includes(i));
       const sprites = this.visibleSprites(object);
@@ -188,7 +188,8 @@ class SpriteProcessor {
         if (opacity > threshold) return col;
       }
     }
-    throw "Unable to find opaque pixels in image";
+    return 0;
+    // throw "Unable to find opaque pixels in image";
   }
 
   rightTrim(image, threshold) {
@@ -199,7 +200,8 @@ class SpriteProcessor {
         if (opacity > threshold) return image.width-1-col;
       }
     }
-    throw "Unable to find opaque pixels in image";
+    return 0;
+    // throw "Unable to find opaque pixels in image";
   }
 
   topTrim(image, threshold) {
@@ -210,7 +212,8 @@ class SpriteProcessor {
         if (opacity > threshold) return row;
       }
     }
-    throw "Unable to find opaque pixels in image";
+    return 0;
+    // throw "Unable to find opaque pixels in image";
   }
 
   bottomTrim(image, threshold) {
@@ -221,7 +224,8 @@ class SpriteProcessor {
         if (opacity > threshold) return image.height-1-row;
       }
     }
-    throw "Unable to find opaque pixels in image";
+    return 0;
+    // throw "Unable to find opaque pixels in image";
   }
 
   spritePoints(sprite) {
