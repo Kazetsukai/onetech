@@ -20,23 +20,30 @@ class RecipeNode {
     this.depth = 0;
     this.decaySeconds = 0;
     this.tool = false;
-    this.collapsed = false;
-    this.expandable = false;
+    this.collapsedParent = null;
   }
 
   addParent(parent) {
     this.parents.push(parent);
-    this.updateDepth(parent.depth + 1);
+    if (parent.depth >= this.depth)
+      this.updateDepth(parent.depth + 1);
     if (parent.tool)
       this.makeTool();
     parent.children.push(this);
   }
 
   updateDepth(depth) {
-    if (depth > this.depth) {
-      this.depth = depth;
-      this.children.forEach(child => child.updateDepth(depth + 1));
-    }
+    this.depth = depth;
+    this.children.forEach(child => child.updateDepth(depth + 1));
+  }
+
+  resetDepth() {
+    const depths = this.parents.map(parent => {
+      if (parent.collapsedParent)
+        return parent.collapsedParent.depth;
+      return parent.depth;
+    });
+    this.updateDepth(depths.sort((a,b) => b - a)[0] + 1);
   }
 
   makeTool() {
@@ -46,7 +53,7 @@ class RecipeNode {
   }
 
   showInStep(expand) {
-    return !this.tool && !this.isIngredient() && (!this.collapsed || expand);
+    return !this.tool && !this.isIngredient() && (!this.isCollapsed() || expand);
   }
 
   isIngredient() {
@@ -65,6 +72,10 @@ class RecipeNode {
     return this.cachedSubNodes;
   }
 
+  collapsedSubNodes() {
+    return this.subNodes().filter(n => n.collapsedParent == this);
+  }
+
   calculateSubNodes() {
     let subNodes = [];
     for (let child of this.uniqueChildren()) {
@@ -73,11 +84,19 @@ class RecipeNode {
         subNodes = subNodes.concat(child.subNodes());
       }
     }
-    return subNodes;
+    return subNodes.filter((s,i) => subNodes.indexOf(s) == i);
   }
 
   canBeSubNode() {
-    return !this.tool && !this.isIngredient() && this.uniqueParents().length == 1;
+    return !this.tool && !this.isIngredient();
+  }
+
+  isExpandable() {
+    return this.collapsedParent == this && this.collapsedSubNodes().length > 0;
+  }
+
+  isCollapsed() {
+    return this.collapsedParent && this.collapsedParent != this;
   }
 
   subNodeDepth() {
@@ -90,15 +109,42 @@ class RecipeNode {
     return this.children.filter((c,i) => this.children.indexOf(c) == i);
   }
 
-  uniqueParents() {
-    return this.parents.filter((p,i) => this.parents.indexOf(p) == i);
+  collapseBranches() {
+    this.object
+    if (this.collapsedParent)
+      return;
+    if (this.children.length > 1) {
+      const children = this.uniqueChildren()
+        .sort((a,b) => b.subNodes().length - a.subNodes().length);
+      children[0].uncollapse();
+      for (let i=1; i < children.length; i++) {
+        children[i].collapse();
+      }
+    }
+    for (let child of this.children) {
+      child.collapseBranches();
+    }
   }
 
-  collapse() {
-    this.expandable = true;
-    for (let node of this.subNodes()) {
-      node.collapsed = true;
+  collapse(parent = null) {
+    if (!parent || this.canCollapse(parent)) {
+      this.collapsedParent = parent || this;
+      this.children.forEach(c => c.collapse(parent || this));
+    } else {
+      this.resetDepth();
+      this.collapseBranches();
     }
+  }
+
+  // Only collapse if the parents are all in the same collapsed branch
+  canCollapse(parent) {
+    return this.parents.filter(p => p.collapsedParent == parent).length == this.parents.length;
+  }
+
+  uncollapse() {
+    if (!this.collapsedParent) return;
+    this.collapsedParent = null;
+    this.children.forEach(c => c.uncollapse());
   }
 
   jsonData(expand = false) {
@@ -106,7 +152,7 @@ class RecipeNode {
     if (this.count() > 1)
       data.count = this.count();
 
-    if (!expand && this.expandable) {
+    if (!expand && this.isExpandable()) {
       data.subSteps = this.subSteps();
       return data;
     }
@@ -129,7 +175,7 @@ class RecipeNode {
   }
 
   subSteps() {
-    return RecipeNode.steps([this].concat(this.subNodes()), true);
+    return RecipeNode.steps([this].concat(this.collapsedSubNodes()), true);
   }
 }
 
