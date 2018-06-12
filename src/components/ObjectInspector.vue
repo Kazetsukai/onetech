@@ -123,7 +123,7 @@ export default {
         "Very Hard",
         "Extremely Hard",
       ];
-      return levels[Math.floor(this.object.data.difficulty*levels.length)];
+      return levels[this.object.data.difficulty];
     },
     difficultyTip() {
       const stepWord = this.object.data.depth == 1 ? "step" : "steps";

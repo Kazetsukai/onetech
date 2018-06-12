@@ -110,8 +110,8 @@ class GameObject {
     if (this.depth.hasValue())
       result.depth = this.depth.value;
 
-    if (this.depth.difficulty)
-      result.difficulty = this.depth.difficulty.toFixed(2);
+    if (this.difficulty())
+      result.difficulty = this.difficulty();
 
     if (this.data.clothing != "n") {
       result.clothing = this.data.clothing;
@@ -150,6 +150,13 @@ class GameObject {
 
   sortWeight() {
     return -this.id;
+  }
+
+  // See ObjectInspector.vue for difficulty levels
+  difficulty() {
+    if (!this.depth.difficulty) return;
+    const difficultyLevels = 9;
+    return Math.floor(this.depth.difficulty*9);
   }
 
   isTool() {
