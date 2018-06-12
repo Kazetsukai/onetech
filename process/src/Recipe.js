@@ -1,41 +1,17 @@
 "use strict";
 
+const RecipeGenerator = require('./RecipeGenerator');
 const RecipeNode = require('./RecipeNode');
 
 class Recipe {
   constructor(object) {
     this.object = object;
-    const node = new RecipeNode({object: object});
-    this.nodes = [node];
-    this.remainingNodes = [];
   }
 
   generate() {
-    // console.log("Generate Recipe", this.object.id, this.object.name);
-    for (let depth=0; depth < 100; depth++) {
-      const nodes = this.nodes.filter(n => n.depth() == depth);
-      if (nodes.length == 0)
-        return;
-      if (this.nodes.length > 100) {
-        // console.log("Reached recipe node limit for ", this.object.id, this.object.name);
-        this.remainingNodes = nodes;
-        this.nodes = this.nodes.filter(n => !this.remainingNodes.includes(n));
-        return;
-      }
-      for (let node of nodes) {
-        this.addNodes(node.generateNodes());
-      }
-    }
-  }
-
-  addNodes(newNodes) {
-    for (let node of newNodes) {
-      let existingNode = this.nodes.find(n => n.object == node.object);
-      if (existingNode)
-        existingNode.merge(node)
-      else
-        this.nodes.push(node)
-    }
+    const generator = new RecipeGenerator(this.object);
+    generator.generate();
+    this.nodes = generator.nodes;
   }
 
   hasData() {
@@ -47,18 +23,18 @@ class Recipe {
     // We may eventually split them up for the user
     const ingredients = this.tools().concat(this.ingredients());
     return {
-      steps: this.steps().reverse(),
+      steps: RecipeNode.steps(this.nodes),
       ingredients: ingredients.sort((a,b) => a.depth.compare(b.depth)).reverse().map(o => o.id),
     }
   }
 
   tools() {
-    return this.nodes.filter(n => n.isTool()).map(n => n.object);
+    return this.nodes.filter(n => n.tool).map(n => n.object);
   }
 
   ingredients() {
     const ingredients = [];
-    const nodes = this.remainingNodes.concat(this.nodes.filter(n => n.isIngredient()));
+    const nodes = this.nodes.filter(n => n.isIngredient());
     for (let node of nodes) {
       const count = node.count();
       for (let i=0; i < count; i++) {
@@ -66,20 +42,6 @@ class Recipe {
       }
     }
     return ingredients;
-  }
-
-  steps() {
-    const steps = [];
-    for (let node of this.nodes) {
-      if (node.showInStep()) {
-        const depth = node.depth();
-        if (steps[depth])
-          steps[depth].push(node.jsonData());
-        else
-          steps[depth] = [node.jsonData()];
-      }
-    }
-    return steps.filter(s => s);
   }
 }
 

@@ -1,32 +1,98 @@
 <template>
-  <div class="step">
-    <div class="stepNumber">
-      {{number}}
+  <div class="stepWrapper">
+    <div class="step">
+      <div class="stepNumber">
+        {{number}}
+      </div>
+      <div class="stepTransitionsWrapper">
+        <div class="stepTransitions">
+          <RecipeTransition
+            v-for="transition in unexpandableTransitions"
+            :transition="transition"
+            :key="transition.id"
+            @expand="expand"
+          />
+          <RecipeTransition
+            v-for="transition in expandableTransitions"
+            :transition="transition"
+            :key="transition.id"
+            @expand="expand"
+          />
+        </div>
+      </div>
     </div>
-    <div class="stepTransitions">
-      <RecipeTransition v-for="transition in transitions" :transition="transition" :key="transition.id" />
+    <div class="subSteps" v-if="expandedTransition">
+      <RecipeStep
+        v-for="(transitions, index) in expandedTransition.subSteps"
+        :transitions="transitions"
+        :number="numberToLetter(index)"
+        :key="index"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import RecipeTransition from './RecipeTransition';
+import RecipeStep from './RecipeStep';
 
 export default {
+  name: 'RecipeStep',
   props: ['transitions', 'number'],
   components: {
-    RecipeTransition
+    RecipeTransition,
+    RecipeStep
+  },
+  data() {
+    return {
+      expandedTransition: null,
+    };
+  },
+  computed: {
+    unexpandableTransitions() {
+      return this.transitions.filter(t => !t.subSteps);
+    },
+    expandableTransitions() {
+      return this.transitions.filter(t => t.subSteps);
+    },
+  },
+  methods: {
+    numberToLetter(num) {
+      return String.fromCharCode(97 + num);
+    },
+
+    expand(transition) {
+      if (this.expandedTransition)
+        this.expandedTransition = null;
+      else
+        this.expandedTransition = transition;
+    }
   }
 }
 </script>
 
 <style scoped>
-  .step {
+  .stepWrapper {
     background-color: #3c3c3c;
     border-radius: 5px;
-    display: flex;
     margin: 10px;
     padding-top: 10px;
+  }
+
+  .subSteps {
+    padding-top: 10px;
+    border-top: dashed 1px #666;
+  }
+
+  .subSteps .stepWrapper {
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    background-color: inherit;
+  }
+
+  .step {
+    display: flex;
   }
 
   .step .stepNumber {
@@ -38,6 +104,11 @@ export default {
     color: #ccc;
     border-radius: 5px;
     width: 45px;
+  }
+
+  .subSteps .stepNumber {
+    margin-top: 25px;
+    font-size: 30px;
   }
 
   .stepTransitions {

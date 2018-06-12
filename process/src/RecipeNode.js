@@ -1,113 +1,115 @@
 "use strict";
 
 class RecipeNode {
-  constructor({object, availableTools, parent}) {
-    this.object = object;
-    this.availableTools = availableTools || [];
-    this.parents = [];
-    this.decaySeconds = 0;
-    if (parent)
-      this.parents.push(parent);
-  }
-
-  merge(node) {
-    this.parents = this.parents.concat(node.parents);
-  }
-
-  generateNodes() {
-    if (this.generated) return [];
-    this.generated = true;
-
-    if (this.isTool() || this.isIngredient())
-      return [];
-
-    this.addAvailableTools();
-
-    return this.generateNodesForTransition(this.object.transitionsToward[0]);
-  }
-
-  generateNodesForTransition(transition) {
-    if (!transition) return [];
-
-    // Collapse decay transitions
-    if (transition.autoDecaySeconds > 0) {
-      this.decaySeconds += parseInt(transition.autoDecaySeconds);
-      const nextTransition = transition.target.transitionsToward[0];
-      if (nextTransition.autoDecaySeconds > 0) {
-        return this.generateNodesForTransition(nextTransition);
+  static steps(nodes, expand = false) {
+    const steps = [];
+    for (let node of nodes) {
+      if (node.showInStep(expand)) {
+        if (!steps[node.depth])
+          steps[node.depth] = []
+        steps[node.depth].push(node.jsonData(expand));
       }
     }
-
-    const nodes = [];
-    if (transition.actor)
-      nodes.push(this.generateNode(transition.actor));
-    if (transition.target)
-      nodes.push(this.generateNode(transition.target));
-    return nodes;
+    return steps.filter(s => s).reverse();
   }
 
-  generateNode(object) {
-    return new RecipeNode({
-      object: object,
-      parent: this,
-      availableTools: this.availableTools}
-    );
+  constructor(object) {
+    this.object = object;
+    this.parents = [];
+    this.children = [];
+    this.depth = 0;
+    this.decaySeconds = 0;
+    this.tool = false;
+    this.collapsed = false;
+    this.expandable = false;
   }
 
-  showInStep() {
-    return !this.isTool() && !this.isIngredient();
+  addParent(parent) {
+    this.parents.push(parent);
+    this.updateDepth(parent.depth + 1);
+    if (parent.tool)
+      this.makeTool();
+    parent.children.push(this);
   }
 
-  isTool() {
-    return this.parentIsTool() || this.availableTools.includes(this.object);
+  updateDepth(depth) {
+    if (depth > this.depth) {
+      this.depth = depth;
+      this.children.forEach(child => child.updateDepth(depth + 1));
+    }
   }
 
-  parentIsTool() {
-    return this.parents.find(n => n.isTool());
+  makeTool() {
+    if (this.tool) return;
+    this.tool = true;
+    this.children.forEach(child => child.makeTool());
+  }
+
+  showInStep(expand) {
+    return !this.tool && !this.isIngredient() && (!this.collapsed || expand);
   }
 
   isIngredient() {
-    return !this.isTool() && (!this.object.depth.hasValue() || this.object.depth.difficulty == 0);
-  }
-
-  depth() {
-    if (this.parents.length == 0) return 0;
-    return this.parents.map(n => n.depth()).sort((a,b) => b-a)[0]+1;
+    return !this.tool && (!this.object.depth.hasValue() || this.object.depth.difficulty == 0);
   }
 
   count() {
-    if (this.isTool()) return 1;
+    if (this.tool) return 1;
     if (this.parents.length == 0) return 1;
     return this.parents.map(n => n.count()).reduce((t, c) => t + c, 0);
   }
 
-  addAvailableTools() {
-    const transition = this.object.transitionsToward[0];
-    this.addAvailableTool(transition.newActor, 0);
-    this.addAvailableTool(transition.newTarget, 0);
+  subNodes() {
+    if (!this.cachedSubNodes)
+      this.cachedSubNodes = this.calculateSubNodes();
+    return this.cachedSubNodes;
   }
 
-  addAvailableTool(object, depth) {
-    if (!object || object == this.object || this.availableTools.includes(object)) return;
-
-    if (object.depth.compare(this.object.depth) < 0)
-      this.availableTools.push(object);
-
-    if (depth > 5 || object.isNatural()) return;
-
-    // Search simple transitions for more tools
-    for (let transition of object.transitionsAway) {
-      if (transition.decay || !transition.actor || !transition.target) {
-        this.addAvailableTool(transition.newActor, depth+1);
-        this.addAvailableTool(transition.newTarget, depth+1);
+  calculateSubNodes() {
+    let subNodes = [];
+    for (let child of this.uniqueChildren()) {
+      if (child.canBeSubNode()) {
+        subNodes.push(child);
+        subNodes = subNodes.concat(child.subNodes());
       }
+    }
+    return subNodes;
+  }
+
+  canBeSubNode() {
+    return !this.tool && !this.isIngredient() && this.uniqueParents().length == 1;
+  }
+
+  subNodeDepth() {
+    if (this.subNodes().length == 0)
+      return 0;
+    return this.subNodes().map(n => n.depth).sort((a,b) => b - a)[0] - this.depth;
+  }
+
+  uniqueChildren() {
+    return this.children.filter((c,i) => this.children.indexOf(c) == i);
+  }
+
+  uniqueParents() {
+    return this.parents.filter((p,i) => this.parents.indexOf(p) == i);
+  }
+
+  collapse() {
+    this.expandable = true;
+    for (let node of this.subNodes()) {
+      node.collapsed = true;
     }
   }
 
-  jsonData() {
+  jsonData(expand = false) {
     const data = {id: this.object.id};
     if (this.count() > 1)
       data.count = this.count();
+
+    if (!expand && this.expandable) {
+      data.subSteps = this.subSteps();
+      return data;
+    }
 
     const transition = this.object.transitionsToward[0];
     if (transition.actor)
@@ -124,6 +126,10 @@ class RecipeNode {
       data.targetPlayer = true;
 
     return data;
+  }
+
+  subSteps() {
+    return RecipeNode.steps([this].concat(this.subNodes()), true);
   }
 }
 
