@@ -1,7 +1,15 @@
 <template>
   <div class="recipeTransition">
     <!-- What object is being used -->
-    <div class="leftSide">
+    <div class="leftSide" v-if="transition.subSteps">
+      <div class="expandButton"
+          :class="{active: expanded}"
+          title="Expand Recipe" v-tippy
+          @click="expand()">
+        <img src="../assets/recipe.png" width="41" height="42" />
+      </div>
+    </div>
+    <div class="leftSide" v-else>
       <ObjectImage class="recipeTransitionObject"
                   v-if="transition.decay"
                   hover="true"
@@ -56,6 +64,11 @@ export default {
   components: {
     ObjectImage
   },
+  data() {
+    return {
+      expanded: false,
+    };
+  },
   computed: {
     showPlus() {
       return this.transition.actorID || this.transition.decay || this.transition.hand;
@@ -72,6 +85,12 @@ export default {
     resultCount() {
       if (this.transition.count)
         return `x${this.transition.count}`;
+    }
+  },
+  methods: {
+    expand() {
+      this.expanded = !this.expanded;
+      this.$emit("expand", this.transition);
     }
   }
 }
@@ -143,6 +162,30 @@ export default {
     margin: -10px;
     margin-left: 0;
     margin-right: 0;
+  }
+
+  .expandButton {
+    height: 70px;
+    background-color: #555;
+    border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .expandButton:hover {
+    border: 1px solid #aaa;
+    background-color: #666;
+  }
+  .expandButton.active {
+    border: 1px solid #aaa;
+    background-color: #222;
+  }
+
+  .stepsCount {
+    padding-left: 15px;
+    font-size: 24px;
   }
 
 </style>
