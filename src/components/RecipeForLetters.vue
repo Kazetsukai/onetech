@@ -8,7 +8,7 @@
       <div class="signSize" :class="{selected: !small}" @click="selectBig">Big Sign</div>
     </div>
 
-    <textarea class="message" id="messageArea" @keyup="update" :rows="rows" :cols="cols" :maxLength="maxLength" autofocus></textarea>
+    <textarea class="message" id="messageArea" @keyup="update" :rows="rows" :cols="cols+1" :maxLength="maxLength" autofocus></textarea>
 
     <h3 v-if="loading">Loading...</h3>
     <div v-else-if="objects.length" class="steps">
@@ -104,7 +104,13 @@ export default {
       const length = textarea.value.length;
       let selectionStart = textarea.selectionStart;
       let selectionEnd = textarea.selectionEnd;
-      textarea.value = textarea.value.toUpperCase().replace(/ /g, "-").replace(/[^A-Z-]/g, "").match(rowRegex).join("\r\n").substring(0, this.maxLength);
+      textarea.value = textarea.value.toUpperCase()
+        .replace(/ /g, "-")
+        .replace(/–/g, "--") // Since mobile converts -- to hyphen
+        .replace(/[^A-Z-]/g, "")
+        .match(rowRegex)
+        .join("\r\n")
+        .substring(0, this.maxLength);
       if (textarea.value.length > length) {
         selectionStart += 2;
         selectionEnd += 2;
