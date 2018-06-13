@@ -106,7 +106,7 @@ export default {
       let selectionEnd = textarea.selectionEnd;
       textarea.value = textarea.value.toUpperCase()
         .replace(/ /g, "-")
-        .replace(/–/g, "--") // Since mobile converts -- to hyphen
+        .replace(/—/g, "--") // Since mobile converts -- to hyphen
         .replace(/[^A-Z-]/g, "")
         .match(rowRegex)
         .join("\r\n")
