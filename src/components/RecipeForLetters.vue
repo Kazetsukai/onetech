@@ -8,7 +8,7 @@
       <div class="signSize" :class="{selected: !small}" @click="selectBig">Big Sign</div>
     </div>
 
-    <textarea class="message" id="messageArea" @keyup="update" :rows="rows" :cols="cols+1" :maxLength="maxLength" autofocus></textarea>
+    <textarea class="message" id="messageArea" @keyup="update" :rows="rows" :cols="cols+1" :maxLength="maxLength" autofocus autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
 
     <h3 v-if="loading">Loading...</h3>
     <div v-else-if="objects.length" class="steps">
@@ -106,7 +106,8 @@ export default {
       let selectionEnd = textarea.selectionEnd;
       textarea.value = textarea.value.toUpperCase()
         .replace(/ /g, "-")
-        .replace(/—/g, "--") // Since mobile converts -- to hyphen
+        .replace("–", "--") // Some systems convert -- to en dash
+        .replace("—", "--") // Some systems convert -- to em dash
         .replace(/[^A-Z-]/g, "")
         .match(rowRegex)
         .join("\r\n")
