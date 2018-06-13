@@ -5,6 +5,7 @@
       <h3>{{object.subName()}}</h3>
       <ObjectImage :object="object" scaleUpTo="128" />
       <h3 v-if="!object.data">Loading...</h3>
+
       <ul v-if="object.data">
         <li v-if="object.data.foodValue">Food: {{object.data.foodValue}}</li>
         <li v-if="object.data.heatValue">Heat: {{object.data.heatValue}}</li>
@@ -22,9 +23,16 @@
           <span class="helpTip" v-tippy :title="difficultyTip">?</span>
         </li>
         <li v-if="containerText">{{containerText}}</li>
-        <li v-if="version">Added in {{version}}</li>
+        <li v-if="object.data.version">
+          Added in
+          <router-link :to="versionUrl">v{{object.data.version}}</router-link>
+        </li>
+        <li v-else-if="modName">
+          Added in {{modName}}
+        </li>
         <li v-else>Unreleased</li>
       </ul>
+
       <div class="actions" v-if="object.data">
         <router-link :to="object.url('tech-tree')" v-if="object.data.techTree" title="Tech Tree" v-tippy>
           <img src="../assets/techtree.png" width="38" height="36" />
@@ -151,11 +159,11 @@ export default {
     isLetterOrSign() {
       return this.object.name.includes("Letter") || this.object.name.includes("Sign");
     },
-    version() {
-      if (this.object.data.version)
-        return `v${this.object.data.version}`;
-      if (process.env.ONETECH_MOD_NAME)
-        return process.env.ONETECH_MOD_NAME;
+    versionUrl() {
+      return "/versions/" + this.object.data.version;
+    },
+    modName() {
+      return process.env.ONETECH_MOD_NAME;
     }
   },
   metaInfo() {

@@ -1,6 +1,12 @@
 <template>
   <div class="changeLog">
     <ChangeLogVersion v-for="id in versionIds" :id="id" :key="id" />
+    <div class="showMore">
+      <span class="showMoreLink" @click="showMore" v-if="!singleVersion">
+        Show More
+      </span>
+      <router-link v-else to="/versions">Show All Versions</router-link>
+    </div>
   </div>
 </template>
 
@@ -16,7 +22,7 @@ export default {
   },
   data() {
     return {
-      limit: 5,
+      limit: 3,
     };
   },
   created () {
@@ -46,11 +52,14 @@ export default {
       } else {
         this.loadingMore = false;
       }
+    },
+    showMore() {
+      this.limit += 3;
     }
   },
   metaInfo() {
-    if (this.$route.params.id)
-      return {title: `Version ${this.$route.params.id}`};
+    if (this.singleVersion)
+      return {title: `Version ${this.singleVersion}`};
     return {title: "Change Log"};
   }
 }
@@ -58,5 +67,17 @@ export default {
 
 <style scoped>
   .changeLog {
+    margin-bottom: 10px;
+  }
+
+  .showMore {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 18px;
+  }
+
+  .showMoreLink {
+    text-decoration: underline;
+    cursor: pointer;
   }
 </style>

@@ -1,15 +1,17 @@
 <template>
   <ObjectImageWrapper
       className="imgContainer"
-      :clickable="clickable"
+      :clickable="clickable && !legacy"
       :title="title"
       :object="object">
     <div v-if="hand" class="hand" :style="object ? {} : { width: '100%', height: '100%' }" />
+    <div v-if="legacy" class="removed" />
     <div v-if="player" class="player" />
+    <div v-if="wildcard" class="wildcard"></div>
     <div v-if="uses" class="uses">{{uses}}</div>
     <div v-if="decay" class="decay"><span>{{decay}}</span></div>
     <div v-if="ground" class="ground"></div>
-    <div v-if="object" class="image">
+    <div v-if="object && !legacy" class="image">
       <img :id="imageID" :src="imageUrl" :alt="title" />
     </div>
   </ObjectImageWrapper>
@@ -29,6 +31,7 @@ export default {
     'ground',
     'uses',
     'player',
+    'wildcard',
     'scaleUpTo'
   ],
   components: {
@@ -37,6 +40,7 @@ export default {
   mounted() { // Enlarge small images up to a certain amount
     if (!this.scaleUpTo) return;
     const img = document.getElementById(this.imageID);
+    if (!img) return;
     img.onload = () => {
       let multiplier = this.scaleUpTo/Math.max(img.naturalWidth, img.naturalHeight);
       if (multiplier < 1.0) {
@@ -59,6 +63,9 @@ export default {
     imageID () {
       return ["image", this.object.id, Math.random().toString(36).substr(2, 7)].join("-");
     },
+    legacy () {
+      return this.object && this.object.legacy;
+    },
     title () {
       if (!this.hover)
         return '';
@@ -71,6 +78,9 @@ export default {
 
       if (this.player)
         return "Player"
+
+      if (this.wildcard)
+        return "Wildcard Object"
 
       if (this.hand)
         return "Empty hands"
@@ -137,6 +147,24 @@ export default {
     background-repeat: no-repeat;
     background-position: center center;
     background-image: url('../assets/player.png');
+  }
+
+  .removed {
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-image: url('../assets/removed.png');
+  }
+
+  .wildcard {
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-image: url('../assets/wildcard.png');
   }
 
   .uses {

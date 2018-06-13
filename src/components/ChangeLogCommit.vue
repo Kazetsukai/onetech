@@ -3,16 +3,20 @@
     <div class="message">
       <div class="messageContent">{{commit.message}}</div>
       <div class="messageDate">{{date}}</div>
+      <div v-if="hasChanges" class="collapse" @click="toggleCollapse">
+        <span v-if="collapsed">&#x25C0;</span>
+        <span v-else>&#x25BC;</span>
+      </div>
     </div>
 
-    <div v-if="commit.removedObjectIDs" class="objectsList">
+    <div v-if="!collapsed && commit.removedObjectIDs" class="objectsList">
       <h3>Removed Objects</h3>
       <div class="objects">
         <div v-for="object in removedObjects" class="objectWrapper">
-          <router-link class="object" :to="object.url()">
+          <div class="object">
             <ObjectImage :object="object" scaleUpTo="80" />
             <div class="name">{{object.name}}</div>
-          </router-link>
+          </div>
         </div>
       </div>
       <div v-if="commit.removedObjectIDs.length > objectLimit" class="showMore">
@@ -20,11 +24,14 @@
       </div>
     </div>
 
-    <div v-if="commit.addedObjectIDs" class="objectsList">
+    <div v-if="!collapsed && commit.addedObjectIDs" class="objectsList">
       <h3>Added Objects</h3>
       <div class="objects">
         <div v-for="object in addedObjects" v-if="object" class="objectWrapper">
-          <router-link class="object" :to="object.url()">
+          <router-link class="object"
+              :to="object.url()"
+              :class="{disabled: object.legacy}"
+              :event="object.legacy ? '' : 'click'">
             <ObjectImage :object="object" scaleUpTo="80" />
             <div class="name">{{object.name}}</div>
           </router-link>
@@ -35,7 +42,7 @@
       </div>
     </div>
 
-    <div v-if="commit.removedTransitions">
+    <div v-if="!collapsed && commit.removedTransitions">
       <h3>Removed Transitions</h3>
       <div class="transitions">
         <div v-for="(transition, index) in removedTransitions"
@@ -50,7 +57,7 @@
       </div>
     </div>
 
-    <div v-if="commit.addedTransitions">
+    <div v-if="!collapsed && commit.addedTransitions">
       <h3>Added Transitions</h3>
       <div class="transitions">
         <div v-for="(transition, index) in addedTransitions"
@@ -65,7 +72,7 @@
       </div>
     </div>
 
-    <div v-if="commit.objectChanges" class="objectChanges">
+    <div v-if="!collapsed && commit.objectChanges" class="objectChanges">
       <h3>Changed Objects</h3>
       <div class="objects">
         <div v-for="change in objectChanges"
@@ -102,6 +109,7 @@ export default {
       objectLimit: 8,
       transitionLimit: 6,
       objectChangeLimit: 6,
+      collapsed: false
     };
   },
   created() {
@@ -125,6 +133,13 @@ export default {
     },
     objectChanges() {
       return this.commit.objectChanges.slice(0, this.objectChangeLimit);
+    },
+    hasChanges() {
+      return this.commit.addedObjectIDs
+        || this.commit.removedObjectIDs
+        || this.commit.addedTransitions
+        || this.commit.removedTransitions
+        || this.commit.objectChanges;
     },
     date() {
       const date = new Date(this.commit.date);
@@ -150,6 +165,9 @@ export default {
     showMoreObjectChanges() {
       this.objectChangeLimit += 24;
     },
+    toggleCollapse() {
+      this.collapsed = !this.collapsed;
+    }
   }
 }
 </script>
@@ -179,6 +197,12 @@ export default {
   .changeLogCommit .messageDate {
     padding-left: 20px;
     color: #999;
+  }
+
+  .changeLogCommit .collapse {
+    color: #ccc;
+    padding-left: 10px;
+    cursor: pointer;
   }
 
   .changeLogCommit h3 {
@@ -217,9 +241,16 @@ export default {
     text-decoration: inherit;
     color: inherit;
   }
-  .changeLogCommit .object:hover {
+  .changeLogCommit a.object:hover {
     border: 1px solid #eee;
     background-color: #222;
+  }
+  .changeLogCommit a.object.disabled {
+    cursor: default;
+  }
+  .changeLogCommit a.object.disabled:hover {
+    border: 1px solid transparent;
+    background-color: #333;
   }
 
   .changeLogCommit .object .name {

@@ -57,10 +57,45 @@ class ChangeLogCommit {
     if (mode == "A") {
       const transition = this.createTransition(path, mode);
       this.addedTransitions.push(transition);
+      this.trackLegacyObjectsInTransition(transition, mode);
     } else if (mode == "D") {
       const transition = this.createTransition(path, mode);
       this.removedTransitions.push(transition);
+      this.trackLegacyObjectsInTransition(transition, mode);
+    } else if (mode == "M") {
+      const newTransition = this.createTransition(path, "A");
+      const oldTransition = this.createTransition(path, "D");
+      if (this.isSignificantChange(oldTransition, newTransition)) {
+        this.parseTransitionChange(path, "D");
+        this.parseTransitionChange(path, "A");
+      }
     }
+  }
+
+  isSignificantChange(oldTransition, newTransition) {
+    if (oldTransition.actorID != newTransition.actorID)
+      return true;
+    if (oldTransition.targetID != newTransition.targetID)
+      return true;
+    if (oldTransition.newActorID != newTransition.newActorID)
+      return true;
+    if (oldTransition.newTargetID != newTransition.newTargetID)
+      return true;
+    if (oldTransition.decay != newTransition.decay)
+      return true;
+    return false;
+  }
+
+  trackLegacyObjectsInTransition(transition, mode) {
+    this.trackLegacyObject(transition.actorID, mode);
+    this.trackLegacyObject(transition.targetID, mode);
+    this.trackLegacyObject(transition.newActorID, mode);
+    this.trackLegacyObject(transition.newTargetID, mode);
+  }
+
+  trackLegacyObject(id, mode) {
+    if (id > 1)
+      this.lookupObject(`objects/${id}.txt`, mode);
   }
 
   lookupObject(path, mode) {
@@ -99,8 +134,25 @@ class ChangeLogCommit {
       this.objectChanges.push(this.objectChange(before, after));
   }
 
+  ignoredAttributes() {
+    return [
+      "slotPos",
+      "pixHeight",
+      "parent",
+      "sounds",
+      "useVanishIndex",
+      "useAppearIndex",
+      "heldOffset",
+      "creationSoundInitialOnly",
+      "floorHugging",
+      "vertSlotRot",
+      "permanent",
+      "drawBehindPlayer"
+    ];
+  }
+
   objectChange(before, after) {
-    const ignore = ["slotPos", "pixHeight", "parent", "sounds"];
+    const ignore = this.ignoredAttributes();
     const attributes = {};
     for (let attribute in after.data) {
       if (ignore.includes(attribute))
@@ -156,6 +208,10 @@ class ChangeLogCommit {
 
   transitionData(transition) {
     const data = {};
+    this.trackLegacyObject(transition.actorID);
+    this.trackLegacyObject(transition.targetID);
+    this.trackLegacyObject(transition.newActorID);
+    this.trackLegacyObject(transition.newTargetID);
     if (transition.actorID)       data.actorID = transition.actorID;
     if (transition.targetID)      data.targetID = transition.targetID;
     if (transition.newActorID)    data.newActorID = transition.newActorID;
@@ -168,7 +224,7 @@ class ChangeLogCommit {
   }
 
   legacyObjectData(object) {
-    return {id: object.id, name: object.name};
+    return {id: object.id, name: object.name, category: !!object.category};
   }
 }
 

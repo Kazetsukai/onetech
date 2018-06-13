@@ -25,6 +25,7 @@
                   hover="true"
                   :object="target"
                   :uses="transition.targetUses"
+                  :wildcard="wildcard"
                   :clickable="transition.targetID && target != selectedObject" />
 
       <ObjectImage class="transitionObject"
@@ -34,7 +35,7 @@
 
       <ObjectImage class="transitionObject"
                   v-else
-                  ground="true"
+                  :ground="true"
                   hover="true" />
     </div>
 
@@ -43,7 +44,7 @@
     <div class="rightSide">
       <!-- What does the used object become? -->
       <ObjectImage class="transitionObject"
-                  v-if="!transition.decay && (!transition.tool || transition.newActorUses)"
+                  v-if="showNewActor"
                   hand="true" hover="true"
                   :uses="transition.newActorUses"
                   :object="newActor"
@@ -56,13 +57,14 @@
                   v-if="transition.newTargetID && (!transition.targetRemains || transition.newTargetUses)"
                   hover="true"
                   :uses="transition.newTargetUses"
+                  :wildcard="wildcard"
                   :object="newTarget"
                   :extraObject="newExtraTarget"
                   :clickable="newTarget && newTarget != selectedObject" />
 
       <ObjectImage class="transitionObject"
                   v-else
-                  ground="true"
+                  :ground="true"
                   hover="true" />
     </div>
   </div>
@@ -100,6 +102,12 @@ export default {
     newExtraTarget () {
       return GameObject.find(this.transition.newExtraTargetID);
     },
+    showNewActor() {
+      return !this.transition.decay && (!this.transition.tool || this.transition.newActorUses);
+    },
+    wildcard() {
+      return this.showNewActor && (this.transition.targetID || 0) < 1 && (this.transition.newTargetID || 0) < 1;
+    }
   }
 }
 </script>
