@@ -11,7 +11,7 @@ class SitemapGenerator {
   }
 
   generate(objects) {
-    const sitemap = sm.createSitemap({hostname: 'http://onetech.info'});
+    const sitemap = sm.createSitemap({hostname: 'https://onetech.info'});
 
     sitemap.add({url: "/"});
 

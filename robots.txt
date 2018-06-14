@@ -1,1 +1,1 @@
-Sitemap: http://onetech.info/sitemap.xml
+Sitemap: https://onetech.info/sitemap.xml
