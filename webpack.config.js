@@ -2,7 +2,7 @@ var path = require('path')
 var webpack = require('webpack')
 var fs = require('fs')
 
-var rootPath = process.env.NODE_ENV === 'development' ? "/" : "/onetech/";
+var rootPath = "/";
 var mod = process.env.ONETECH_MOD_NAME ? "-mod" : "";
 
 if (process.env.NODE_ENV === 'development' && fs.existsSync(`static${mod}-dev`))

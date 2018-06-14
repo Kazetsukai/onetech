@@ -2,7 +2,7 @@
 
 > One Hour One Life Crafting Reference
 
-View here: https://kazetsukai.github.io/onetech
+View here: http://onetech.info
 
 This site is built using the game data directly from [the game data repository](https://github.com/jasonrohrer/OneLifeData7).
 It shows the relationships between items, and lets you explore how things are crafted.

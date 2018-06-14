@@ -1,1 +1,1 @@
-Sitemap: https://kazetsukai.github.io/onetech/sitemap.xml
+Sitemap: http://onetech.info/sitemap.xml
