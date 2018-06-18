@@ -29,10 +29,10 @@ class RecipeGenerator {
     if (!transition) return;
 
     // Collapse decay transitions
-    if (transition.autoDecaySeconds > 0) {
-      parent.decaySeconds += parseInt(transition.autoDecaySeconds);
+    if (transition.totalDecaySeconds() > 0) {
+      parent.decaySeconds += parseInt(transition.totalDecaySeconds());
       const nextTransition = transition.target.transitionsToward[0];
-      if (nextTransition.autoDecaySeconds > 0) {
+      if (nextTransition.totalDecaySeconds() > 0) {
         return this.generateTransitionNodes(nextTransition, parent);
       }
     }

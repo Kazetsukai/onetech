@@ -99,6 +99,12 @@ class Transition {
     return this.targetID === '0' || this.targetID === '-1' && this.actor.data.foodValue > 0;
   }
 
+  totalDecaySeconds() {
+    if (this.autoDecaySeconds > 0 && this.target.data.numUses > 1 && this.lastUseTarget)
+      return parseInt(this.autoDecaySeconds) * this.target.data.numUses;
+    return this.autoDecaySeconds;
+  }
+
   clone() {
     return Object.assign(Object.create(Object.getPrototypeOf(this)), this);
   }
