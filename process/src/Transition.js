@@ -73,6 +73,24 @@ class Transition {
     return this.targetID === '-1' && this.newTargetID === '0' && this.actorID != this.newActorID;
   }
 
+  matchesGenericTransition(transition) {
+    if (this == transition)
+      return false;
+    return this.matchesGenericActor(transition) || this.matchesGenericTarget(transition);
+  }
+
+  matchesGenericActor(transition) {
+    if (transition.lastUseActor && !this.lastUseActor)
+      return false;
+    return this.actorID == transition.actorID && this.tool && this.targetID > 0;
+  }
+
+  matchesGenericTarget(transition) {
+    if (transition.lastUseActor && !this.lastUseTarget)
+      return false;
+    return this.targetID == transition.actorID && this.targetRemains && this.actorID > 0;
+  }
+
   isLastUse() {
     return this.lastUseActor || this.lastUseTarget;
   }

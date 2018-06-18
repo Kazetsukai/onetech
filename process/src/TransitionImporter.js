@@ -89,24 +89,36 @@ class TransitionImporter {
   }
 
   mergeGenericTransition(transition, newTransitions) {
-    const toolTransitions = this.transitions.filter(t => t != transition && t.actorID == transition.actorID && t.tool && t.targetID > 0);
+    const otherTransitions = this.transitions.filter(t => t.matchesGenericTransition(transition));
 
-    if (toolTransitions.length == 0) {
+    if (otherTransitions.length == 0) {
       newTransitions.push(transition);
       return;
     }
 
-    for (let otherTransition of toolTransitions) {
+    for (let otherTransition of otherTransitions) {
       // Clone last use transition since it doesn't always take effect
       if (transition.lastUseActor) {
         const newTransition = transition.clone();
-        newTransition.targetID = otherTransition.targetID;
-        newTransition.newTargetID = otherTransition.newTargetID;
-        newTransition.targetRemains = otherTransition.targetRemains;
+        if (otherTransition.matchesGenericActor(transition)) {
+          newTransition.targetID = otherTransition.targetID;
+          newTransition.newTargetID = otherTransition.newTargetID;
+          newTransition.targetRemains = otherTransition.targetRemains;
+        } else {
+          newTransition.targetID = newTransition.actorID;
+          newTransition.newTargetID = newTransition.newActorID;
+          newTransition.targetRemains = newTransition.tool;
+          newTransition.actorID = otherTransition.actorID;
+          newTransition.newActorID = otherTransition.newActorID;
+          newTransition.tool = otherTransition.tool;
+        }
         newTransitions.push(newTransition);
-      } else {
+      } else if (otherTransition.matchesGenericActor(transition)) {
         otherTransition.newActorID = transition.newActorID;
         otherTransition.tool = transition.tool;
+      } else {
+        otherTransition.newTargetID = transition.newActorID;
+        otherTransition.targetRemains = transition.tool;
       }
     }
   }
