@@ -16,16 +16,16 @@ class SitemapGenerator {
     sitemap.add({url: "/"});
 
     for (let filter of ObjectFilters.filters) {
-      sitemap.add({url: `/filter/${filter.key}`});
+      sitemap.add({url: `/?p=/filter/${filter.key}`});
     }
 
     for (let object of objects) {
       const path = encodeURIComponent(`${object.id}-${object.name.replace(/\W+/g, '-')}`);
       if (object.isVisible()) {
-        sitemap.add({url: `/${path}`});
+        sitemap.add({url: `/?p=/${path}`});
         if (!object.isNatural() && object.transitionsToward[0]) {
-          sitemap.add({url: `/${path}/tech-tree`});
-          sitemap.add({url: `/${path}/recipe`});
+          sitemap.add({url: `/?p=/${path}/tech-tree`});
+          sitemap.add({url: `/?p=/${path}/recipe`});
         }
       }
     }
