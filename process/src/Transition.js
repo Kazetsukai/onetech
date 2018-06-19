@@ -80,8 +80,6 @@ class Transition {
   }
 
   matchesGenericActor(transition) {
-    if (transition.lastUseActor && !this.lastUseActor)
-      return false;
     return this.actorID == transition.actorID && this.tool && this.targetID > 0;
   }
 
