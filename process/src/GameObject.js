@@ -184,7 +184,10 @@ class GameObject {
 
   isWaterSource() {
     for (var transition of this.transitionsAway) {
-      if (transition.actorID == '209' && transition.target == this && (transition.tool || transition.targetRemains)) return true;
+      if (transition.actorID == '209' // Empty water pouch
+        && transition.newActorID == '210' // Full water pouch
+        && transition.target == this
+        && (transition.tool || transition.targetRemains)) return true;
     }
     return false;
   }
