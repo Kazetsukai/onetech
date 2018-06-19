@@ -37,7 +37,7 @@ export default {
     badgeText(badge) {
       switch (badge.key) {
         case "clothing":  return `${badge.value} insulation`;
-        case "food":      return `${badge.value} food value`;
+        case "food":      return this.foodBadgeText(badge.value);
         case "tool":      return `Tool with ${badge.value || "infinite"} uses`;
         case "container": return `Holds ${badge.value} items`;
         case "heat":      return `Emits ${badge.value} heat`;
@@ -45,6 +45,13 @@ export default {
         case "natural":   return "Spawns naturally";
         default:          throw `Unknown badge key: ${badge.key}`;
       }
+    },
+    foodBadgeText(value) {
+      const parts = value.toString().split(" x ");
+      parts[0] += " food value";
+      if (parts[1])
+        parts[1] += " uses";
+      return parts.join(", ");
     }
   }
 }
