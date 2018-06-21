@@ -1,1 +1,1 @@
-{"id":"797","name":"Wound Blood","transitionsToward":[],"transitionsAway":[],"transitionsTimed":[],"version":75}
+{"id":"797","name":"Knife Wound","transitionsToward":[],"transitionsAway":[{"actorID":"1378","targetID":"797","newActorID":"1379","newTargetID":"1380"}],"transitionsTimed":[],"version":75}

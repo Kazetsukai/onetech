@@ -1,0 +1,1 @@
+{"id":"1377","name":"Snake Bite","transitionsToward":[{"actorID":"764","newActorID":"1385","newTargetID":"1377","targetPlayer":true}],"transitionsAway":[{"actorID":"1378","targetID":"1377","newActorID":"1379","newTargetID":"1384"}],"transitionsTimed":[],"version":113,"depth":1,"techTree":[{"id":"764","nodes":null}]}
