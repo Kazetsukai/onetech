@@ -1,0 +1,1 @@
+{"id":"1608","name":"Pressed Wood Pulp","transitionsToward":[{"actorID":"291","targetID":"1607","newTargetID":"1608"}],"transitionsAway":[{"targetID":"1608","newActorID":"291","newTargetID":"1609","hand":true}],"transitionsTimed":[],"version":132,"depth":0,"mapChance":1,"biomes":[3,5]}

@@ -1,0 +1,1 @@
+{"id":"1609","name":"Flat Rock with Paper","transitionsToward":[{"targetID":"1608","newActorID":"291","newTargetID":"1609","hand":true}],"transitionsAway":[{"targetID":"1609","newActorID":"1619","newTargetID":"291","hand":true}],"transitionsTimed":[],"version":132,"depth":0,"mapChance":1,"biomes":[3,5]}
