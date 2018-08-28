@@ -1,0 +1,1 @@
+{"id":134,"date":"2018-08-28T03:17:54.000Z","commits":[{"sha":"4c795ef82e48fa198570c437948e4a05ddb50209","message":"Fixed so that dropped note-arrow isn't deadly by itself.","date":"2018-08-28T03:15:02.000Z","objectChanges":[{"id":"1626","attributes":{"deadlyDistance":{"from":3,"to":0},"useDistance":{"from":5,"to":1}}}]}]}
