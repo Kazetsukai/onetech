@@ -1,0 +1,1 @@
+{"id":144,"date":"2018-09-21T00:31:35.000Z","commits":[{"sha":"146fc8100139c259dec1b496d6cd683e4fc9bf6e","message":"Whoops... flat rocks stacks shouldn't spawn.","date":"2018-09-21T00:11:19.000Z","objectChanges":[{"id":"1836","attributes":{"mapChance":{"from":1,"to":0}}}]}]}
