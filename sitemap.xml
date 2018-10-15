@@ -1211,9 +1211,9 @@
 <url> <loc>https://onetech.info?p=/557-Two-Shafts</loc> </url>
 <url> <loc>https://onetech.info?p=/557-Two-Shafts/tech-tree</loc> </url>
 <url> <loc>https://onetech.info?p=/557-Two-Shafts/recipe</loc> </url>
-<url> <loc>https://onetech.info?p=/558-Open-Fence</loc> </url>
-<url> <loc>https://onetech.info?p=/558-Open-Fence/tech-tree</loc> </url>
-<url> <loc>https://onetech.info?p=/558-Open-Fence/recipe</loc> </url>
+<url> <loc>https://onetech.info?p=/558-Open-Fence-Gate</loc> </url>
+<url> <loc>https://onetech.info?p=/558-Open-Fence-Gate/tech-tree</loc> </url>
+<url> <loc>https://onetech.info?p=/558-Open-Fence-Gate/recipe</loc> </url>
 <url> <loc>https://onetech.info?p=/559-Steel-Blade</loc> </url>
 <url> <loc>https://onetech.info?p=/559-Steel-Blade/tech-tree</loc> </url>
 <url> <loc>https://onetech.info?p=/559-Steel-Blade/recipe</loc> </url>
@@ -2109,11 +2109,7 @@
 <url> <loc>https://onetech.info?p=/930-Clump-of-Scrap-Steel/tech-tree</loc> </url>
 <url> <loc>https://onetech.info?p=/930-Clump-of-Scrap-Steel/recipe</loc> </url>
 <url> <loc>https://onetech.info?p=/933-Fence-just-closed</loc> </url>
-<url> <loc>https://onetech.info?p=/933-Fence-just-closed/tech-tree</loc> </url>
-<url> <loc>https://onetech.info?p=/933-Fence-just-closed/recipe</loc> </url>
 <url> <loc>https://onetech.info?p=/934-Fence-Rail</loc> </url>
-<url> <loc>https://onetech.info?p=/934-Fence-Rail/tech-tree</loc> </url>
-<url> <loc>https://onetech.info?p=/934-Fence-Rail/recipe</loc> </url>
 <url> <loc>https://onetech.info?p=/935-Sapling-with-Cutting</loc> </url>
 <url> <loc>https://onetech.info?p=/935-Sapling-with-Cutting/tech-tree</loc> </url>
 <url> <loc>https://onetech.info?p=/935-Sapling-with-Cutting/recipe</loc> </url>
@@ -4359,4 +4355,13 @@
 <url> <loc>https://onetech.info?p=/1849-Buried-Grave-with-Dug-Stone-origGrave</loc> </url>
 <url> <loc>https://onetech.info?p=/1849-Buried-Grave-with-Dug-Stone-origGrave/tech-tree</loc> </url>
 <url> <loc>https://onetech.info?p=/1849-Buried-Grave-with-Dug-Stone-origGrave/recipe</loc> </url>
+<url> <loc>https://onetech.info?p=/1850-Kindling-Pile-just-chopped</loc> </url>
+<url> <loc>https://onetech.info?p=/1850-Kindling-Pile-just-chopped/tech-tree</loc> </url>
+<url> <loc>https://onetech.info?p=/1850-Kindling-Pile-just-chopped/recipe</loc> </url>
+<url> <loc>https://onetech.info?p=/1851-Fence-Gate</loc> </url>
+<url> <loc>https://onetech.info?p=/1851-Fence-Gate/tech-tree</loc> </url>
+<url> <loc>https://onetech.info?p=/1851-Fence-Gate/recipe</loc> </url>
+<url> <loc>https://onetech.info?p=/1852-Fence-with-Dislodged-Shaft</loc> </url>
+<url> <loc>https://onetech.info?p=/1852-Fence-with-Dislodged-Shaft/tech-tree</loc> </url>
+<url> <loc>https://onetech.info?p=/1852-Fence-with-Dislodged-Shaft/recipe</loc> </url>
 </urlset>
