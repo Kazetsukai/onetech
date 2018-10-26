@@ -1,0 +1,1 @@
+{"id":"1890","name":"Lapis Lazuli","transitionsToward":[{"targetID":"1892","newActorID":"1890","newTargetID":"235","hand":true}],"transitionsAway":[{"actorID":"1890","targetID":"235","newTargetID":"1892"}],"transitionsTimed":[],"version":158,"depth":0,"mapChance":0.02,"biomes":[5],"size":1}

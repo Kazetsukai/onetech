@@ -1,0 +1,1 @@
+{"id":"1891","name":"Cinnabar","transitionsToward":[{"targetID":"1893","newActorID":"1891","newTargetID":"235","hand":true}],"transitionsAway":[{"actorID":"1891","targetID":"235","newTargetID":"1893"}],"transitionsTimed":[],"version":158,"depth":0,"mapChance":0.03,"biomes":[5],"size":1}
