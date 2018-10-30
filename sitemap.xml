@@ -129,9 +129,9 @@
 <url> <loc>https://onetech.info?p=/86-Ashes</loc> </url>
 <url> <loc>https://onetech.info?p=/86-Ashes/tech-tree</loc> </url>
 <url> <loc>https://onetech.info?p=/86-Ashes/recipe</loc> </url>
-<url> <loc>https://onetech.info?p=/87-Fresh-Grave-origGrave</loc> </url>
-<url> <loc>https://onetech.info?p=/87-Fresh-Grave-origGrave/tech-tree</loc> </url>
-<url> <loc>https://onetech.info?p=/87-Fresh-Grave-origGrave/recipe</loc> </url>
+<url> <loc>https://onetech.info?p=/87-Fresh-Grave-origGrave-fromDeath</loc> </url>
+<url> <loc>https://onetech.info?p=/87-Fresh-Grave-origGrave-fromDeath/tech-tree</loc> </url>
+<url> <loc>https://onetech.info?p=/87-Fresh-Grave-origGrave-fromDeath/recipe</loc> </url>
 <url> <loc>https://onetech.info?p=/88-Grave-origGrave</loc> </url>
 <url> <loc>https://onetech.info?p=/88-Grave-origGrave/tech-tree</loc> </url>
 <url> <loc>https://onetech.info?p=/88-Grave-origGrave/recipe</loc> </url>
@@ -1674,9 +1674,9 @@
 <url> <loc>https://onetech.info?p=/750-Bloody-Knife</loc> </url>
 <url> <loc>https://onetech.info?p=/750-Bloody-Knife/tech-tree</loc> </url>
 <url> <loc>https://onetech.info?p=/750-Bloody-Knife/recipe</loc> </url>
-<url> <loc>https://onetech.info?p=/752-Murder-Grave-origGrave</loc> </url>
-<url> <loc>https://onetech.info?p=/752-Murder-Grave-origGrave/tech-tree</loc> </url>
-<url> <loc>https://onetech.info?p=/752-Murder-Grave-origGrave/recipe</loc> </url>
+<url> <loc>https://onetech.info?p=/752-Murder-Grave-origGrave-fromDeath</loc> </url>
+<url> <loc>https://onetech.info?p=/752-Murder-Grave-origGrave-fromDeath/tech-tree</loc> </url>
+<url> <loc>https://onetech.info?p=/752-Murder-Grave-origGrave-fromDeath/recipe</loc> </url>
 <url> <loc>https://onetech.info?p=/753-Adobe-Rubble</loc> </url>
 <url> <loc>https://onetech.info?p=/753-Adobe-Rubble/tech-tree</loc> </url>
 <url> <loc>https://onetech.info?p=/753-Adobe-Rubble/recipe</loc> </url>
@@ -4423,9 +4423,9 @@
 <url> <loc>https://onetech.info?p=/1875-Fruiting-Domestic-Mango-Tree</loc> </url>
 <url> <loc>https://onetech.info?p=/1875-Fruiting-Domestic-Mango-Tree/tech-tree</loc> </url>
 <url> <loc>https://onetech.info?p=/1875-Fruiting-Domestic-Mango-Tree/recipe</loc> </url>
-<url> <loc>https://onetech.info?p=/1876-Domestic-Mango-Tree</loc> </url>
-<url> <loc>https://onetech.info?p=/1876-Domestic-Mango-Tree/tech-tree</loc> </url>
-<url> <loc>https://onetech.info?p=/1876-Domestic-Mango-Tree/recipe</loc> </url>
+<url> <loc>https://onetech.info?p=/1876-Languishing-Domestic-Mango-Tree</loc> </url>
+<url> <loc>https://onetech.info?p=/1876-Languishing-Domestic-Mango-Tree/tech-tree</loc> </url>
+<url> <loc>https://onetech.info?p=/1876-Languishing-Domestic-Mango-Tree/recipe</loc> </url>
 <url> <loc>https://onetech.info?p=/1877-Mango</loc> </url>
 <url> <loc>https://onetech.info?p=/1877-Mango/tech-tree</loc> </url>
 <url> <loc>https://onetech.info?p=/1877-Mango/recipe</loc> </url>
@@ -4524,4 +4524,11 @@
 <url> <loc>https://onetech.info?p=/1919-Dehydrated-Urushiol-Poisoned-Cow</loc> </url>
 <url> <loc>https://onetech.info?p=/1919-Dehydrated-Urushiol-Poisoned-Cow/tech-tree</loc> </url>
 <url> <loc>https://onetech.info?p=/1919-Dehydrated-Urushiol-Poisoned-Cow/recipe</loc> </url>
+<url> <loc>https://onetech.info?p=/1920-Baby-Bones-fromDeath</loc> </url>
+<url> <loc>https://onetech.info?p=/1922-Dry-Fertile-Domestic-Mango-Tree</loc> </url>
+<url> <loc>https://onetech.info?p=/1922-Dry-Fertile-Domestic-Mango-Tree/tech-tree</loc> </url>
+<url> <loc>https://onetech.info?p=/1922-Dry-Fertile-Domestic-Mango-Tree/recipe</loc> </url>
+<url> <loc>https://onetech.info?p=/1923-Wet-Fertile-Domestic-Mango-Tree</loc> </url>
+<url> <loc>https://onetech.info?p=/1923-Wet-Fertile-Domestic-Mango-Tree/tech-tree</loc> </url>
+<url> <loc>https://onetech.info?p=/1923-Wet-Fertile-Domestic-Mango-Tree/recipe</loc> </url>
 </urlset>
