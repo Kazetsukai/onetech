@@ -1,0 +1,1 @@
+{"id":"1984","name":"Dice Roll of Eight -  3 5","transitionsToward":[],"transitionsAway":[{"targetID":"1984","newActorID":"1956","newTargetID":"1956","hand":true},{"actorID":"235","targetID":"1984","newActorID":"1993"}],"transitionsTimed":[],"version":162}

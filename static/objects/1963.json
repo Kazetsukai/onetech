@@ -1,0 +1,1 @@
+{"id":"1963","name":"Die Roll of Six","transitionsToward":[],"transitionsAway":[{"targetID":"1963","newActorID":"1956","hand":true},{"actorID":"235","targetID":"1963","newActorID":"1994"}],"transitionsTimed":[],"version":162}

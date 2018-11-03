@@ -1,0 +1,1 @@
+{"id":"2099","name":"Old Boot","transitionsToward":[{"actorID":"2098","newActorID":"2091","newTargetID":"2099"}],"transitionsAway":[],"transitionsTimed":[],"version":162,"clothing":"s","insulation":0,"size":1,"techTree":[{"id":"2098","nodes":null}]}

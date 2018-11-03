@@ -1,0 +1,1 @@
+{"id":"2097","name":"Fishing Pole with Char -  just caught","transitionsToward":[],"transitionsAway":[{"actorID":"2097","newActorID":"2091","newTargetID":"2102"}],"transitionsTimed":[{"targetID":"2097","newTargetID":"2100","decay":"5s"}],"version":162}

@@ -1,0 +1,1 @@
+{"id":"1980","name":"Dice Roll of Seven -  2 5","transitionsToward":[],"transitionsAway":[{"targetID":"1980","newActorID":"1956","newTargetID":"1956","hand":true},{"actorID":"235","targetID":"1980","newActorID":"1993"}],"transitionsTimed":[],"version":162}

@@ -1,0 +1,1 @@
+{"id":"1969","name":"Dice Roll of Two -  1 1","transitionsToward":[],"transitionsAway":[{"targetID":"1969","newActorID":"1956","newTargetID":"1956","hand":true},{"actorID":"235","targetID":"1969","newActorID":"1993"}],"transitionsTimed":[],"version":162}

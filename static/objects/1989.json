@@ -1,0 +1,1 @@
+{"id":"1989","name":"Dice Roll of Ten -  5 5","transitionsToward":[],"transitionsAway":[{"targetID":"1989","newActorID":"1956","newTargetID":"1956","hand":true},{"actorID":"235","targetID":"1989","newActorID":"1993"}],"transitionsTimed":[],"version":162}

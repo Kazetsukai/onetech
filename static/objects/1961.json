@@ -1,0 +1,1 @@
+{"id":"1961","name":"Die Roll of Four","transitionsToward":[],"transitionsAway":[{"targetID":"1961","newActorID":"1956","hand":true},{"actorID":"235","targetID":"1961","newActorID":"1994"}],"transitionsTimed":[],"version":162}

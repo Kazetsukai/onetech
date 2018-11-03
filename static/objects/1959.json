@@ -1,0 +1,1 @@
+{"id":"1959","name":"Die Roll of Two","transitionsToward":[],"transitionsAway":[{"targetID":"1959","newActorID":"1956","hand":true},{"actorID":"235","targetID":"1959","newActorID":"1994"}],"transitionsTimed":[],"version":162}

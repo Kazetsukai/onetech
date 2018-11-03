@@ -1,0 +1,1 @@
+{"id":"2102","name":"Arctic Char -  alive","transitionsToward":[{"actorID":"2097","newActorID":"2091","newTargetID":"2102"}],"transitionsAway":[],"transitionsTimed":[{"targetID":"2102","newTargetID":"2096","decay":"3s"}],"version":162,"techTree":[{"id":"2097","nodes":null}]}

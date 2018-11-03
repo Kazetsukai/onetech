@@ -1,0 +1,1 @@
+{"id":"1977","name":"Dice Roll of Four -  2 2","transitionsToward":[],"transitionsAway":[{"targetID":"1977","newActorID":"1956","newTargetID":"1956","hand":true},{"actorID":"235","targetID":"1977","newActorID":"1993"}],"transitionsTimed":[],"version":162}

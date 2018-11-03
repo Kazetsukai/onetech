@@ -1,0 +1,1 @@
+{"id":"1958","name":"Die Roll of One","transitionsToward":[],"transitionsAway":[{"targetID":"1958","newActorID":"1956","hand":true},{"actorID":"235","targetID":"1958","newActorID":"1994"}],"transitionsTimed":[],"version":162}
