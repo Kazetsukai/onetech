@@ -46,6 +46,7 @@
       <ObjectImage class="transitionObject"
                   v-if="showNewActor"
                   hand="true" hover="true"
+                  :weight="transition.newActorWeight"
                   :uses="transition.newActorUses"
                   :object="newActor"
                   :clickable="newActor && newActor != selectedObject" />
@@ -56,6 +57,7 @@
       <ObjectImage class="transitionObject"
                   v-if="transition.newTargetID && (!transition.targetRemains || transition.newTargetUses)"
                   hover="true"
+                  :weight="transition.newTargetWeight"
                   :uses="transition.newTargetUses"
                   :wildcard="wildcard"
                   :object="newTarget"

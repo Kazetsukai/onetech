@@ -18,8 +18,8 @@ class TransitionImporter {
   splitCategories(categories) {
     const nonPatternCategories = categories.filter(c => !c.pattern);
     for (let category of nonPatternCategories) {
-      this.splitCategory(category, "actorID", "newActorID");
-      this.splitCategory(category, "targetID", "newTargetID");
+      this.splitCategory(category, "actorID", "newActorID", "newActorWeight");
+      this.splitCategory(category, "targetID", "newTargetID", "newTargetWeight");
     }
     const patternCategories = categories.filter(c => c.pattern);
     for (let transition of this.transitions) {
@@ -27,7 +27,7 @@ class TransitionImporter {
     }
   }
 
-  splitCategory(category, attr, newAttr) {
+  splitCategory(category, attr, newAttr, weightAttr) {
     const newTransitions = [];
     for (let transition of this.transitions) {
       if (transition[attr] == category.parentID || transition[newAttr] == category.parentID) {
@@ -37,6 +37,11 @@ class TransitionImporter {
             newTransition[attr] = id;
           if (transition[newAttr] == category.parentID)
             newTransition[newAttr] = id;
+          if (transition[newAttr] == category.parentID)
+            newTransition[newAttr] = id;
+          if (category.probSet) {
+            newTransition[weightAttr] = category.objectWeight(id);
+          }
           newTransitions.push(newTransition);
         }
       } else {

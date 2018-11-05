@@ -139,6 +139,12 @@ class Transition {
     if (this.newExtraTarget)
       result.newExtraTargetID = this.newExtraTarget.id;
 
+    if (this.newActorWeight)
+      result.newActorWeight = this.newActorWeight;
+
+    if (this.newTargetWeight)
+      result.newTargetWeight = this.newTargetWeight;
+
     if (this.targetsPlayer())
       result.targetPlayer = true;
 

@@ -2,10 +2,43 @@
 
 class Category {
   constructor(dataText) {
+    this.objectIDs = [];
+    this.objectWeights = [];
     const lines = dataText.split('\n');
-    this.parentID = lines[0].split('=')[1];
-    this.pattern = lines[1] == "pattern";
-    this.objectIDs = lines.slice(this.pattern ? 3 : 2, lines.length);
+    let headers = true;
+    for (let line of lines) {
+      if (headers) {
+        headers = this.processHeader(line);
+      } else {
+        this.processObject(line);
+      }
+    }
+  }
+
+  processHeader(line) {
+    const parts = line.split('=');
+    switch (parts[0]) {
+      case "parentID":   this.parentID = parts[1]; break;
+      case "pattern":    this.pattern = true; break;
+      case "probSet":    this.probSet = true; break;
+      case "numObjects": return false; // Done processing headers
+      default:           throw `Unknown category header: ${parts[0]}`;
+    }
+    return true; // Continue processing headers
+  }
+
+  processObject(line) {
+    const parts = line.split(' ');
+    if (parts[0]) {
+      this.objectIDs.push(parts[0]);
+      if (this.probSet) {
+        this.objectWeights.push(parseFloat(parts[1]));
+      }
+    }
+  }
+
+  objectWeight(id) {
+    return this.objectWeights[this.objectIDs.indexOf(id)];
   }
 
   addToObjects(objects) {

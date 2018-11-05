@@ -162,6 +162,10 @@ class RecipeNode {
       data.actorID = transition.actor.id;
     if (transition.target)
       data.targetID = transition.target.id;
+    if (transition.newActor == this.object && transition.newActorWeight)
+      data.weight = transition.newActorWeight;
+    if (transition.newTarget == this.object && transition.newTargetWeight)
+      data.weight = transition.newTargetWeight;
     if (this.decaySeconds)
       data.decay = transition.calculateDecay(this.decaySeconds);
     else if (transition.decay)

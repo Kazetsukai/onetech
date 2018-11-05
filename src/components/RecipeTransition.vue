@@ -49,6 +49,7 @@
                   hover="true"
                   :object="result"
                   :uses="resultCount"
+                  :weight="transition.weight"
                   clickable="true" />
     </div>
   </div>

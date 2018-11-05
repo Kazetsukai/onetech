@@ -9,6 +9,7 @@
     <div v-if="player" class="player" />
     <div v-if="wildcard" class="wildcard"></div>
     <div v-if="uses" class="uses">{{uses}}</div>
+    <div v-if="weight" class="weight">{{weightPercent}}%</div>
     <div v-if="decay" class="decay"><span>{{decay}}</span></div>
     <div v-if="ground" class="ground"></div>
     <div v-if="object && !legacy" class="image">
@@ -32,7 +33,8 @@ export default {
     'uses',
     'player',
     'wildcard',
-    'scaleUpTo'
+    'scaleUpTo',
+    'weight'
   ],
   components: {
     ObjectImageWrapper,
@@ -90,6 +92,9 @@ export default {
 
       if (this.decay)
         return this.decay.replace("s", " second").replace("m", " minute").replace("h", " hour") + (parseInt(this.decay) != 1 ? 's' : '');
+    },
+    weightPercent () {
+      return Math.round(this.weight*1000)/10.0;
     }
   }
 }
@@ -170,6 +175,19 @@ export default {
   .uses {
     position: absolute;
     right: 4px;
+    bottom: 4px;
+    color: black;
+    font-weight: bold;
+    font-size: 12px;
+    padding: 1px 4px;
+    background-color: rgba(180, 180, 180, 0.75);
+    border-radius: 3px;
+    z-index: 2;
+  }
+
+  .weight {
+    position: absolute;
+    left: 4px;
     bottom: 4px;
     color: black;
     font-weight: bold;
