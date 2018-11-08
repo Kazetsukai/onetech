@@ -25,7 +25,7 @@ class ChangeLog {
   }
 
   fetchVersionNumbers() {
-    return this.git.tags().map(t => this.versionNumberFromTag(t)).sort((a,b) => a - b);
+    return this.git.tags().map(t => this.versionNumberFromTag(t)).filter(t => !isNaN(t)).sort((a,b) => a - b);
   }
 
   versionNumberFromTag(tag) {
