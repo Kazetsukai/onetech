@@ -153,23 +153,26 @@ class TransitionImporter {
   }
 
   mergeAttackTransition(transition) {
-    const lastUseTransition = this.transitions.find(t => t != transition && t.actorID == transition.actorID && t.lastUseTarget);
+    const lastUseActorTransition = this.transitions.find(t => t != transition && t.actorID == transition.actorID && t.lastUseActor);
+    const lastUseTargetTransition = this.transitions.find(t => t != transition && t.actorID == transition.actorID && t.lastUseTarget);
 
     // Animal attack
-    if (!lastUseTransition) {
+    if (!lastUseTargetTransition) {
       if (transition.newTargetID === '0') {
         transition.newTargetID = '87'; // Fresh grave
-        transition.targetRemains = false;
+      } else {
+        transition.newExtraTargetID = '87'; // Fresh grave
       }
+      transition.targetRemains = false;
       return;
     }
 
     // Murder attack
-    transition.newActorID = lastUseTransition.newActorID;
-    transition.newExtraTargetID = transition.newTargetID;
-    transition.newTargetID = lastUseTransition.newTargetID;
-    transition.tool = lastUseTransition.tool;
-    transition.targetRemains = lastUseTransition.targetRemains;
+    transition.newActorID = (lastUseActorTransition || lastUseTargetTransition).newActorID;
+    transition.newExtraTargetID = lastUseTargetTransition.newTargetID;
+    transition.newTargetID = (lastUseActorTransition || transition).newTargetID;
+    transition.tool = lastUseTargetTransition.tool;
+    transition.targetRemains = lastUseTargetTransition.targetRemains;
   }
 
   addToObjects(objects) {

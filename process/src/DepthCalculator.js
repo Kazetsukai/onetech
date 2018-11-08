@@ -46,6 +46,8 @@ class DepthCalculator {
       this.setObjectDepth(transition.newActor, depth);
     if (transition.newTarget)
       this.setObjectDepth(transition.newTarget, depth);
+    if (transition.newExtraTarget)
+      this.setObjectDepth(transition.newExtraTarget, depth);
   }
 
   sortObjectTransitions(objects) {
