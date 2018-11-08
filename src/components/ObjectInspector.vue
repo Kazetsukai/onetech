@@ -47,7 +47,7 @@
     </div>
     <div class="transitionsPanels" v-if="object.data">
       <div class="transitionsPanel" v-if="object.data.transitionsToward.length > 0 || object.data.mapChance">
-        <h3>How to get</h3>
+        <h3>Ways to get</h3>
         <div v-if="object.data.mapChance" class="spawn">
           <div class="spawnChance">
             Spawn Chance: {{spawnText}}
@@ -72,7 +72,7 @@
           :selectedObject="object" />
       </div>
       <div class="transitionsPanel" v-if="object.data.transitionsAway.length > 0">
-        <h3>How to use</h3>
+        <h3>Ways to use</h3>
         <TransitionsList
           limit="3"
           :transitions="object.data.transitionsAway"
