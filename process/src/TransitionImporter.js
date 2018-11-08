@@ -54,27 +54,30 @@ class TransitionImporter {
   // Pattern categories work differently than regular categories:
   // 1. The parentID is an actual object and should stick around
   // 2. A transition is only considered if there are two pattern
-  //    categories with the same number of objectIDs
+  //    categories with the same number of objectIDs or decay transition
   // 3. For each objectID, a new transition is created which maps
   //    each other pattern category objectID to the new object
   splitPatternCategories(transition, patternCategories) {
-    // if (transition.actorID == 969 && transition.targetID == 1012)
+    // if (transition.decay == "5m" && transition.targetID == 1737)
     //   debugger;
     const attrs = ["actorID", "targetID", "newActorID", "newTargetID"];
     let categories = attrs.map(attr => {
       return patternCategories.find(c => c.parentID == transition[attr]);
     });
-    if (categories.filter(c => c).length <= 1)
+    if (categories.filter(c => c).length === 0) {
       return;
+    }
     const count = categories.find(c => c).objectIDs.length;
     categories = categories.map(c => c && c.objectIDs.length == count && c);
-    if (categories.filter(c => c).length <= 1)
+    if (categories.filter(c => c).length <= (transition.decay ? 0 : 1)) {
       return;
+    }
     for (let i=0; i < count; i++) {
-      const newTransition = transition.clone()
+      const newTransition = transition.clone();
       for (let j=0; j < attrs.length; j++) {
-        if (categories[j])
+        if (categories[j]) {
           newTransition[attrs[j]] = categories[j].objectIDs[i];
+        }
       }
       this.transitions.push(newTransition);
     }
