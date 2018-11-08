@@ -58,7 +58,7 @@ class TransitionImporter {
   // 3. For each objectID, a new transition is created which maps
   //    each other pattern category objectID to the new object
   splitPatternCategories(transition, patternCategories) {
-    // if (transition.actorID == 677 && transition.targetID == 1909)
+    // if (transition.actorID == 2092 && transition.targetID == 1055)
     //   debugger;
     const attrs = ["actorID", "targetID", "newActorID", "newTargetID"];
     let categories = attrs.map(attr => {
@@ -76,7 +76,16 @@ class TransitionImporter {
           newTransition[attrs[j]] = categories[j].objectIDs[i];
         }
       }
-      this.transitions.push(newTransition);
+      let duplicate = this.transitions.find(transition => {
+        return transition.actorID == newTransition.actorID &&
+          transition.targetID == newTransition.targetID &&
+          transition.newActorID == newTransition.newActorID &&
+          transition.newTargetID == newTransition.newTargetID &&
+          transition.newActorID == newTransition.newActorID;
+      });
+      if (!duplicate) {
+        this.transitions.push(newTransition);
+      }
     }
   }
 

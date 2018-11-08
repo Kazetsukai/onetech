@@ -44,6 +44,7 @@ class GameData {
         this.objects[object.id] = object;
       }
     });
+    console.log("Object Count: " + Object.values(this.objects).length);
   }
 
   importCategories() {
@@ -52,6 +53,7 @@ class GameData {
       category.addToObjects(this.objects);
       this.categories.push(category);
     });
+    console.log("Category Count: " + this.categories.length);
   }
 
   importTransitions() {
@@ -63,6 +65,7 @@ class GameData {
     importer.mergeGenericTransitions();
     importer.mergeAttackTransitions();
     importer.addToObjects(this.objects);
+    console.log("Transition Count: " + importer.transitions.length);
   }
 
   populateVersions() {
