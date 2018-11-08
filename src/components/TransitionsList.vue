@@ -23,29 +23,17 @@ export default {
   components: {
     TransitionView
   },
-  data() {
-    return {
-      expanded: false,
-    };
-  },
-  watch: {
-    selectedObject() {
-      this.expanded = false;
-    }
-  },
   computed: {
     visibleTransitions() {
-      if (this.limit && !this.expanded)
-        return this.transitions.slice(0, this.limit);
-      return this.transitions;
+      return this.transitions.slice(0, this.limit);
     },
     canShowMore() {
-      return this.limit && !this.expanded && this.limit < this.transitions.length;
+      return this.limit && this.limit < this.transitions.length;
     }
   },
   methods: {
     expand() {
-      this.expanded = true;
+      this.limit = parseInt(this.limit) + 50;
     }
   }
 }
