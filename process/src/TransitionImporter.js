@@ -66,7 +66,7 @@ class TransitionImporter {
     let categories = attrs.map(attr => {
       return patternCategories.find(c => c.parentID == transition[attr]);
     });
-    if (categories.filter(c => c).length === 0) {
+    if (categories.slice(0, 2).filter(c => c).length === 0) {
       return;
     }
     const count = categories.find(c => c).objectIDs.length;
