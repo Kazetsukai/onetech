@@ -117,6 +117,8 @@ class Transition {
           result.actorUses = this.reverseUseActor ? "max" : "last";
         else if (this.tool)
           result.newActorUses = this.reverseUseActor ? "+1" : "-1";
+      } else if (this.reverseUseActor) {
+        result.newActorUses = "last";
       }
     }
 
@@ -127,6 +129,8 @@ class Transition {
           result.targetUses = this.reverseUseTarget ? "max" : "last";
         else if (this.targetRemains)
           result.newTargetUses = this.reverseUseTarget ? "+1" : "-1";
+      } else if (this.reverseUseTarget) {
+        result.newTargetUses = "last";
       }
     }
 
