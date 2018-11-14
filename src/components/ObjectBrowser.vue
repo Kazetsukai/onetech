@@ -5,9 +5,12 @@
         <ObjectFilter :filter="filter" :selected="filter == selectedFilter" />
       </div>
     </div>
-    <div class="objectList">
-      <div class="object" v-for="object in shownObjects" >
-        <ObjectView :object="object" />
+    <div class="objectListWrapper">
+      <h3 class="objectListTitle" v-if="!selectedFilter">Recently Added</h3>
+      <div class="objectList">
+        <div class="object" v-for="object in shownObjects" >
+          <ObjectView :object="object" />
+        </div>
       </div>
     </div>
   </div>
@@ -78,14 +81,23 @@ export default {
     flex-wrap: wrap;
   }
 
-  .objectList {
+  .objectListWrapper {
     background-color: #222;
     border-radius: 5px;
     width: 100%;
     padding: 10px;
     margin: 10px 0px;
     box-sizing: border-box;
+  }
 
+  .objectListTitle {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-size: 16px;
+  }
+
+  .objectList {
     display: flex;
     flex-wrap: wrap;
   }
