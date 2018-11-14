@@ -13,7 +13,7 @@ export default {
       return `${STATIC_PATH}/ground/ground_${this.biome}.png`;
     },
     name() {
-      const names = ["Grassland", "Swamp", "Prairie", "Rocky", "Snow", "Desert"];
+      const names = ["Grassland", "Swamp", "Prairie", "Rocky", "Snow", "Desert", "Jungle"];
       return names[parseInt(this.biome)];
     }
   }
