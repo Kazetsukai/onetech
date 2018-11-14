@@ -42,7 +42,9 @@ class TransitionImporter {
           if (category.probSet) {
             newTransition[weightAttr] = category.objectWeight(id);
           }
-          newTransitions.push(newTransition);
+          if (!this.findDuplicate(newTransition)) {
+            newTransitions.push(newTransition);
+          }
         }
       } else {
         newTransitions.push(transition);
@@ -76,17 +78,20 @@ class TransitionImporter {
           newTransition[attrs[j]] = categories[j].objectIDs[i];
         }
       }
-      let duplicate = this.transitions.find(transition => {
-        return transition.actorID == newTransition.actorID &&
-          transition.targetID == newTransition.targetID &&
-          transition.newActorID == newTransition.newActorID &&
-          transition.newTargetID == newTransition.newTargetID &&
-          transition.newActorID == newTransition.newActorID;
-      });
-      if (!duplicate) {
+      if (!this.findDuplicate(newTransition)) {
         this.transitions.push(newTransition);
       }
     }
+  }
+
+  findDuplicate(newTransition) {
+    return this.transitions.find(transition => {
+      return transition.actorID == newTransition.actorID &&
+        transition.targetID == newTransition.targetID &&
+        transition.newActorID == newTransition.newActorID &&
+        transition.newTargetID == newTransition.newTargetID &&
+        transition.newActorID == newTransition.newActorID;
+    });
   }
 
   // Generic transitions are played along with another successful transition of the same actor
