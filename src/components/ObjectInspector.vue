@@ -38,11 +38,11 @@
       <div class="transitionsPanel" v-if="object.data.transitionsToward.length > 0 || object.data.mapChance">
         <h3>How to get</h3>
         <div class="actions" v-if="object.data && (object.data.recipe || object.data.techTree)">
-          <router-link :to="object.url('recipe')" v-if="object.data.recipe" title="Crafting Recipe" v-tippy>
-            <img src="../assets/recipe.png" width="41" height="42" />
-          </router-link>
           <router-link :to="object.url('tech-tree')" v-if="object.data.techTree" title="Tech Tree" v-tippy>
             <img src="../assets/techtree.png" width="38" height="36" />
+          </router-link>
+          <router-link :to="object.url('recipe')" v-if="object.data.recipe" title="Crafting Recipe" v-tippy>
+            <img src="../assets/recipe.png" width="41" height="42" />
           </router-link>
           <router-link to="/letters" v-if="isLetterOrSign" title="Letters Recipe" v-tippy>
             <img src="../assets/sign.png" width="40" height="41" />
