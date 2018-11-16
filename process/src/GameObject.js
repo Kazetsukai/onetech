@@ -132,6 +132,10 @@ class GameObject {
       result.size = this.data.containSize;
     }
 
+    if (this.data.permanent == 0 && this.data.floor == 0) {
+      result.minPickupAge = parseInt(this.data.minPickupAge) || 3;
+    }
+
     let techTree = this.techTreeNodes(3);
     if (techTree)
       result.techTree = techTree;

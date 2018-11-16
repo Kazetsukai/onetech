@@ -23,6 +23,7 @@
           <span class="helpTip" v-tippy :title="difficultyTip">?</span>
         </li>
         <li v-if="containerText">{{containerText}}</li>
+        <li v-if="pickupText">{{pickupText}}</li>
         <li v-if="object.data.version">
           Added in
           <router-link :to="versionUrl">v{{object.data.version}}</router-link>
@@ -155,6 +156,10 @@ export default {
     containerText() {
       if (!this.object.data.numSlots) return;
       return `Holds ${this.object.data.numSlots} ${this.object.slotSize()} items`;
+    },
+    pickupText() {
+      if (!this.object.data.minPickupAge) return;
+      return `Pickup at Age: ${this.object.data.minPickupAge}`;
     },
     isLetterOrSign() {
       return this.object.name.includes("Letter") || this.object.name.includes("Sign");
