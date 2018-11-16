@@ -11,7 +11,6 @@
         <li v-if="object.data.heatValue">Heat: {{object.data.heatValue}}</li>
         <li v-if="object.clothingPart()">Clothing: {{object.clothingPart()}}</li>
         <li v-if="object.hasInsulation()">Insulation: {{object.insulationPercent()}}%</li>
-        <li v-if="sizeText">Item Size: {{sizeText}}</li>
         <li v-if="numUses">Number of uses: {{numUses}}</li>
         <li v-if="object.data.useChance">
           Chance to use:
@@ -22,8 +21,9 @@
           Difficulty: {{difficultyText}}
           <span class="helpTip" v-tippy :title="difficultyTip">?</span>
         </li>
-        <li v-if="containerText">{{containerText}}</li>
         <li v-if="pickupText">{{pickupText}}</li>
+        <li v-if="sizeText">{{sizeText}}</li>
+        <li v-if="containerText">{{containerText}}</li>
         <li v-if="object.data.version">
           Added in
           <router-link :to="versionUrl">v{{object.data.version}}</router-link>
@@ -150,8 +150,11 @@ export default {
       return this.numUses * (1/this.object.data.useChance);
     },
     sizeText() {
-      if (!this.object.data.size) return;
-      return this.object.size();
+      if (!this.object.data.size) {
+        if (!this.object.data.minPickupAge) return;
+        return "Cannot be placed in container";
+      }
+      return `Item size: ${this.object.size()}`;
     },
     containerText() {
       if (!this.object.data.numSlots) return;
