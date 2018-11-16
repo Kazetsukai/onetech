@@ -2,7 +2,7 @@
   <div class="objectInspector">
     <div class="info">
       <h2>{{object.baseName()}}</h2>
-      <h3>{{object.subName()}}</h3>
+      <h3 v-if="object.subName()">{{object.subName()}}</h3>
       <ObjectImage :object="object" scaleUpTo="128" />
       <h3 v-if="!object.data">Loading...</h3>
 
@@ -198,13 +198,13 @@ export default {
   .objectInspector .info > h2 {
     text-align: center;
     font-weight: bolder;
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
   .objectInspector .info > h3 {
     text-align: center;
     font-weight: lighter;
     font-style: italic;
-    margin-top: 0px;
+    margin: 0;
   }
   .objectInspector .info > .imgContainer {
     width: 100%;
