@@ -30,6 +30,7 @@
 
 <script>
 import GameObject from '../models/GameObject'
+import BrowserStorage from '../models/BrowserStorage'
 
 import ObjectFilter from './ObjectFilter'
 import ObjectView from './ObjectView';
@@ -43,8 +44,8 @@ export default {
     return {
       showAmount: 24,
       selectedFilter: GameObject.findFilter(this.$route.params.filter),
-      sortBy: "recent",
-      descending: false
+      sortBy: BrowserStorage.getItem("ObjectBrowser.sortBy") || "recent",
+      descending: BrowserStorage.getItem("ObjectBrowser.descending") === "true"
     }
   },
   created () {
@@ -78,6 +79,9 @@ export default {
     sort (sortBy, descending) {
       this.sortBy = sortBy;
       this.descending = descending;
+
+      BrowserStorage.setItem("ObjectBrowser.sortBy", sortBy);
+      BrowserStorage.setItem("ObjectBrowser.descending", descending.toString());
     }
   },
   metaInfo() {
