@@ -7,11 +7,12 @@
       <h3 v-if="!object.data">Loading...</h3>
 
       <ul v-if="object.data">
-        <li v-if="object.data.foodValue">Food: {{object.data.foodValue}}</li>
+        <li v-if="foodValue">Food: {{foodValue}} (with {{foodBonus}} bonus)</li>
         <li v-if="object.data.heatValue">Heat: {{object.data.heatValue}}</li>
         <li v-if="object.clothingPart()">Clothing: {{object.clothingPart()}}</li>
         <li v-if="object.hasInsulation()">Insulation: {{object.insulationPercent()}}%</li>
         <li v-if="numUses">Number of uses: {{numUses}}</li>
+        <li v-if="totalFood">Total Food: {{totalFood}}</li>
         <li v-if="object.data.useChance">
           Chance to use:
           {{Math.round(object.data.useChance*100)}}%
@@ -171,7 +172,18 @@ export default {
     },
     modName() {
       return process.env.ONETECH_MOD_NAME;
-    }
+    },
+    foodBonus() {
+      return GameObject.foodBonus;
+    },
+    foodValue() {
+      if (!this.object.data.foodValue) return;
+      return this.object.data.foodValue + this.foodBonus;
+    },
+    totalFood() {
+      if (!this.foodValue || !this.numUses) return;
+      return this.foodValue * this.numUses;
+    },
   },
   metaInfo() {
     return {title: this.object.name};

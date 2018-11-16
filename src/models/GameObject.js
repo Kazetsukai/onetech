@@ -10,6 +10,7 @@ export default class GameObject {
       this.badges = data.badges;
       this.date = new Date(data.date);
       this.versions = data.versions;
+      this.foodBonus = data.foodBonus;
       callback();
     });
   }

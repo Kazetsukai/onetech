@@ -1,3 +1,7 @@
+if (!process.env.ONETECH_FOOD_BONUS) {
+  process.env.ONETECH_FOOD_BONUS = 2;
+}
+
 const GameData = require('./src/GameData');
 
 const gitURL = process.env.ONETECH_PROCESS_GIT_URL || "https://github.com/jasonrohrer/OneLifeData7.git";

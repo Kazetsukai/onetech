@@ -143,6 +143,7 @@ class GameData {
       badges: ObjectBadges.jsonData(objects),
       date: new Date(),
       versions: this.changeLog.versions.slice(1).reverse().map(v => v.id),
+      foodBonus: parseInt(process.env.ONETECH_FOOD_BONUS),
     };
   }
 

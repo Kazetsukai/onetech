@@ -104,8 +104,8 @@ module.exports = {
         ONETECH_MOD_NAME: JSON.stringify(process.env.ONETECH_MOD_NAME),
         ONETECH_MOD_URL: JSON.stringify(process.env.ONETECH_MOD_URL),
       },
-      'ROOT_PATH': JSON.stringify(rootPath),
-      'STATIC_PATH': JSON.stringify(rootPath + staticPath),
+      ROOT_PATH: JSON.stringify(rootPath),
+      STATIC_PATH: JSON.stringify(rootPath + staticPath),
     })
   ],
   devtool: '#eval-source-map'

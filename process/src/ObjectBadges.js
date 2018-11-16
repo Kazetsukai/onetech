@@ -18,8 +18,8 @@ const Food = {
   },
   value(object) {
     if (object.data.numUses > 1)
-      return `${object.data.foodValue} x ${object.data.numUses}`;
-    return object.data.foodValue;
+      return `${object.data.foodValue + parseInt(process.env.ONETECH_FOOD_BONUS)} x ${object.data.numUses}`;
+    return object.data.foodValue + parseInt(process.env.ONETECH_FOOD_BONUS);
   }
 }
 
