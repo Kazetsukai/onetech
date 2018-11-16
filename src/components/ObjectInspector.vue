@@ -212,12 +212,13 @@ export default {
   }
   .objectInspector .info > ul {
     padding: 0;
-    margin: 5px 30px;
-    font-size: 1.3rem;
+    margin: 0 30px;
+    font-size: 1.2rem;
     list-style-type: none;
   }
   .objectInspector .info li {
     text-align: center;
+    padding: 2px 0;
   }
 
   .objectInspector .actions {
