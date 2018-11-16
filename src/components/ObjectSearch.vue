@@ -34,7 +34,7 @@ export default {
   },
   computed: {
     objects () {
-      return GameObject.byName();
+      return GameObject.byNameLength();
     }
   },
   methods: {

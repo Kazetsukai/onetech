@@ -6,9 +6,21 @@
       </div>
     </div>
     <div class="objectListWrapper">
-      <h3 class="objectListTitle" v-if="!selectedFilter">Recently Added</h3>
+      <div class="objectListHeader">
+        <div class="objectListSorter">
+          Sort by:
+          <span @click="sort('recent', false)" :class="{selected: sortBy == 'recent'}">Recent</span>,
+          <span @click="sort('depth', false)" :class="{selected: sortBy == 'depth'}">Depth</span>,
+          <span @click="sort('name', false)" :class="{selected: sortBy == 'name'}">Name</span>
+        </div>
+        <div class="objectListSorter">
+          Order:
+          <span @click="sort(sortBy, false)" :class="{selected: !descending}">Asc</span>,
+          <span @click="sort(sortBy, true)" :class="{selected: descending}">Desc</span>
+        </div>
+      </div>
       <div class="objectList">
-        <div class="object" v-for="object in shownObjects" >
+        <div class="object" v-for="object in shownObjects">
           <ObjectView :object="object" />
         </div>
       </div>
@@ -31,6 +43,8 @@ export default {
     return {
       showAmount: 24,
       selectedFilter: GameObject.findFilter(this.$route.params.filter),
+      sortBy: "recent",
+      descending: false
     }
   },
   created () {
@@ -44,7 +58,7 @@ export default {
   },
   computed: {
     shownObjects () {
-      return GameObject.objects(this.showAmount, this.selectedFilter);
+      return GameObject.objects(this.showAmount, this.selectedFilter, this.sortBy, this.descending);
     },
     filters () {
       return GameObject.filters;
@@ -60,6 +74,10 @@ export default {
       } else {
         this.loadingMore = false;
       }
+    },
+    sort (sortBy, descending) {
+      this.sortBy = sortBy;
+      this.descending = descending;
     }
   },
   metaInfo() {
@@ -90,11 +108,26 @@ export default {
     box-sizing: border-box;
   }
 
-  .objectListTitle {
-    margin: 0;
+  .objectListHeader {
+    margin: 0 15px;
     padding: 0;
-    text-align: center;
     font-size: 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+  .objectListSorter {
+    padding: 0 10px;
+  }
+  .objectListSorter span {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  .objectListSorter .selected {
+    color: inherit;
+    font-weight: bold;
+    cursor: normal;
+    text-decoration: none;
   }
 
   .objectList {

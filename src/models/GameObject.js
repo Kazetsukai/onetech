@@ -3,7 +3,7 @@ export default class GameObject {
     this.fetchObjects(data => {
       this.objectsMap = {};
       for (let i in data.ids) {
-        this.objectsMap[data.ids[i]] = new GameObject(data.ids[i], data.names[i]);
+        this.objectsMap[data.ids[i]] = new GameObject(data.ids[i], data.names[i], data.depths[i]);
       }
       this.ids = data.ids;
       this.filters = data.filters;
@@ -20,13 +20,35 @@ export default class GameObject {
       then(callback);
   }
 
-  static byName() {
+  static sort(objects, sortBy) {
+    switch (sortBy) {
+      case "recent":
+        return objects.sort((a,b) => b.id - a.id);
+      case "depth":
+        return objects.sort((a,b) => (a.depth || 0) - (b.depth || 0));
+      case "name":
+        return objects.sort((a,b) => a.name.localeCompare(b.name));
+    }
+  }
+
+  static byNameLength() {
     return Object.values(this.objectsMap).sort((a,b) => a.name.length - b.name.length);
   }
 
-  static objects(amount, filter) {
-    const ids = filter ? filter.ids : this.ids;
-    return ids.slice(0, amount).map(id => this.objectsMap[id]);
+  static objects(amount, filter, sortBy, descending) {
+    let objects;
+    if (filter) {
+      objects = filter.ids.map(id => this.objectsMap[id]);
+    } else if (sortBy == "depth") {
+      objects = Object.values(this.objectsMap).filter(o => o.depth);
+    } else {
+      objects = Object.values(this.objectsMap);
+    }
+    let sorted = this.sort(objects, sortBy);
+    if (descending) {
+      sorted.reverse();
+    }
+    return sorted.slice(0, amount);
   }
 
   static find(id) {
@@ -60,15 +82,16 @@ export default class GameObject {
   static addLegacyObject(attributes) {
     if (this.objectsMap[attributes.id])
       return;
-    const object = new GameObject(attributes.id, attributes.name);
+    const object = new GameObject(attributes.id, attributes.name, null);
     if (!attributes.category)
       object.legacy = true;
     this.objectsMap[object.id] = object;
   }
 
-  constructor(id, name) {
+  constructor(id, name, depth) {
     this.id = id;
     this.name = name;
+    this.depth = depth;
     this.data = null;
   }
 

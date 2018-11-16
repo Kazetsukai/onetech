@@ -138,6 +138,7 @@ class GameData {
     return {
       ids: objects.map(o => o.id),
       names: objects.map(o => o.name),
+      depths: objects.map(o => o.depth.hasValue() && o.depth.value),
       filters: ObjectFilters.jsonData(objects),
       badges: ObjectBadges.jsonData(objects),
       date: new Date(),
