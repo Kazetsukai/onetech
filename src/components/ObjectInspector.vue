@@ -33,22 +33,21 @@
         </li>
         <li v-else>Unreleased</li>
       </ul>
-
-      <div class="actions" v-if="object.data">
-        <router-link :to="object.url('tech-tree')" v-if="object.data.techTree" title="Tech Tree" v-tippy>
-          <img src="../assets/techtree.png" width="38" height="36" />
-        </router-link>
-        <router-link :to="object.url('recipe')" v-if="object.data.recipe" title="Crafting Recipe" v-tippy>
-          <img src="../assets/recipe.png" width="41" height="42" />
-        </router-link>
-        <router-link to="/letters" v-if="isLetterOrSign" title="Letters Recipe" v-tippy>
-          <img src="../assets/sign.png" width="40" height="41" />
-        </router-link>
-      </div>
     </div>
     <div class="transitionsPanels" v-if="object.data">
       <div class="transitionsPanel" v-if="object.data.transitionsToward.length > 0 || object.data.mapChance">
-        <h3>Ways to get</h3>
+        <h3>How to get</h3>
+        <div class="actions" v-if="object.data && (object.data.recipe || object.data.techTree)">
+          <router-link :to="object.url('recipe')" v-if="object.data.recipe" title="Crafting Recipe" v-tippy>
+            <img src="../assets/recipe.png" width="41" height="42" />
+          </router-link>
+          <router-link :to="object.url('tech-tree')" v-if="object.data.techTree" title="Tech Tree" v-tippy>
+            <img src="../assets/techtree.png" width="38" height="36" />
+          </router-link>
+          <router-link to="/letters" v-if="isLetterOrSign" title="Letters Recipe" v-tippy>
+            <img src="../assets/sign.png" width="40" height="41" />
+          </router-link>
+        </div>
         <div v-if="object.data.mapChance" class="spawn">
           <div class="spawnChance">
             Spawn Chance: {{spawnText}}
@@ -61,7 +60,7 @@
           </div>
         </div>
         <TransitionsList
-          limit="3"
+          limit="1"
           :transitions="object.data.transitionsToward"
           :selectedObject="object" />
       </div>
@@ -73,7 +72,7 @@
           :selectedObject="object" />
       </div>
       <div class="transitionsPanel" v-if="object.data.transitionsAway.length > 0">
-        <h3>Ways to use</h3>
+        <h3>How to use</h3>
         <TransitionsList
           limit="3"
           :transitions="object.data.transitionsAway"
@@ -221,15 +220,17 @@ export default {
     text-align: center;
   }
 
-  .objectInspector .info .actions {
+  .objectInspector .actions {
     display: flex;
     justify-content: center;
+    padding: 10px;
+    background-color: #2b2b2b;
+    border-radius: 5px;
+    margin-top: 10px;
   }
-  .objectInspector .info .actions a {
+  .objectInspector .actions a {
     display: block;
-    margin: 20px 10px;
-  }
-  .objectInspector .info .actions a {
+    margin: 0 10px;
     padding: 8px 10px;
     background-color: #505050;
     border: 1px solid transparent;
@@ -237,11 +238,11 @@ export default {
     display: flex;
     align-items: center;
   }
-  .objectInspector .info .actions a:hover {
+  .objectInspector .actions a:hover {
     border: 1px solid #eee;
     background-color: #666;
   }
-  .objectInspector .info .actions a img {
+  .objectInspector .actions a img {
     display: block;
   }
 
