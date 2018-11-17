@@ -120,7 +120,7 @@ export default {
       return "Common";
     },
     difficultyText() {
-      if (!this.object.data || typeof this.object.data.difficulty == 'undefined') return;
+      if (!this.object.difficulty) return;
       const levels = [
         "Extremely Easy",
         "Very Easy",
@@ -132,7 +132,7 @@ export default {
         "Very Hard",
         "Extremely Hard",
       ];
-      return levels[this.object.data.difficulty];
+      return levels[Math.floor(this.object.difficulty*levels.length)];
     },
     difficultyTip() {
       const stepWord = this.object.data.depth == 1 ? "step" : "steps";

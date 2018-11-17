@@ -3,7 +3,7 @@ export default class GameObject {
     this.fetchObjects(data => {
       this.objectsMap = {};
       for (let i in data.ids) {
-        this.objectsMap[data.ids[i]] = new GameObject(data.ids[i], data.names[i], data.depths[i]);
+        this.objectsMap[data.ids[i]] = new GameObject(data.ids[i], data.names[i], data.difficulties[i]);
       }
       this.ids = data.ids;
       this.filters = data.filters;
@@ -23,12 +23,12 @@ export default class GameObject {
 
   static sort(objects, sortBy) {
     switch (sortBy) {
-      case "recent":
-        return objects.sort((a,b) => b.id - a.id);
-      case "depth":
-        return objects.sort((a,b) => (a.depth || 0) - (b.depth || 0));
+      case "difficulty":
+        return objects.sort((a,b) => (a.difficulty || 0) - (b.difficulty || 0));
       case "name":
         return objects.sort((a,b) => a.name.localeCompare(b.name));
+      default: // recent
+        return objects.sort((a,b) => b.id - a.id);
     }
   }
 
@@ -40,8 +40,8 @@ export default class GameObject {
     let objects;
     if (filter) {
       objects = filter.ids.map(id => this.objectsMap[id]);
-    } else if (sortBy == "depth") {
-      objects = Object.values(this.objectsMap).filter(o => o.depth);
+    } else if (sortBy == "difficulty") {
+      objects = Object.values(this.objectsMap).filter(o => o.difficulty);
     } else {
       objects = Object.values(this.objectsMap);
     }
@@ -89,10 +89,10 @@ export default class GameObject {
     this.objectsMap[object.id] = object;
   }
 
-  constructor(id, name, depth) {
+  constructor(id, name, difficulty) {
     this.id = id;
     this.name = name;
-    this.depth = depth;
+    this.difficulty = difficulty;
     this.data = null;
   }
 

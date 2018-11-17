@@ -10,7 +10,7 @@
         <div class="objectListSorter">
           Sort by:
           <span @click="sort('recent', false)" :class="{selected: sortBy == 'recent'}">Recent</span>,
-          <span @click="sort('depth', false)" :class="{selected: sortBy == 'depth'}">Depth</span>,
+          <span @click="sort('difficulty', false)" :class="{selected: sortBy == 'difficulty'}">Difficulty</span>,
           <span @click="sort('name', false)" :class="{selected: sortBy == 'name'}">Name</span>
         </div>
         <div class="objectListSorter">
