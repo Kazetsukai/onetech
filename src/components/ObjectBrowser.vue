@@ -163,5 +163,9 @@ export default {
       min-width: 150px;
       width: 50%;
     }
+    .objectListHeader {
+      flex-direction: column;
+      align-items: center;
+    }
   }
 </style>
