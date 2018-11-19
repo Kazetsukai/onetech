@@ -7,7 +7,7 @@
       <h3 v-if="!object.data">Loading...</h3>
 
       <ul v-if="object.data">
-        <li v-if="foodValue">Food: {{foodValue}} (with {{foodBonus}} bonus)</li>
+        <li v-if="foodValue">Food: {{foodValue}} (includes {{foodBonus}} bonus)</li>
         <li v-if="object.data.heatValue">Heat: {{object.data.heatValue}}</li>
         <li v-if="object.clothingPart()">Clothing: {{object.clothingPart()}}</li>
         <li v-if="object.hasInsulation()">Insulation: {{object.insulationPercent()}}%</li>
