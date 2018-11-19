@@ -13,7 +13,7 @@ class Biome {
   }
 
   name() {
-    const names = ["Grassland", "Swamp", "Prairie", "Rocky", "Snow", "Desert", "Jungle"];
+    const names = ["Grasslands", "Swamps", "Yellow Prairies", "Badlands", "Tundra", "Desert", "Jungle"];
     return names[this.id];
   }
 
