@@ -1,0 +1,1 @@
+{"id":"2155","name":"Yellow Fever -  sick emot_7_25  food_0.5","transitionsToward":[{"actorID":"2156","newActorID":"2157","newTargetID":"2155","newExtraTargetID":"87","targetPlayer":true}],"transitionsAway":[],"transitionsTimed":[{"targetID":"2155","decay":"25s"}],"heatValue":6,"depth":1,"techTree":[{"id":"2156","nodes":null}]}
