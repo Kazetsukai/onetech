@@ -60,7 +60,7 @@
           </div>
         </div>
         <TransitionsList
-          limit="1"
+          :limit="object.data.mapChance ? '0' : '1'"
           :transitions="object.data.transitionsToward"
           :selectedObject="object" />
       </div>
