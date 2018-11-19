@@ -5,6 +5,9 @@
     <div class="biomeImgContainer">
       <BiomeImage :biome="biome" />
     </div>
+    <ul v-if="biome.data">
+      <li>Ground Heat: {{biome.data.groundHeat}}</li>
+    </ul>
     <div class="objects">
       <div class="object" v-for="object in objects">
         <ObjectView :object="object" :spawnInfo="true" />

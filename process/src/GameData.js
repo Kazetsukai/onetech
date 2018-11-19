@@ -77,6 +77,12 @@ class GameData {
         this.biomes.push(biome);
       }
     });
+    this.eachFileInDir("objects", ".txt", (path, filename) => {
+      if (filename.startsWith("groundHeat")) {
+        const content = fs.readFileSync(path, "utf8");
+        Biome.applyGroundHeat(this.biomes, filename, content);
+      }
+    });
     const objects = Object.values(this.objects).filter(o => o.isNatural());
     for (let biome of this.biomes) {
       biome.addObjects(objects);
