@@ -5,6 +5,16 @@
         <ObjectFilter :filter="filter" :selected="filter == selectedFilter" />
       </div>
     </div>
+
+    <div v-if="showBiomes" class="biomesWrapper">
+      <div class="biomesTitle">Biomes</div>
+      <div class="biomes">
+        <router-link v-for="biome in biomes" :to="biome.url()" :title="biome.name" v-tippy class="biome" :key="biome.id">
+          <BiomeImage :biome="biome" />
+        </router-link>
+      </div>
+    </div>
+
     <div class="objectListWrapper">
       <div class="objectListHeader">
         <div class="objectListSorter">
@@ -29,16 +39,19 @@
 </template>
 
 <script>
-import GameObject from '../models/GameObject'
-import BrowserStorage from '../models/BrowserStorage'
+import GameObject from '../models/GameObject';
+import Biome from '../models/Biome';
+import BrowserStorage from '../models/BrowserStorage';
 
-import ObjectFilter from './ObjectFilter'
+import ObjectFilter from './ObjectFilter';
 import ObjectView from './ObjectView';
+import BiomeImage from './BiomeImage';
 
 export default {
   components: {
     ObjectFilter,
     ObjectView,
+    BiomeImage,
   },
   data () {
     return {
@@ -52,21 +65,27 @@ export default {
     window.onscroll = () => this.handleScroll();
   },
   watch: {
-    "$route" (to, from) {
+    "$route"(to, from) {
       this.showAmount = 24;
       this.selectedFilter = GameObject.findFilter(to.params.filter);
     }
   },
   computed: {
-    shownObjects () {
+    shownObjects() {
       return GameObject.objects(this.showAmount, this.selectedFilter, this.sortBy, this.descending);
     },
-    filters () {
+    filters() {
       return GameObject.filters;
+    },
+    showBiomes() {
+      return this.selectedFilter && this.selectedFilter.key === "natural";
+    },
+    biomes() {
+      return Biome.biomes();
     }
   },
   methods: {
-    handleScroll () {
+    handleScroll() {
       if (window.scrollY + window.innerHeight > document.body.clientHeight - 100) {
         if (!this.loadingMore) {
           this.loadingMore = true;
@@ -76,7 +95,7 @@ export default {
         this.loadingMore = false;
       }
     },
-    sort (sortBy, descending) {
+    sort(sortBy, descending) {
       this.sortBy = sortBy;
       this.descending = descending;
 
@@ -93,7 +112,7 @@ export default {
 </script>
 
 <style lang="scss">
-  .filterList {
+  .objectBrowser .filterList {
     background-color: #222;
     border-radius: 5px;
     padding: 10px;
@@ -103,7 +122,7 @@ export default {
     flex-wrap: wrap;
   }
 
-  .objectListWrapper {
+  .objectBrowser .objectListWrapper {
     background-color: #222;
     border-radius: 5px;
     width: 100%;
@@ -112,7 +131,7 @@ export default {
     box-sizing: border-box;
   }
 
-  .objectListHeader {
+  .objectBrowser .objectListHeader {
     margin: 0 15px;
     padding: 0;
     font-size: 16px;
@@ -120,50 +139,83 @@ export default {
     flex-direction: row;
     justify-content: center;
   }
-  .objectListSorter {
+  .objectBrowser .objectListSorter {
     padding: 0 10px;
   }
-  .objectListSorter span {
+  .objectBrowser .objectListSorter span {
     cursor: pointer;
     text-decoration: underline;
   }
-  .objectListSorter .selected {
+  .objectBrowser .objectListSorter .selected {
     color: inherit;
     font-weight: bold;
     cursor: normal;
     text-decoration: none;
   }
 
-  .objectList {
+  .objectBrowser .objectList {
     display: flex;
     flex-wrap: wrap;
   }
 
-  .objectView .imgContainer {
+  .objectBrowser .objectView .imgContainer {
     width: 128px;
     height: 128px;
   }
 
-  .filterList > .filter {
+  .objectBrowser .filterList > .filter {
     min-width: 200px;
     width: 33.3333%;
   }
 
-  .objectList > .object {
+  .objectBrowser .objectList > .object {
     min-width: 200px;
     width: 33.3333%;
+  }
+
+  .objectBrowser .biomesWrapper {
+    background-color: #222;
+    border-radius: 5px;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0px;
+    box-sizing: border-box;
+  }
+  .objectBrowser .biomesTitle {
+    font-weight: bold;
+    // font-size: 20px;
+    text-align: center;
+  }
+  .objectBrowser .biomes {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .objectBrowser .biome {
+    margin: 8px;
+    width: 64px;
+    height: 64px;
+  }
+
+  .objectBrowser .biomeImage {
+    border-radius: 5px;
+    border: solid 1px transparent;
+  }
+
+  .objectBrowser .biomeImage:hover {
+    border: solid 1px white;
   }
 
   @media only screen and (max-width: 768px) {
-    .filterList > .filter {
+    .objectBrowser .filterList > .filter {
       min-width: 150px;
       width: 50%;
     }
-    .objectList > .object {
+    .objectBrowser .objectList > .object {
       min-width: 150px;
       width: 50%;
     }
-    .objectListHeader {
+    .objectBrowser .objectListHeader {
       flex-direction: column;
       align-items: center;
     }

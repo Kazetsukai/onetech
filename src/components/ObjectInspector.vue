@@ -55,7 +55,7 @@
           </div>
           <div class="biomes">
             <router-link v-for="biome in biomes" :to="biome.url()" :title="biome.name" v-tippy class="biome" :key="biome.id">
-              <BiomeImage :biome="biome" class="biomeImg" />
+              <BiomeImage :biome="biome" />
             </router-link>
           </div>
         </div>

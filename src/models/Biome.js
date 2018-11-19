@@ -8,8 +8,8 @@ export default class Biome {
     }
   }
 
-  static biomes(amount) {
-    return Object.values(this.biomesMap).slice(0, amount);
+  static biomes() {
+    return Object.values(this.biomesMap);
   }
 
   static find(id) {
