@@ -20,6 +20,7 @@ console.log("Importing objects...");
 gameData.importObjects();
 gameData.importCategories();
 gameData.importTransitions();
+gameData.importBiomes();
 
 console.log("Populating versions...");
 gameData.populateVersions();
@@ -32,6 +33,9 @@ gameData.exportObjects();
 
 console.log("Exporting versions...");
 gameData.exportVersions();
+
+console.log("Exporting biomes...");
+gameData.exportBiomes();
 
 if (process.argv.includes('sprites') || process.argv.includes('download')) {
   console.log("Converting sprite images...");

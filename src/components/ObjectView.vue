@@ -9,6 +9,9 @@
         </div>
       </div>
       <ObjectImage :object="object" scaleUpTo="80" />
+      <div class="spawnInfo" v-if="spawnInfo">
+        {{object.spawnText()}}
+      </div>
     </div>
   </router-link>
 </template>
@@ -17,7 +20,7 @@
 import ObjectImage from './ObjectImage';
 
 export default {
-  props: ['object'],
+  props: ["object", "spawnInfo"],
   components: {
     ObjectImage
   },

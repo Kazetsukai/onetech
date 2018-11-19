@@ -24,7 +24,8 @@
 </template>
 
 <script>
-import GameObject from './models/GameObject'
+import GameObject from './models/GameObject';
+import Biome from './models/Biome';
 
 import ObjectSearch from './components/ObjectSearch';
 import ObjectBrowser from './components/ObjectBrowser';
@@ -32,6 +33,7 @@ import ObjectInspector from './components/ObjectInspector';
 import TechTree from './components/TechTree';
 import Recipe from './components/Recipe';
 import RecipeForLetters from './components/RecipeForLetters';
+import BiomeInspector from './components/BiomeInspector';
 import ChangeLog from './components/ChangeLog';
 import NotFound from './components/NotFound';
 
@@ -47,7 +49,8 @@ export default {
   },
   beforeMount () {
     this.redirectOldHash();
-    GameObject.load(() => {
+    GameObject.load((data) => {
+      Biome.setup(data.biomeIds, data.biomeNames);
       this.loading = false;
     });
   },
@@ -101,6 +104,7 @@ export default {
     {path: "/letters", component: RecipeForLetters},
     {path: "/versions", component: ChangeLog},
     {path: "/versions/:id", component: ChangeLog},
+    {path: "/biomes/:id", component: BiomeInspector},
     {path: "/:id/tech-tree", component: TechTree},
     {path: "/:id/recipe", component: Recipe},
     {path: "/:id", component: ObjectInspector},

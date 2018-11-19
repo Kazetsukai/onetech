@@ -11,7 +11,7 @@ export default class GameObject {
       this.date = new Date(data.date);
       this.versions = data.versions;
       this.foodBonus = data.foodBonus;
-      callback();
+      callback(data);
     });
   }
 
@@ -160,6 +160,19 @@ export default class GameObject {
 
   size() {
     return this.sizeText(this.data.size);
+  }
+
+  spawnText() {
+    if (!this.mapChanceData()) return;
+    const level = Math.ceil(parseFloat(this.mapChanceData())*15)-1;
+    if (level == 0) return "Very Rare";
+    if (level < 3) return "Rare";
+    if (level < 7) return "Uncommon";
+    return "Common";
+  }
+
+  mapChanceData() {
+    return this.mapChance || this.data && this.data.mapChance;
   }
 
   fetchData(callback) {

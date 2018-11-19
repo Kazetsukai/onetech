@@ -54,10 +54,9 @@
             Spawn Chance: {{spawnText}}
           </div>
           <div class="biomes">
-            <BiomeImage v-for="biome in object.data.biomes"
-              class="biome"
-              :biome="biome"
-              :key="biome" />
+            <router-link v-for="biome in biomes" :to="biome.url()" :title="biome.name" v-tippy class="biome" :key="biome.id">
+              <BiomeImage :biome="biome" class="biomeImg" />
+            </router-link>
           </div>
         </div>
         <TransitionsList
@@ -85,6 +84,7 @@
 
 <script>
 import GameObject from '../models/GameObject';
+import Biome from '../models/Biome';
 
 import ObjectImage from './ObjectImage';
 import BiomeImage from './BiomeImage';
@@ -112,12 +112,7 @@ export default {
   },
   computed: {
     spawnText() {
-      if (!this.object.data || !this.object.data.mapChance) return;
-      const level = Math.ceil(parseFloat(this.object.data.mapChance)*15)-1;
-      if (level == 0) return "Very Rare";
-      if (level < 3) return "Rare";
-      if (level < 7) return "Uncommon";
-      return "Common";
+      return this.object.spawnText();
     },
     difficultyText() {
       if (!this.object.difficulty) return;
@@ -184,6 +179,10 @@ export default {
       if (!this.foodValue || !this.numUses) return;
       return this.foodValue * this.numUses;
     },
+    biomes() {
+      if (!this.object.data.biomes) return [];
+      return this.object.data.biomes.map(id => Biome.find(id.toString()));
+    }
   },
   metaInfo() {
     return {title: this.object.name};
@@ -311,10 +310,18 @@ export default {
   }
 
   .objectInspector .biome {
-    width: 64px;
-    height: 64px;
-    border-radius: 5px;
     margin: 0 5px;
+    width: 54px;
+    height: 54px;
+  }
+
+  .objectInspector .biomeImage {
+    border-radius: 5px;
+    border: solid 1px transparent;
+  }
+
+  .objectInspector .biomeImage:hover {
+    border: solid 1px white;
   }
 
   @media only screen and (max-width: 768px) {

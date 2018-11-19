@@ -8,6 +8,7 @@ const GameObject = require('./GameObject');
 const Category = require('./Category');
 const TransitionImporter = require('./TransitionImporter');
 const ChangeLog = require('./ChangeLog');
+const Biome = require('./Biome');
 const DepthCalculator = require('./DepthCalculator');
 const SpriteProcessor = require('./SpriteProcessor');
 const ObjectFilters = require('./ObjectFilters');
@@ -23,6 +24,7 @@ class GameData {
     this.staticDevDir = processDir + `/../static${mod}-dev`;
     this.objects = {};
     this.categories = [];
+    this.biomes = [];
   }
 
   download(gitURL) {
@@ -38,7 +40,7 @@ class GameData {
   }
 
   importObjects() {
-    this.eachFileInDir("objects", ".txt", (content, _filename) => {
+    this.eachFileContent("objects", ".txt", (content, _filename) => {
       const object = new GameObject(content);
       if (object.id) {
         this.objects[object.id] = object;
@@ -48,7 +50,7 @@ class GameData {
   }
 
   importCategories() {
-    this.eachFileInDir("categories", ".txt", (content, _filename) => {
+    this.eachFileContent("categories", ".txt", (content, _filename) => {
       const category = new Category(content);
       category.addToObjects(this.objects);
       this.categories.push(category);
@@ -58,7 +60,7 @@ class GameData {
 
   importTransitions() {
     const importer = new TransitionImporter();
-    this.eachFileInDir("transitions", ".txt", (content, filename) => {
+    this.eachFileContent("transitions", ".txt", (content, filename) => {
       importer.importFromFile(content, filename);
     });
     importer.splitCategories(this.categories);
@@ -66,6 +68,20 @@ class GameData {
     importer.mergeAttackTransitions();
     importer.addToObjects(this.objects);
     console.log("Transition Count: " + importer.transitions.length);
+  }
+
+  importBiomes() {
+    this.eachFileInDir("ground", ".tga", (_path, filename) => {
+      const biome = Biome.fromFilename(filename);
+      if (biome) {
+        this.biomes.push(biome);
+      }
+    });
+    const objects = Object.values(this.objects).filter(o => o.isNatural());
+    for (let biome of this.biomes) {
+      biome.addObjects(objects);
+    }
+    console.log("Biome Count: " + this.biomes.length);
   }
 
   populateVersions() {
@@ -101,6 +117,12 @@ class GameData {
     }
   }
 
+  exportBiomes() {
+    for (let biome of this.biomes) {
+      this.saveJSON(`biomes/${biome.id}.json`, biome.jsonData());
+    }
+  }
+
   prepareStaticDir() {
     if (!fs.existsSync(this.staticDevDir) && fs.existsSync(this.staticDir))
       spawnSync("cp", ["-R", this.staticDir, this.staticDevDir]);
@@ -109,9 +131,11 @@ class GameData {
     this.makeDir(this.staticDevDir + "/ground");
     this.makeDir(this.staticDevDir + "/objects");
     this.makeDir(this.staticDevDir + "/versions");
+    this.makeDir(this.staticDevDir + "/biomes");
     this.makeDir(this.staticDevDir + "/pretty-json");
     this.makeDir(this.staticDevDir + "/pretty-json/objects");
     this.makeDir(this.staticDevDir + "/pretty-json/versions");
+    this.makeDir(this.staticDevDir + "/pretty-json/biomes");
   }
 
   makeDir(path) {
@@ -143,6 +167,8 @@ class GameData {
       badges: ObjectBadges.jsonData(objects),
       date: new Date(),
       versions: this.changeLog.versions.slice(1).reverse().map(v => v.id),
+      biomeIds: this.biomes.map(b => b.id),
+      biomeNames: this.biomes.map(b => b.name()),
       foodBonus: parseInt(process.env.ONETECH_FOOD_BONUS),
     };
   }
@@ -180,10 +206,15 @@ class GameData {
     const dir = this.dataDir + "/" + dirName;
     for (let filename of fs.readdirSync(dir)) {
       if (filename.endsWith(extension)) {
-        const content = fs.readFileSync(dir + "/" + filename, "utf8");
-        callback(content, filename);
+        callback(dir + "/" + filename, filename);
       }
     }
+  }
+
+  eachFileContent(dirName, extension, callback) {
+    this.eachFileInDir(dirName, extension, (path, filename) => {
+      callback(fs.readFileSync(path, "utf8"), filename);
+    });
   }
 
   syncStaticDir() {
