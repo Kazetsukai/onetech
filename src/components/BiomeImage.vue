@@ -1,5 +1,5 @@
 <template>
-  <div class="biomeImage" :title="name" v-tippy :style="{backgroundImage: `url('${imageUrl}')`}">
+  <div class="biomeImage" :style="{backgroundImage: `url('${imageUrl}')`}">
   </div>
 </template>
 
@@ -10,12 +10,15 @@ export default {
   ],
   computed: {
     imageUrl() {
-      return `${STATIC_PATH}/ground/ground_${this.biome}.png`;
-    },
-    name() {
-      const names = ["Grassland", "Swamp", "Prairie", "Rocky", "Snow", "Desert", "Jungle"];
-      return names[parseInt(this.biome)];
+      return `${STATIC_PATH}/ground/ground_${this.biome.id}.png`;
     }
   }
 }
 </script>
+
+<style scoped>
+  .biomeImage {
+    width: 100%;
+    height: 100%;
+  }
+</style>
