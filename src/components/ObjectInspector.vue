@@ -22,6 +22,7 @@
         </li>
         <li v-if="estimatedUses">Estimated uses: {{estimatedUses}}</li>
         <li v-if="pickupText">{{pickupText}}</li>
+        <li v-if="speedPercent">Walking Speed: {{speedPercent}}%</li>
         <li v-if="sizeText">{{sizeText}}</li>
         <li v-if="containerText">{{containerText}}</li>
         <li v-if="difficultyText">
@@ -185,6 +186,10 @@ export default {
     totalFood() {
       if (!this.foodValue || !this.numUses) return;
       return this.foodValue * this.numUses;
+    },
+    speedPercent() {
+      if (!this.object.data.speedMult) return;
+      return this.object.data.speedMult * 100;
     },
     biomes() {
       if (!this.object.data.biomes) return [];

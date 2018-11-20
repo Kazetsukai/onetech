@@ -133,6 +133,10 @@ class GameObject {
       result.minPickupAge = parseInt(this.data.minPickupAge) || 3;
     }
 
+    if (this.data.speedMult != 1) {
+      result.speedMult = parseFloat(this.data.speedMult);
+    }
+
     let techTree = this.techTreeNodes(3);
     if (techTree)
       result.techTree = techTree;
