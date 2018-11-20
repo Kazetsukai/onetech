@@ -119,6 +119,10 @@ class GameObject {
       result.groundHeat = this.data.rValue;
     }
 
+    if (this.data.deadlyDistance) {
+      result.deadlyDistance = this.data.deadlyDistance;
+    }
+
     if (this.data.mapChance > 0) {
       result.mapChance = this.data.mapChance;
       result.biomes = this.data.biomes;

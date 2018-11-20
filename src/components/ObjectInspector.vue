@@ -27,6 +27,7 @@
         <li v-if="sizeText">{{sizeText}}</li>
         <li v-if="containerText">{{containerText}}</li>
         <li v-if="object.data.blocksWalking">Blocks walking</li>
+        <li v-if="object.data.deadlyDistance">Deadly</li>
         <li v-if="difficultyText">
           Difficulty: {{difficultyText}}
           <span class="helpTip" v-tippy :title="difficultyTip">?</span>
