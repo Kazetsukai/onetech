@@ -14,6 +14,7 @@
         <li v-if="object.data.heatValue">Heat: {{object.data.heatValue}}</li>
         <li v-if="object.clothingPart()">Clothing: {{object.clothingPart()}}</li>
         <li v-if="object.hasInsulation()">Insulation: {{object.insulationPercent()}}%</li>
+        <li v-if="object.data.groundHeat">Ground Heat: {{object.data.groundHeat}}</li>
         <li v-if="numUses">Number of uses: {{numUses}}</li>
         <li v-if="totalFood">Total Food: {{totalFood}}</li>
         <li v-if="object.data.useChance">

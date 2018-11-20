@@ -115,6 +115,10 @@ class GameObject {
       result.insulation = this.insulation();
     }
 
+    if (this.data.floor && this.data.rValue > 0) {
+      result.groundHeat = this.data.rValue;
+    }
+
     if (this.data.mapChance > 0) {
       result.mapChance = this.data.mapChance;
       result.biomes = this.data.biomes;
