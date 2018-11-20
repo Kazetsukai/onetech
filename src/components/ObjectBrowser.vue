@@ -6,13 +6,9 @@
       </div>
     </div>
 
-    <div v-if="showBiomes" class="biomesWrapper">
+    <div v-if="showBiomes" class="biomes">
       <div class="biomesTitle">Biomes</div>
-      <div class="biomes">
-        <router-link v-for="biome in biomes" :to="biome.url()" :title="biome.name" v-tippy class="biome" :key="biome.id">
-          <BiomeImage :biome="biome" />
-        </router-link>
-      </div>
+      <BiomeList />
     </div>
 
     <div class="objectListWrapper">
@@ -40,18 +36,17 @@
 
 <script>
 import GameObject from '../models/GameObject';
-import Biome from '../models/Biome';
 import BrowserStorage from '../models/BrowserStorage';
 
 import ObjectFilter from './ObjectFilter';
 import ObjectView from './ObjectView';
-import BiomeImage from './BiomeImage';
+import BiomeList from './BiomeList';
 
 export default {
   components: {
     ObjectFilter,
     ObjectView,
-    BiomeImage,
+    BiomeList,
   },
   data () {
     return {
@@ -80,9 +75,6 @@ export default {
     showBiomes() {
       return this.selectedFilter && this.selectedFilter.key === "natural";
     },
-    biomes() {
-      return Biome.biomes();
-    }
   },
   methods: {
     handleScroll() {
@@ -173,7 +165,7 @@ export default {
     width: 33.3333%;
   }
 
-  .objectBrowser .biomesWrapper {
+  .objectBrowser .biomes {
     background-color: #222;
     border-radius: 5px;
     width: 100%;
@@ -183,27 +175,7 @@ export default {
   }
   .objectBrowser .biomesTitle {
     font-weight: bold;
-    // font-size: 20px;
     text-align: center;
-  }
-  .objectBrowser .biomes {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  .objectBrowser .biome {
-    margin: 8px;
-    width: 64px;
-    height: 64px;
-  }
-
-  .objectBrowser .biomeImage {
-    border-radius: 5px;
-    border: solid 1px transparent;
-  }
-
-  .objectBrowser .biomeImage:hover {
-    border: solid 1px white;
   }
 
   @media only screen and (max-width: 768px) {
