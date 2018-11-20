@@ -113,10 +113,14 @@ class Transition {
     if (this.actor) {
       result.actorID = this.actor.id;
       if (this.actor.data.numUses > 1) {
-        if (this.lastUseActor)
+        if (this.lastUseActor) {
           result.actorUses = this.reverseUseActor ? "max" : "last";
-        else if (this.tool)
+        } else if (this.tool) {
           result.newActorUses = this.reverseUseActor ? "+1" : "-1";
+          if (this.actor.data.useChance < 1.0) {
+            result.newActorWeight = this.actor.data.useChance;
+          }
+        }
       } else if (this.reverseUseActor) {
         result.newActorUses = "last";
       }
@@ -125,10 +129,14 @@ class Transition {
     if (this.target) {
       result.targetID = this.target.id;
       if (this.target.data.numUses > 1) {
-        if (this.lastUseTarget)
+        if (this.lastUseTarget) {
           result.targetUses = this.reverseUseTarget ? "max" : "last";
-        else if (this.targetRemains)
+        } else if (this.targetRemains) {
           result.newTargetUses = this.reverseUseTarget ? "+1" : "-1";
+          if (this.target.data.useChance < 1.0) {
+            result.newTargetWeight = this.target.data.useChance;
+          }
+        }
       } else if (this.reverseUseTarget) {
         result.newTargetUses = "last";
       }
