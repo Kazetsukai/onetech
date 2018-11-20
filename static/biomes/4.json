@@ -1,1 +1,1 @@
-{"id":"4","name":"Snow"}
+{"id":"4","groundHeat":-0.15,"name":"Tundra","objects":[{"id":"32","mapChance":1},{"id":"33","mapChance":1},{"id":"99","mapChance":1},{"id":"680","mapChance":0.005},{"id":"703","mapChance":0.1},{"id":"706","mapChance":0.25},{"id":"707","mapChance":0.05},{"id":"1020","mapChance":0.25}]}

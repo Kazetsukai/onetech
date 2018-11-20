@@ -1,1 +1,1 @@
-{"id":"1","name":"Swamp"}
+{"id":"1","groundHeat":0,"name":"Swamps","objects":[{"id":"121","mapChance":1},{"id":"125","mapChance":1},{"id":"141","mapChance":1},{"id":"527","mapChance":2},{"id":"530","mapChance":2},{"id":"1323","mapChance":0.1}]}

@@ -1,1 +1,1 @@
-{"id":"0","name":"Grassland"}
+{"id":"0","groundHeat":0,"name":"Grasslands","objects":[{"id":"30","mapChance":1},{"id":"32","mapChance":1},{"id":"33","mapChance":1},{"id":"49","mapChance":1},{"id":"50","mapChance":2},{"id":"63","mapChance":1},{"id":"65","mapChance":1},{"id":"100","mapChance":1},{"id":"133","mapChance":1},{"id":"136","mapChance":1},{"id":"153","mapChance":1},{"id":"211","mapChance":1},{"id":"804","mapChance":1},{"id":"805","mapChance":1},{"id":"1140","mapChance":0.1}]}

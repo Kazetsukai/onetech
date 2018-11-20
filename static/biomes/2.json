@@ -1,1 +1,1 @@
-{"id":"2","name":"Prairie"}
+{"id":"2","groundHeat":0,"name":"Yellow Prairies","objects":[{"id":"36","mapChance":1},{"id":"49","mapChance":1},{"id":"161","mapChance":1},{"id":"242","mapChance":1},{"id":"713","mapChance":0.25},{"id":"714","mapChance":0.25},{"id":"1013","mapChance":0.125},{"id":"1107","mapChance":0.25},{"id":"1157","mapChance":0.1},{"id":"1184","mapChance":0.1},{"id":"1435","mapChance":0.1}]}
