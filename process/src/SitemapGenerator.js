@@ -10,7 +10,7 @@ class SitemapGenerator {
     this.rootDir = rootDir;
   }
 
-  generate(objects) {
+  generate(objects, biomes) {
     const sitemap = sm.createSitemap({hostname: 'https://onetech.info'});
 
     sitemap.add({url: "/"});
@@ -28,6 +28,11 @@ class SitemapGenerator {
           sitemap.add({url: `/?p=/${path}/recipe`});
         }
       }
+    }
+
+    for (let biome of biomes) {
+      const path = encodeURIComponent(`${biome.id}-${biome.name().toString().replace(/\W+/g, '-')}`);
+      sitemap.add({url: `/?p=/biomes/${path}`});
     }
 
     fs.writeFileSync(this.rootDir + "sitemap.xml", sitemap.toString());

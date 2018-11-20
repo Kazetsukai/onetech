@@ -229,7 +229,7 @@ class GameData {
 
   generateSitemap() {
     var generator = new SitemapGenerator(this.processDir + "/../");
-    generator.generate(Object.values(this.objects));
+    generator.generate(Object.values(this.objects), this.biomes);
   }
 }
 
