@@ -21,13 +21,13 @@
           {{Math.round(object.data.useChance*100)}}%
         </li>
         <li v-if="estimatedUses">Estimated uses: {{estimatedUses}}</li>
+        <li v-if="pickupText">{{pickupText}}</li>
+        <li v-if="sizeText">{{sizeText}}</li>
+        <li v-if="containerText">{{containerText}}</li>
         <li v-if="difficultyText">
           Difficulty: {{difficultyText}}
           <span class="helpTip" v-tippy :title="difficultyTip">?</span>
         </li>
-        <li v-if="pickupText">{{pickupText}}</li>
-        <li v-if="sizeText">{{sizeText}}</li>
-        <li v-if="containerText">{{containerText}}</li>
         <li v-if="object.data.version">
           Added in
           <router-link :to="versionUrl">v{{object.data.version}}</router-link>
