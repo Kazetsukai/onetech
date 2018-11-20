@@ -7,7 +7,10 @@
       <h3 v-if="!object.data">Loading...</h3>
 
       <ul v-if="object.data">
-        <li v-if="foodValue">Food: {{foodValue}} (includes {{foodBonus}} bonus)</li>
+        <li v-if="foodWithBonus">
+          Food: {{foodWithBonus}}
+          <span class="details">({{foodBase}}+{{foodBonus}} bonus)</span>
+        </li>
         <li v-if="object.data.heatValue">Heat: {{object.data.heatValue}}</li>
         <li v-if="object.clothingPart()">Clothing: {{object.clothingPart()}}</li>
         <li v-if="object.hasInsulation()">Insulation: {{object.insulationPercent()}}%</li>
@@ -171,9 +174,13 @@ export default {
     foodBonus() {
       return GameObject.foodBonus;
     },
-    foodValue() {
+    foodBase() {
       if (!this.object.data.foodValue) return;
-      return this.object.data.foodValue + this.foodBonus;
+      return this.object.data.foodValue;
+    },
+    foodWithBonus() {
+      if (!this.foodBase) return;
+      return this.foodBase + this.foodBonus;
     },
     totalFood() {
       if (!this.foodValue || !this.numUses) return;
@@ -230,6 +237,9 @@ export default {
   .objectInspector .info li {
     text-align: center;
     padding: 2px 0;
+  }
+  .objectInspector .info li .details {
+    color: #999;
   }
 
   .objectInspector .actions {
