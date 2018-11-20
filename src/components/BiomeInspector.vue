@@ -11,7 +11,10 @@
         <BiomeImage :biome="biome" />
       </div>
       <ul v-if="biome.data">
-        <li>Ground Heat: {{biome.data.groundHeat}}</li>
+        <li>
+          Temperature: {{temperatureText}}
+          <span class="details">({{biome.data.groundHeat}})</span>
+        </li>
       </ul>
       <div class="objects">
         <div class="object" v-for="object in objects">
@@ -53,6 +56,16 @@ export default {
   computed: {
     objects() {
       return this.biome.objects();
+    },
+    temperatureText() {
+      const heat = this.biome.data.groundHeat;
+      if (heat < 0.0) return "Very Cold";
+      if (heat < 0.5) return "Cold";
+      if (heat < 1.0) return "Cool";
+      if (heat < 1.1) return "Perfect";
+      if (heat < 1.9) return "Warm";
+      if (heat < 2.1) return "Hot";
+      return "Very Hot"
     }
   },
   metaInfo() {
@@ -102,6 +115,9 @@ export default {
   .info li {
     text-align: center;
     padding: 2px 0;
+  }
+  .info li .details {
+    color: #999;
   }
 
   .info .biomeImgContainer {
