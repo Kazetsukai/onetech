@@ -137,6 +137,10 @@ class GameObject {
       result.speedMult = parseFloat(this.data.speedMult);
     }
 
+    if (this.data.blocksWalking == 1) {
+      result.blocksWalking = true;
+    }
+
     let techTree = this.techTreeNodes(3);
     if (techTree)
       result.techTree = techTree;
