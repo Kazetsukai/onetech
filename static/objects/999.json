@@ -1,1 +1,1 @@
-{"id":"999","name":"@ Locked Sign","transitionsToward":[],"transitionsAway":[],"transitionsTimed":[],"version":91,"minPickupAge":3}
+{"id":"999","name":"@ Locked Sign","transitionsToward":[],"transitionsAway":[],"transitionsTimed":[],"version":91,"minPickupAge":3,"blocksWalking":true}

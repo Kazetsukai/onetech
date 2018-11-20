@@ -1,1 +1,1 @@
-{"id":"1415","name":"Final Tutorial Torch","transitionsToward":[],"transitionsAway":[{"actorID":"248","targetID":"1415","newActorID":"248","newTargetID":"1416","tool":true}],"transitionsTimed":[],"version":117}
+{"id":"1415","name":"Final Tutorial Torch","transitionsToward":[],"transitionsAway":[{"actorID":"248","targetID":"1415","newActorID":"248","newTargetID":"1416","tool":true}],"transitionsTimed":[],"version":117,"blocksWalking":true}
