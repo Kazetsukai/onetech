@@ -86,11 +86,17 @@ class TransitionImporter {
 
   findDuplicate(newTransition) {
     return this.transitions.find(transition => {
+      if (transition.newActorWeight || transition.newTargetWeight ||
+          newTransition.newActorWeight || newTransition.newTargetWeight) {
+        return transition.actorID == newTransition.actorID &&
+          transition.targetID == newTransition.targetID &&
+          transition.newActorID == newTransition.newActorID &&
+          transition.newTargetID == newTransition.newTargetID;
+      }
       return transition.actorID == newTransition.actorID &&
         transition.targetID == newTransition.targetID &&
-        transition.newActorID == newTransition.newActorID &&
-        transition.newTargetID == newTransition.newTargetID &&
-        transition.newActorID == newTransition.newActorID;
+        transition.lastUseActor == newTransition.lastUseActor &&
+        transition.lastUseTarget == newTransition.lastUseTarget;
     });
   }
 
