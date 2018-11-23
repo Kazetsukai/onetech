@@ -181,6 +181,10 @@ class RecipeNode {
   subSteps() {
     return RecipeNode.steps([this].concat(this.collapsedSubNodes()), true);
   }
+
+  parentsAreTools() {
+    return this.parents.filter(p => p.tool).length == this.parents.length;
+  }
 }
 
 module.exports = RecipeNode;

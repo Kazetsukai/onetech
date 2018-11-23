@@ -62,7 +62,7 @@ class RecipeGenerator {
     }
 
     // Don't search too deep for tools
-    if (recursionCount > 5 || object.isNatural()) return;
+    if (recursionCount > 10 || object.isNatural()) return;
 
     // Search simple transitions for more tools
     for (let transition of object.transitionsAway) {

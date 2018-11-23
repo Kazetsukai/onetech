@@ -29,7 +29,7 @@ class Recipe {
   }
 
   tools() {
-    return this.nodes.filter(n => n.tool).map(n => n.object);
+    return this.nodes.filter(n => n.tool && !n.parentsAreTools()).map(n => n.object);
   }
 
   ingredients() {
