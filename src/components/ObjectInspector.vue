@@ -21,7 +21,7 @@
         <li v-if="totalFood">Total Food: {{totalFood}}</li>
         <li v-if="object.data.useChance">
           Chance to use:
-          {{Math.round(object.data.useChance*100)}}%
+          {{object.data.useChance*100}}%
         </li>
         <li v-if="estimatedUses">Estimated {{useWord}}s: {{estimatedUses}}</li>
         <li v-if="pickupText">{{pickupText}}</li>
