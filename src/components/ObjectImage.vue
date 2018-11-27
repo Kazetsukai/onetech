@@ -11,6 +11,7 @@
     <div v-if="uses" class="uses">{{uses}}</div>
     <div v-if="weight" class="weight">{{weightPercent}}%</div>
     <div v-if="decay" class="decay"><span>{{decay}}</span></div>
+    <div v-if="move" class="move">move</div>
     <div v-if="ground" class="ground"></div>
     <div v-if="object && !legacy" class="image">
       <img :id="imageID" :src="imageUrl" :alt="title" />
@@ -34,7 +35,8 @@ export default {
     'player',
     'wildcard',
     'scaleUpTo',
-    'weight'
+    'weight',
+    'move'
   ],
   components: {
     ObjectImageWrapper,
@@ -172,10 +174,8 @@ export default {
     background-image: url('../assets/wildcard.png');
   }
 
-  .uses {
+  .uses, .weight, .move {
     position: absolute;
-    right: 4px;
-    bottom: 4px;
     color: black;
     font-weight: bold;
     font-size: 12px;
@@ -185,17 +185,19 @@ export default {
     z-index: 2;
   }
 
+  .uses {
+    right: 4px;
+    bottom: 4px;
+  }
+
   .weight {
-    position: absolute;
     left: 4px;
     bottom: 4px;
-    color: black;
-    font-weight: bold;
-    font-size: 12px;
-    padding: 1px 4px;
-    background-color: rgba(180, 180, 180, 0.75);
-    border-radius: 3px;
-    z-index: 2;
+  }
+
+  .move {
+    left: 4px;
+    top: 4px;
   }
 
   /*.ground {

@@ -92,14 +92,17 @@ class GameObject {
       transitionsTimed: transitionsTimed.map(t => t.jsonData()),
     };
 
-    if (this.version)
+    if (this.version) {
       result.version = this.version;
+    }
 
-    if (this.data.foodValue > 0)
+    if (this.data.foodValue > 0) {
       result.foodValue = this.data.foodValue;
+    }
 
-    if (this.data.heatValue > 0)
+    if (this.data.heatValue > 0) {
       result.heatValue = this.data.heatValue;
+    }
 
     if (this.data.numUses > 1) {
       result.numUses = this.data.numUses;
@@ -107,8 +110,9 @@ class GameObject {
         result.useChance = this.data.useChance;
     }
 
-    if (this.depth.hasValue())
+    if (this.depth.hasValue()) {
       result.depth = this.depth.value;
+    }
 
     if (this.data.clothing != "n") {
       result.clothing = this.data.clothing;
@@ -149,14 +153,22 @@ class GameObject {
       result.blocksWalking = true;
     }
 
-    let techTree = this.techTreeNodes(3);
-    if (techTree)
-      result.techTree = techTree;
+    const moveTransition = this.transitionsAway.find(t => t.move > 0);
+    if (moveTransition) {
+      result.moveType = moveTransition.move;
+      result.moveDistance = moveTransition.desiredMoveDist;
+    }
 
-    let recipe = new Recipe(this);
+    const techTree = this.techTreeNodes(3);
+    if (techTree) {
+      result.techTree = techTree;
+    }
+
+    const recipe = new Recipe(this);
     recipe.generate();
-    if (recipe.hasData())
+    if (recipe.hasData()) {
       result.recipe = recipe.jsonData();
+    }
 
     return result;
   }

@@ -27,7 +27,7 @@ class Transition {
     this.targetMinUseFraction = data[4] || 0;
     this.reverseUseActor = data[5] == '1';
     this.reverseUseTarget = data[6] == '1';
-    this.move = data[7] || 0;
+    this.move = parseInt(data[7] || 0);
     this.desiredMoveDist = data[8] || 1;
 
     this.hand = this.actorID == 0;
@@ -171,6 +171,10 @@ class Transition {
 
     if (this.decay)
       result.decay = this.decay;
+
+    if (this.move > 0) {
+      result.move = this.move;
+    }
 
     return result;
   }

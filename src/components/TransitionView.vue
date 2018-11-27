@@ -48,6 +48,7 @@
                   hand="true" hover="true"
                   :weight="transition.newActorWeight"
                   :uses="transition.newActorUses"
+                  :move="transition.move"
                   :object="newActor"
                   :clickable="newActor && newActor != selectedObject" />
 
@@ -59,6 +60,7 @@
                   hover="true"
                   :weight="transition.newTargetWeight"
                   :uses="transition.newTargetUses"
+                  :move="transition.move"
                   :wildcard="wildcard"
                   :object="newTarget"
                   :extraObject="newExtraTarget"

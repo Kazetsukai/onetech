@@ -9,9 +9,6 @@ class TransitionImporter {
 
   importFromFile(content, filename) {
     const transition = new Transition(content, filename);
-    // Ignore move transitions which don't change the target
-    if (transition.move > 0 && transition.targetID == transition.newTargetID)
-      return;
     this.transitions.push(transition);
   }
 

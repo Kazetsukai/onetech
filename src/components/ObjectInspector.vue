@@ -15,13 +15,15 @@
         <li v-if="object.clothingPart()">Clothing: {{object.clothingPart()}}</li>
         <li v-if="object.hasInsulation()">Insulation: {{object.insulationPercent()}}%</li>
         <li v-if="object.data.groundHeat">Ground Heat: {{object.data.groundHeat}}</li>
-        <li v-if="numUses">Number of uses: {{numUses}}</li>
+        <li v-if="moveDistanceText">Move distance: {{moveDistanceText}}</li>
+        <li v-if="moveType">Move behavior: {{moveType}}</li>
+        <li v-if="numUses">Number of {{useWord}}s: {{numUses}}</li>
         <li v-if="totalFood">Total Food: {{totalFood}}</li>
         <li v-if="object.data.useChance">
           Chance to use:
           {{Math.round(object.data.useChance*100)}}%
         </li>
-        <li v-if="estimatedUses">Estimated uses: {{estimatedUses}}</li>
+        <li v-if="estimatedUses">Estimated {{useWord}}s: {{estimatedUses}}</li>
         <li v-if="pickupText">{{pickupText}}</li>
         <li v-if="speedPercent">Walking Speed: {{speedPercent}}%</li>
         <li v-if="sizeText">{{sizeText}}</li>
@@ -140,6 +142,16 @@ export default {
       const stepWord = this.object.data.depth == 1 ? "step" : "steps";
       return `${this.object.data.depth} ${stepWord} to create`;
     },
+    moveDistanceText() {
+      if (!this.object.data.moveDistance) return;
+      const tiles = this.object.data.moveDistance > 1 ? "tiles" : "tile";
+      return this.object.data.moveDistance + " " + tiles;
+    },
+    moveType() {
+      if (!this.object.data.moveType) return;
+      const types = ["None", "Chase", "Flee", "Random", "North", "South", "East", "West"];
+      return types[this.object.data.moveType];
+    },
     numUses() {
       if (!this.object.data.numUses) return;
       // Subtract one if there is a use chance since last use doesn't count
@@ -150,6 +162,10 @@ export default {
     estimatedUses() {
       if (!this.object.data.useChance) return;
       return this.numUses * (1/this.object.data.useChance);
+    },
+    useWord() {
+      if (this.object.data.moveDistance) return "move";
+      return "use";
     },
     sizeText() {
       if (!this.object.data.size) {
