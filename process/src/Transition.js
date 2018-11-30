@@ -32,7 +32,7 @@ class Transition {
     this.noUseActor = data[9] == '1';
     this.noUseTarget = data[10] == '1';
 
-    this.hand = this.actorID == 0;
+    this.playerActor = this.actorID == 0;
     this.tool = this.actorID >= 0 && this.actorID == this.newActorID;
     this.targetRemains = this.targetID >= 0 && this.targetID == this.newTargetID;
 
@@ -123,6 +123,10 @@ class Transition {
             this.newTarget.data.numUses === this.target.data.numUses);
   }
 
+  hand() {
+    return !this.decay && (this.playerActor || !(this.actor && this.actor.canMove()));
+  }
+
   jsonData() {
     const result = {}
 
@@ -179,7 +183,7 @@ class Transition {
     if (this.targetRemains)
       result.targetRemains = true;
 
-    if (this.hand)
+    if (this.hand())
       result.hand = true;
 
     if (this.tool)

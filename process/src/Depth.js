@@ -16,7 +16,7 @@ class Depth {
     if (transition.decay)
       return; // Don't add difficulty on decay transitions
     if (!transition.actor || !transition.target)
-      this.difficulty += transition.hand ? 1 : 0;
+      this.difficulty += transition.playerActor ? 1 : 0;
     else if (transition.tool || transition.targetRemains)
       this.difficulty += transition.isLastUse() ? 3 : 2;
     else

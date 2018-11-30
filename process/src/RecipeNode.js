@@ -170,7 +170,7 @@ class RecipeNode {
       data.decay = transition.calculateDecay(this.decaySeconds);
     else if (transition.decay)
       data.decay = transition.decay;
-    if (transition.hand)
+    if (transition.hand())
       data.hand = true;
     if (transition.targetsPlayer())
       data.targetPlayer = true;

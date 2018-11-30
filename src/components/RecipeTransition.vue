@@ -17,7 +17,7 @@
 
       <ObjectImage class="recipeTransitionObject"
                   v-else-if="transition.actorID || transition.hand"
-                  hand="true" hover="true"
+                  :hand="transition.hand" hover="true"
                   :object="actor"
                   :clickable="transition.actorID" />
 

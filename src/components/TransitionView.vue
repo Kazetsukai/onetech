@@ -9,7 +9,7 @@
 
       <ObjectImage class="transitionObject"
                   v-else-if="transition.actorID || transition.hand"
-                  hand="true" hover="true"
+                  :hand="transition.hand" hover="true"
                   :object="actor"
                   :uses="transition.actorUses"
                   :clickable="transition.actorID && actor != selectedObject" />
@@ -45,7 +45,7 @@
       <!-- What does the used object become? -->
       <ObjectImage class="transitionObject"
                   v-if="showNewActor"
-                  hand="true" hover="true"
+                  :hand="transition.hand" hover="true"
                   :weight="transition.newActorWeight"
                   :uses="transition.newActorUses"
                   :move="transition.move"

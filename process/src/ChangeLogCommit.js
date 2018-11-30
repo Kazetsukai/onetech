@@ -217,9 +217,9 @@ class ChangeLogCommit {
     if (transition.newActorID)    data.newActorID = transition.newActorID;
     if (transition.newTargetID)   data.newTargetID = transition.newTargetID;
     if (transition.targetRemains) data.targetRemains = true;
-    if (transition.hand)          data.hand = true;
     if (transition.tool)          data.tool = true;
     if (transition.decay)         data.decay = transition.decay;
+    if (!transition.decay)        data.hand = true;
     return data;
   }
 

@@ -141,7 +141,7 @@ class GameObject {
       result.size = this.data.containSize;
     }
 
-    if (this.data.permanent == 0 && this.data.floor == 0) {
+    if (this.canPickup()) {
       result.minPickupAge = parseInt(this.data.minPickupAge) || 3;
     }
 
@@ -171,6 +171,14 @@ class GameObject {
     }
 
     return result;
+  }
+
+  canPickup() {
+    return this.data.permanent == 0 && this.data.floor == 0;
+  }
+
+  canMove() {
+    return this.transitionsAway.find(t => t.move > 0);
   }
 
   hasSprite() {
