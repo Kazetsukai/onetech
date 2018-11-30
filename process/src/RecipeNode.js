@@ -109,15 +109,16 @@ class RecipeNode {
     return this.children.filter((c,i) => this.children.indexOf(c) == i);
   }
 
-  collapseBranches() {
-    this.object
+  collapseBranches(allChildren = false) {
     if (this.collapsedParent)
       return;
-    if (this.children.length > 1) {
+    if (this.children.length > 1 || allChildren) {
       const children = this.uniqueChildren()
         .sort((a,b) => b.subNodes().length - a.subNodes().length);
-      children[0].uncollapse();
-      for (let i=1; i < children.length; i++) {
+      if (!allChildren) {
+        children[0].uncollapse();
+      }
+      for (let i=(allChildren ? 0 : 1); i < children.length; i++) {
         children[i].collapse();
       }
     }
@@ -132,7 +133,9 @@ class RecipeNode {
       this.children.forEach(c => c.collapse(parent || this));
     } else {
       this.resetDepth();
-      this.collapseBranches();
+      // Try to collapse all children if parents weren't matching
+      // This way we consistently try to simplify complex recipes
+      this.collapseBranches(!!parent);
     }
   }
 

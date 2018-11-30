@@ -35,3 +35,10 @@ This is a list of items and transitions to check to ensure everything is correct
 * [Wolf](https://onetech.info/418-Wolf): multiple transitions with bow & arrow
 * [Fishing Pole](https://onetech.info/2091-Fishing-Pole)
 * [Thread](https://onetech.info/58-Thread)
+
+
+### Complex Transitions
+
+* [Wet Newcomen Pump](https://onetech.info/2234-Wet-Newcomen-Pump/recipe): it should collapse hot pistons
+* [Three Sisters Stew](https://onetech.info/1249-Three-Sister-s-Stew/recipe)
+* [Turkey Broth](https://onetech.info/2197-Turkey-Broth/recipe)
