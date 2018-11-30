@@ -13,7 +13,7 @@
       <ul v-if="biome.data">
         <li>
           Temperature: {{temperatureText}}
-          <span class="details">({{biome.data.groundHeat}})</span>
+          <span class="details">(ground heat: {{biome.data.groundHeat}})</span>
         </li>
       </ul>
       <div class="objects">
