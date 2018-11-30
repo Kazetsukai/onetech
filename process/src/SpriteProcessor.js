@@ -21,7 +21,7 @@ class SpriteProcessor {
     this.renderSprites(this.visibleSprites(object), object.id);
 
     // Draw only the last sprite
-    if (object.data.numUses > 1 && object.transitionsAway.filter(t => t.lastUseActor || t.lastUseTarget).length > 0) {
+    if (object.data.numUses > 1) {
       this.renderSprites(this.lastSprites(object), object.id + "_last");
     }
   }
