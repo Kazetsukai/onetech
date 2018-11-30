@@ -62,7 +62,7 @@ export default {
       if (heat < 0.0) return "Very Cold";
       if (heat < 0.5) return "Cold";
       if (heat < 1.0) return "Cool";
-      if (heat < 1.1) return "Perfect";
+      if (heat < 1.1) return "Mild";
       if (heat < 1.9) return "Warm";
       if (heat < 2.1) return "Hot";
       return "Very Hot"
