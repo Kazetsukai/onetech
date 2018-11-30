@@ -31,7 +31,7 @@ const Tool = {
   value(object) {
     if (object.data.numUses > 1) {
       if (object.data.useChance && object.data.useChance != 1)
-        return `~${(object.data.numUses-1) * (1 / object.data.useChance)}`;
+        return `~${(object.data.numUses-1) * (1 / object.data.useChance) + 1}`;
       return object.data.numUses;
     }
   }

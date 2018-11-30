@@ -22,6 +22,7 @@
         <li v-if="object.data.useChance">
           Chance to use:
           {{object.data.useChance*100}}%
+          <span class="details">(last use is 100%)</span>
         </li>
         <li v-if="estimatedUses">Estimated {{useWord}}s: {{estimatedUses}}</li>
         <li v-if="pickupText">{{pickupText}}</li>
@@ -154,14 +155,11 @@ export default {
     },
     numUses() {
       if (!this.object.data.numUses) return;
-      // Subtract one if there is a use chance since last use doesn't count
-      if (this.object.data.useChance)
-        return this.object.data.numUses - 1;
       return this.object.data.numUses;
     },
     estimatedUses() {
       if (!this.object.data.useChance) return;
-      return this.numUses * (1/this.object.data.useChance);
+      return Math.round((this.numUses - 1) * (1/this.object.data.useChance)) + 1;
     },
     useWord() {
       if (this.object.data.moveDistance) return "move";
