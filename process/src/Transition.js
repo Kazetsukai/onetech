@@ -29,6 +29,8 @@ class Transition {
     this.reverseUseTarget = data[6] == '1';
     this.move = parseInt(data[7] || 0);
     this.desiredMoveDist = data[8] || 1;
+    this.noUseActor = data[9] == '1';
+    this.noUseTarget = data[10] == '1';
 
     this.hand = this.actorID == 0;
     this.tool = this.actorID >= 0 && this.actorID == this.newActorID;
@@ -107,6 +109,20 @@ class Transition {
     return Object.assign(Object.create(Object.getPrototypeOf(this)), this);
   }
 
+  applyActorUse() {
+    return !this.noUseActor && (
+            this.tool ||
+            this.newActor &&
+            this.newActor.data.numUses === this.actor.data.numUses);
+  }
+
+  applyTargetUse() {
+    return !this.noUseTarget && (
+            this.targetRemains ||
+            this.newTarget &&
+            this.newTarget.data.numUses === this.target.data.numUses);
+  }
+
   jsonData() {
     const result = {}
 
@@ -115,7 +131,7 @@ class Transition {
       if (this.actor.data.numUses > 1) {
         if (this.lastUseActor) {
           result.actorUses = this.reverseUseActor ? "max" : "last";
-        } else if (this.tool) {
+        } else if (this.applyActorUse()) {
           result.newActorUses = this.reverseUseActor ? "+1" : "-1";
           if (this.actor.data.useChance < 1.0) {
             result.newActorWeight = this.actor.data.useChance;
@@ -131,7 +147,7 @@ class Transition {
       if (this.target.data.numUses > 1) {
         if (this.lastUseTarget) {
           result.targetUses = this.reverseUseTarget ? "max" : "last";
-        } else if (this.targetRemains) {
+        } else if (this.applyTargetUse()) {
           result.newTargetUses = this.reverseUseTarget ? "+1" : "-1";
           if (this.target.data.useChance < 1.0) {
             result.newTargetWeight = this.target.data.useChance;
