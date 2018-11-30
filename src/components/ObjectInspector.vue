@@ -141,7 +141,7 @@ export default {
     },
     difficultyTip() {
       const stepWord = this.object.data.depth == 1 ? "step" : "steps";
-      return `${this.object.data.depth} ${stepWord} to create`;
+      return `${this.object.data.depth} ${stepWord} deep`;
     },
     moveDistanceText() {
       if (!this.object.data.moveDistance) return;
