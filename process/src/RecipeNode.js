@@ -25,25 +25,17 @@ class RecipeNode {
 
   addParent(parent) {
     this.parents.push(parent);
-    if (parent.depth >= this.depth)
-      this.updateDepth(parent.depth + 1);
+    this.updateDepth(parent.depth + 1);
     if (parent.tool)
       this.makeTool();
     parent.children.push(this);
   }
 
   updateDepth(depth) {
-    this.depth = depth;
-    this.children.forEach(child => child.updateDepth(depth + 1));
-  }
-
-  resetDepth() {
-    const depths = this.parents.map(parent => {
-      if (parent.collapsedParent)
-        return parent.collapsedParent.depth;
-      return parent.depth;
-    });
-    this.updateDepth(depths.sort((a,b) => b - a)[0] + 1);
+    if (this.depth < depth) {
+      this.depth = depth;
+      this.children.forEach(child => child.updateDepth(depth + 1));
+    }
   }
 
   makeTool() {
@@ -102,23 +94,33 @@ class RecipeNode {
   subNodeDepth() {
     if (this.subNodes().length == 0)
       return 0;
-    return this.subNodes().map(n => n.depth).sort((a,b) => b - a)[0] - this.depth;
+    return this.subNodes().map(n => n.depth).sort((a,b) => b - a)[0];
+  }
+
+  collapsedDepth() {
+    return this.collapsedParent ? this.collapsedParent.depth : this.depth;
+  }
+
+  deepestParent() {
+    return this.parents.sort((a,b) => b.collapsedDepth() - a.collapsedDepth())[0];
   }
 
   uniqueChildren() {
     return this.children.filter((c,i) => this.children.indexOf(c) == i);
   }
 
-  collapseBranches(allChildren = false) {
-    if (this.collapsedParent)
+  immediateUniqueChildren() {
+    return this.children.filter((c,i) => this.children.indexOf(c) == i && c.depth == this.depth+1);
+  }
+
+  collapseBranches() {
+    if (this.collapsedParent) {
       return;
-    if (this.children.length > 1 || allChildren) {
-      const children = this.uniqueChildren()
-        .sort((a,b) => b.subNodes().length - a.subNodes().length);
-      if (!allChildren) {
-        children[0].uncollapse();
-      }
-      for (let i=(allChildren ? 0 : 1); i < children.length; i++) {
+    }
+    if (this.children.length > 1) {
+      const children = this.immediateUniqueChildren().sort((a,b) => b.subNodeDepth() - a.subNodeDepth());
+      // Collapse all except first (deepest) child
+      for (let i = 1; i < children.length; i++) {
         children[i].collapse();
       }
     }
@@ -128,26 +130,27 @@ class RecipeNode {
   }
 
   collapse(parent = null) {
-    if (!parent || this.canCollapse(parent)) {
-      this.collapsedParent = parent || this;
-      this.children.forEach(c => c.collapse(parent || this));
-    } else {
-      this.resetDepth();
-      // Try to collapse all children if parents weren't matching
-      // This way we consistently try to simplify complex recipes
-      this.collapseBranches(!!parent);
+    // Don't collapse child if it has a deep uncollapsed parent
+    if (parent && this.deepestParentIsUncollapsed()) {
+      return;
     }
+    // Reset collapse to this node if it has multiple collapsed parents
+    if (!parent || this.differentCollapsedParent(parent)) {
+      parent = this;
+      // Reset depth so we aren't left behind
+      this.depth = this.deepestParent().collapsedDepth()+1;
+    }
+    this.collapsedParent = parent;
+    this.children.forEach(c => c.collapse(parent));
   }
 
-  // Only collapse if the parents are all in the same collapsed branch
-  canCollapse(parent) {
-    return this.parents.filter(p => p.collapsedParent == parent).length == this.parents.length;
+  deepestParentIsUncollapsed() {
+    const parent = this.deepestParent();
+    return parent && !parent.collapsedParent;
   }
 
-  uncollapse() {
-    if (!this.collapsedParent) return;
-    this.collapsedParent = null;
-    this.children.forEach(c => c.uncollapse());
+  differentCollapsedParent(parent) {
+    return this.parents.find(p => p.collapsedParent != parent);
   }
 
   jsonData(expand = false) {
