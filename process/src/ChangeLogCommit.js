@@ -179,13 +179,11 @@ class ChangeLogCommit {
     if (this.removedObjects.length)
       data.removedObjectIDs = this.removedObjects.map(o => o.id);
 
-    const addedTransitions = this.filterTransitions(this.addedTransitions);
-    if (addedTransitions.length)
-      data.addedTransitions = addedTransitions.map(t => t.jsonData());
+    if (this.addedTransitions.length)
+      data.addedTransitions = this.addedTransitions.map(t => t.jsonData());
 
-    const removedTransitions = this.filterTransitions(this.removedTransitions);
-    if (removedTransitions.length)
-      data.removedTransitions = removedTransitions.map(t => t.jsonData());
+    if (this.removedTransitions.length)
+      data.removedTransitions = this.removedTransitions.map(t => t.jsonData());
 
     if (this.objectChanges.length)
       data.objectChanges = this.objectChanges;

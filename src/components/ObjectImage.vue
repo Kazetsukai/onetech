@@ -61,7 +61,7 @@ export default {
   computed: {
     imageUrl () {
       if (!this.object) return "about:blank";
-      const suffix = this.uses == "last" ? "_last" : "";
+      const suffix = this.uses == "last" && !this.object.category ? "_last" : "";
       return `${STATIC_PATH}/sprites/obj_${this.object.id}${suffix}.png`;
     },
     imageID () {

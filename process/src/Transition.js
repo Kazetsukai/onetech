@@ -132,7 +132,7 @@ class Transition {
 
     if (this.actor) {
       result.actorID = this.actor.id;
-      if (this.actor.data.numUses > 1) {
+      if (this.actor.data.numUses > 1 || this.actor.category) {
         if (this.lastUseActor) {
           result.actorUses = this.reverseUseActor ? "max" : "last";
           if (this.reverseUseActor && this.actor.data.useChance < 1.0) {
@@ -151,7 +151,7 @@ class Transition {
 
     if (this.target) {
       result.targetID = this.target.id;
-      if (this.target.data.numUses > 1) {
+      if (this.target.data.numUses > 1 || this.target.category) {
         if (this.lastUseTarget) {
           result.targetUses = this.reverseUseTarget ? "max" : "last";
           if (this.reverseUseTarget && this.target.data.useChance < 1.0) {

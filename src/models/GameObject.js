@@ -84,8 +84,11 @@ export default class GameObject {
     if (this.objectsMap[attributes.id])
       return;
     const object = new GameObject(attributes.id, attributes.name, null);
-    if (!attributes.category)
+    if (attributes.category) {
+      object.category = true;
+    } else {
       object.legacy = true;
+    }
     this.objectsMap[object.id] = object;
   }
 
