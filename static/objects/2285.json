@@ -1,0 +1,1 @@
+{"id":"2285","name":"Tarry Spot","transitionsToward":[],"transitionsAway":[{"actorID":"2297","targetID":"2285","newTargetID":"2321","hand":true}],"transitionsTimed":[],"version":179,"depth":0,"mapChance":0.02,"biomes":[4,5],"minPickupAge":3}
