@@ -166,10 +166,18 @@ class RecipeNode {
     }
 
     const transition = this.object.transitionsToward[0];
-    if (transition.actor)
+    if (transition.actor) {
       data.actorID = transition.actor.id;
-    if (transition.target)
+      if (transition.lastUseActor && transition.actor.data.numUses > 1) {
+        data.actorUses = transition.reverseUseActor ? "max" : "last";
+      }
+    }
+    if (transition.target) {
       data.targetID = transition.target.id;
+      if (transition.lastUseTarget && transition.target.data.numUses > 1) {
+        data.targetUses = transition.reverseUseTarget ? "max" : "last";
+      }
+    }
     if (transition.newActor == this.object && transition.newActorWeight)
       data.weight = transition.newActorWeight;
     if (transition.newTarget == this.object && transition.newTargetWeight)

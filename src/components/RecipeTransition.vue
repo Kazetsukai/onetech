@@ -19,6 +19,7 @@
                   v-else-if="transition.actorID || transition.hand"
                   :hand="transition.hand" hover="true"
                   :object="actor"
+                  :uses="transition.actorUses"
                   :clickable="transition.actorID" />
 
       <div class="plus" v-if="showPlus">+</div>
@@ -28,6 +29,7 @@
                   v-if="transition.targetID"
                   hover="true"
                   :object="target"
+                  :uses="transition.targetUses"
                   clickable="true" />
 
       <ObjectImage class="recipeTransitionObject"
