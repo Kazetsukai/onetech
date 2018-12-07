@@ -3,6 +3,8 @@
 class RecipeNode {
   static steps(nodes, expand = false) {
     const steps = [];
+    nodes = nodes.sort((a,b) => b.subNodeDepth() - a.subNodeDepth()).
+                  sort((a,b) => (b.collapsedParent ? 0 : 1) - (a.collapsedParent ? 0 : 1))
     for (let node of nodes) {
       if (node.showInStep(expand)) {
         if (!steps[node.depth])
@@ -118,7 +120,7 @@ class RecipeNode {
       return;
     }
     if (this.children.length > 1) {
-      const children = this.immediateUniqueChildren().sort((a,b) => b.subNodeDepth() - a.subNodeDepth());
+      const children = this.immediateUniqueChildren().sort((a,b) => b.subNodes().length - a.subNodes().length);
       // Collapse all except first (deepest) child
       for (let i = 1; i < children.length; i++) {
         children[i].collapse();
