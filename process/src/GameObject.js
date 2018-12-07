@@ -229,7 +229,11 @@ class GameObject {
   }
 
   isVisible() {
-    return !this.category || this.category.pattern;
+    return !this.isCategory();
+  }
+
+  isCategory() {
+    return this.category && !this.category.pattern || this.name && this.name.startsWith("@");
   }
 
   techTreeNodes(depth) {

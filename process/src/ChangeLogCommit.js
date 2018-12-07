@@ -202,7 +202,7 @@ class ChangeLogCommit {
   }
 
   legacyObjectData(object) {
-    return {id: object.id, name: object.name, category: !!object.category};
+    return {id: object.id, name: object.name, category: !!object.isCategory()};
   }
 }
 
