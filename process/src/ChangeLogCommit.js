@@ -57,11 +57,9 @@ class ChangeLogCommit {
     if (mode == "A") {
       const transition = this.createTransition(path, mode);
       this.addedTransitions.push(transition);
-      this.trackLegacyObjectsInTransition(transition, mode);
     } else if (mode == "D") {
       const transition = this.createTransition(path, mode);
       this.removedTransitions.push(transition);
-      this.trackLegacyObjectsInTransition(transition, mode);
     } else if (mode == "M") {
       const newTransition = this.createTransition(path, "A");
       const oldTransition = this.createTransition(path, "D");
@@ -84,18 +82,6 @@ class ChangeLogCommit {
     if (oldTransition.decay != newTransition.decay)
       return true;
     return false;
-  }
-
-  trackLegacyObjectsInTransition(transition, mode) {
-    this.trackLegacyObject(transition.actorID, mode);
-    this.trackLegacyObject(transition.targetID, mode);
-    this.trackLegacyObject(transition.newActorID, mode);
-    this.trackLegacyObject(transition.newTargetID, mode);
-  }
-
-  trackLegacyObject(id, mode) {
-    if (id > 1)
-      this.lookupObject(`objects/${id}.txt`, mode);
   }
 
   lookupObject(path, mode) {
@@ -123,7 +109,18 @@ class ChangeLogCommit {
     const content = this.fileContent(path, mode);
     const filename = path.split("/")[1];
     const transition = new Transition(content, filename);
+    this.setTransitionObject(transition, "actor", mode)
+    this.setTransitionObject(transition, "target", mode)
+    this.setTransitionObject(transition, "newActor", mode)
+    this.setTransitionObject(transition, "newTarget", mode)
     return transition;
+  }
+
+  setTransitionObject(transition, key, mode) {
+    const id = transition[key + "ID"];
+    if (id > 1) {
+      transition[key] = this.lookupObject(`objects/${id}.txt`, mode)
+    }
   }
 
   addObjectChange(path) {
@@ -184,11 +181,11 @@ class ChangeLogCommit {
 
     const addedTransitions = this.filterTransitions(this.addedTransitions);
     if (addedTransitions.length)
-      data.addedTransitions = addedTransitions.map(t => this.transitionData(t));
+      data.addedTransitions = addedTransitions.map(t => t.jsonData());
 
     const removedTransitions = this.filterTransitions(this.removedTransitions);
     if (removedTransitions.length)
-      data.removedTransitions = removedTransitions.map(t => this.transitionData(t));
+      data.removedTransitions = removedTransitions.map(t => t.jsonData());
 
     if (this.objectChanges.length)
       data.objectChanges = this.objectChanges;
@@ -204,23 +201,6 @@ class ChangeLogCommit {
     ids = ids.concat(Object.keys(this.legacyObjects));
     ids = ids.concat(this.removedObjects.map(o => o.id));
     return transitions.filter(t => !ids.includes(t.actorID) && !ids.includes(t.targetID));
-  }
-
-  transitionData(transition) {
-    const data = {};
-    this.trackLegacyObject(transition.actorID);
-    this.trackLegacyObject(transition.targetID);
-    this.trackLegacyObject(transition.newActorID);
-    this.trackLegacyObject(transition.newTargetID);
-    if (transition.actorID)       data.actorID = transition.actorID;
-    if (transition.targetID)      data.targetID = transition.targetID;
-    if (transition.newActorID)    data.newActorID = transition.newActorID;
-    if (transition.newTargetID)   data.newTargetID = transition.newTargetID;
-    if (transition.targetRemains) data.targetRemains = true;
-    if (transition.tool)          data.tool = true;
-    if (transition.decay)         data.decay = transition.decay;
-    if (!transition.decay)        data.hand = true;
-    return data;
   }
 
   legacyObjectData(object) {
