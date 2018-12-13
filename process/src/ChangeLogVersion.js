@@ -12,6 +12,7 @@ class ChangeLogVersion {
 
   tag() {
     if (this.id == 0) return "OneLife_vStart";
+    if (this.isUnreleased()) return "master";
     return "OneLife_v" + this.id;
   }
 
@@ -52,9 +53,20 @@ class ChangeLogVersion {
 
   fetchCommits() {
     if (!this.previous) return [];
-    return this.git.log(this.previous.tag(), this.tag()).map(entry => {
-      return new ChangeLogCommit(this, entry);
-    });
+    if (!this.commits) {
+      this.commits = this.git.log(this.previous.tag(), this.tag()).map(entry => {
+        return new ChangeLogCommit(this, entry);
+      });
+    }
+    return this.commits;
+  }
+
+  isUnreleased() {
+    return this.id === "unreleased";
+  }
+
+  isReleased() {
+    return this.id !== "unreleased";
   }
 }
 

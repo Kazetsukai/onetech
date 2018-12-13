@@ -9,7 +9,7 @@
     <div v-else>
       <div class="subtitle" v-if="showWhatsNew">
         <router-link to="/versions">
-          See what's new in Version {{lastVersion}}!
+          {{whatsNew}}
         </router-link>
       </div>
       <div class="subtitle" v-else-if="gameUrl">
@@ -67,8 +67,12 @@ export default {
       var year = GameObject.date.getFullYear();
       return `${months[month]} ${day}, ${year}`;
     },
-    lastVersion () {
-      return GameObject.versions[0];
+    whatsNew () {
+      const version = GameObject.versions[0];
+      if (version === "unreleased") {
+        return "See latest unreleased changes!";
+      }
+      return `See what's new in Version ${version}!`;
     },
     showWhatsNew () {
       if (process.env.ONETECH_MOD_NAME)

@@ -1,6 +1,6 @@
 <template>
   <div class="changeLogVersion">
-    <h2>Version {{id}}</h2>
+    <h2>{{name}}</h2>
     <div v-if="!version.data" class="loading">
       Loading...
     </div>
@@ -42,6 +42,12 @@ export default {
       var year = date.getFullYear();
       return `${months[month]} ${day}, ${year}`;
     },
+    name() {
+      if (this.id === "unreleased") {
+        return "Unreleased";
+      }
+      return "Version " + this.id;
+    }
   }
 }
 </script>

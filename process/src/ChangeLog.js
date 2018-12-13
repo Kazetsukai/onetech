@@ -12,7 +12,7 @@ class ChangeLog {
 
   fetchVersions() {
     let previousVersion = null;
-    return this.fetchVersionNumbers().map(id => {
+    const versions = this.fetchVersionNumbers().map(id => {
       const version = new ChangeLogVersion(
         this.git,
         this.objects,
@@ -22,6 +22,13 @@ class ChangeLog {
       previousVersion = version;
       return version;
     });
+    versions.push(new ChangeLogVersion(
+      this.git,
+      this.objects,
+      "unreleased",
+      previousVersion
+    ));
+    return versions;
   }
 
   fetchVersionNumbers() {
@@ -36,10 +43,16 @@ class ChangeLog {
 
   populateObjects() {
     for (let version of this.versions) {
-      version.populateObjects();
+      if (version.isReleased()) {
+        version.populateObjects();
+      }
     }
     if (!process.env.ONETECH_MOD_NAME)
       this.reportMissing();
+  }
+
+  validVersions() {
+    return this.versions.slice(1).reverse().filter(v => v.isReleased() || v.fetchCommits().length > 0);
   }
 
   reportMissing() {

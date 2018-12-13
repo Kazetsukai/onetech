@@ -42,7 +42,9 @@
         <li v-else-if="modName">
           Added in {{modName}}
         </li>
-        <li v-else>Unreleased</li>
+        <li v-else>
+          <router-link to="/versions/unreleased">Unreleased</router-link>
+        </li>
       </ul>
     </div>
     <div class="transitionsPanels" v-if="object.data">

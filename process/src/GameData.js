@@ -118,8 +118,9 @@ class GameData {
     const versions = this.changeLog.versions.reverse();
     for (let version of versions) {
       const path = `versions/${version.id}.json`;
-      if (version.id > 0 && !fs.existsSync(this.staticDevDir + "/" + path))
+      if (version.isUnreleased() || version.id > 0 && !fs.existsSync(this.staticDevDir + "/" + path)) {
         this.saveJSON(path, version.jsonData());
+      }
     }
   }
 
@@ -172,7 +173,7 @@ class GameData {
       filters: ObjectFilters.jsonData(objects),
       badges: ObjectBadges.jsonData(objects),
       date: new Date(),
-      versions: this.changeLog.versions.slice(1).reverse().map(v => v.id),
+      versions: this.changeLog.validVersions().map(v => v.id),
       biomeIds: this.biomes.map(b => b.id),
       biomeNames: this.biomes.map(b => b.name()),
       foodBonus: parseInt(process.env.ONETECH_FOOD_BONUS),
