@@ -27,7 +27,7 @@ class GameData {
 
   download(gitURL) {
     if (fs.existsSync(this.dataDir)) {
-      spawnSync("git", ["checkout", "master"], {cwd: this.dataDir});
+      this.checkoutMaster();
       spawnSync("git", ["pull"], {cwd: this.dataDir});
     } else {
       spawnSync("git", ["clone", gitURL, this.dataDir]);
@@ -43,6 +43,10 @@ class GameData {
   checkoutVersion(version) {
     this.releasedOnly = true;
     spawnSync("git", ["checkout", version.tag()], {cwd: this.dataDir});
+  }
+
+  checkoutMaster() {
+    spawnSync("git", ["checkout", "master"], {cwd: this.dataDir});
   }
 
   importObjects() {
@@ -181,6 +185,7 @@ class GameData {
       if (filename.endsWith(".tga")) {
         const id = filename.split('.')[0];
         const inPath = dir + "/" + filename;
+        const outPath = this.staticDir + "/sprites/sprite_" + id + ".png";
         spawnSync("convert", [inPath, outPath]);
       }
     }
@@ -192,12 +197,14 @@ class GameData {
       if (filename.endsWith(".tga")) {
         const name = filename.split('.')[0];
         const inPath = dir + "/" + filename;
+        const outPath = this.staticDir + "/ground/" + name + ".png";
         spawnSync("convert", [inPath, "-sigmoidal-contrast", "3,44%", "-level", "0%,108%,1.1", "-scale", "128x128", outPath]);
       }
     }
   }
 
   processSprites() {
+    const processor = new SpriteProcessor(this.dataDir + "/sprites", this.staticDir + "/sprites")
     processor.process(this.objects)
   }
 

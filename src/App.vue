@@ -24,11 +24,11 @@
         <a :href="gameUrl">Visit "{{gameName}}</a>
       </div>
       <div class="subtitle" v-else>
-        <span v-if="showWhatsNew"
+        <span v-if="showWhatsNew">
           <router-link to="/versions">What's new in v{{latestVersion}}</router-link>
           |
         </span>
-        <a href="https://onetech.info">
+        <a href="https://edge.onetech.info">
           See Unreleased Content
         </a>
       </div>

@@ -35,6 +35,8 @@ class MainProcessor {
     if (version) {
       console.log(`Checking out v${version.id}...`);
       gameData.checkoutVersion(version);
+    } else {
+      gameData.checkoutMaster();
     }
 
     console.log("Importing objects...");
