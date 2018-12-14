@@ -7,6 +7,9 @@ import './css/tippy.css'
 
 if (window.location.hostname.startsWith("edge")) {
   global.edge = true;
+  global.staticPath = ROOT_PATH + "static-edge";
+} else {
+  global.staticPath = ROOT_PATH + "static";
 }
 
 Vue.use(Tippy, {

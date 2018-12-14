@@ -12,7 +12,7 @@
         <div class="edgeTitle">Browsing Unreleased</div>
         <div class="subtitle">
           <span v-if="showWhatsNew">
-            <router-link to="/versions">What's New in Unreleased</router-link>
+            <router-link to="/versions">What's new in Unreleased</router-link>
             |
           </span>
           <a href="https://onetech.info">

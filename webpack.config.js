@@ -3,7 +3,6 @@ var webpack = require('webpack')
 var fs = require('fs')
 
 var rootPath = "/";
-var staticPath = "static";
 
 module.exports = {
   entry: './src/main.js',
@@ -96,7 +95,6 @@ module.exports = {
         ONETECH_MOD_URL: JSON.stringify(process.env.ONETECH_MOD_URL),
       },
       ROOT_PATH: JSON.stringify(rootPath),
-      STATIC_PATH: JSON.stringify(rootPath + staticPath),
     })
   ],
   devtool: '#eval-source-map'

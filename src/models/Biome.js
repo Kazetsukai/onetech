@@ -48,7 +48,7 @@ export default class Biome {
   }
 
   fetchData(callback) {
-    fetch(`${STATIC_PATH}/biomes/${this.id}.json`).
+    fetch(`${global.staticPath}/biomes/${this.id}.json`).
       then(data => data.json()).
       then(callback);
   }

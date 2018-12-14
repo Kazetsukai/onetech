@@ -37,7 +37,7 @@ export default class Version {
   }
 
   fetchData(callback) {
-    fetch(`${STATIC_PATH}/versions/${this.id}.json`).
+    fetch(`${global.staticPath}/versions/${this.id}.json`).
       then(data => data.json()).
       then(callback);
   }

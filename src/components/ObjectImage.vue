@@ -62,7 +62,7 @@ export default {
     imageUrl () {
       if (!this.object) return "about:blank";
       const suffix = this.uses == "last" && !this.object.category ? "_last" : "";
-      return `${STATIC_PATH}/sprites/obj_${this.object.id}${suffix}.png`;
+      return `${global.staticPath}/sprites/obj_${this.object.id}${suffix}.png`;
     },
     imageID () {
       return ["image", this.object.id, Math.random().toString(36).substr(2, 7)].join("-");

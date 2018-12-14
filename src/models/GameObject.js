@@ -16,7 +16,7 @@ export default class GameObject {
   }
 
   static fetchObjects(callback) {
-    fetch(`${STATIC_PATH}/objects.json`).
+    fetch(`${global.staticPath}/objects.json`).
       then(data => data.json()).
       then(callback);
   }
@@ -179,7 +179,7 @@ export default class GameObject {
   }
 
   fetchData(callback) {
-    fetch(`${STATIC_PATH}/objects/${this.id}.json`).
+    fetch(`${global.staticPath}/objects/${this.id}.json`).
       then(data => data.json()).
       then(callback);
   }

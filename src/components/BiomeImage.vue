@@ -10,7 +10,7 @@ export default {
   ],
   computed: {
     imageUrl() {
-      return `${STATIC_PATH}/ground/ground_${this.biome.id}.png`;
+      return `${global.staticPath}/ground/ground_${this.biome.id}.png`;
     }
   }
 }
