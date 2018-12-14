@@ -1,19 +1,36 @@
 <template>
   <div id="app">
     <h1>
-      <router-link to="/">Crafting reference for {{gameName}}</router-link>
+      <router-link to="/">Crafting Reference for {{gameName}}</router-link>
     </h1>
 
     <h2 v-if="loading">Loading...</h2>
 
     <div v-else>
-      <div class="subtitle" v-if="showWhatsNew">
-        <router-link to="/versions">
-          {{whatsNew}}
-        </router-link>
+
+      <div v-if="onEdge">
+        <div class="edgeTitle">Browsing Unreleased</div>
+        <div class="subtitle">
+          <span v-if="showWhatsNew">
+            <router-link to="/versions">What's New in Unreleased</router-link>
+            |
+          </span>
+          <a href="https://onetech.info">
+            See Released Content
+          </a>
+        </div>
       </div>
       <div class="subtitle" v-else-if="gameUrl">
         <a :href="gameUrl">Visit "{{gameName}}</a>
+      </div>
+      <div class="subtitle" v-else>
+        <span v-if="showWhatsNew"
+          <router-link to="/versions">What's new in v{{latestVersion}}</router-link>
+          |
+        </span>
+        <a href="https://onetech.info">
+          See Unreleased Content
+        </a>
       </div>
 
       <ObjectSearch />
@@ -55,7 +72,7 @@ export default {
     });
   },
   computed: {
-    lastDate () {
+    lastDate() {
       const months = [
         "January", "February", "March",
         "April", "May", "June", "July",
@@ -67,25 +84,24 @@ export default {
       var year = GameObject.date.getFullYear();
       return `${months[month]} ${day}, ${year}`;
     },
-    whatsNew () {
-      const version = GameObject.versions[0];
-      if (version === "unreleased") {
-        return "See latest unreleased changes!";
-      }
-      return `See what's new in Version ${version}!`;
+    latestVersion() {
+      return GameObject.versions[0];
     },
-    showWhatsNew () {
+    showWhatsNew() {
       if (process.env.ONETECH_MOD_NAME)
         return false;
       if (this.$route.path == "/versions")
         return false;
       return true;
     },
-    gameName () {
+    gameName() {
       return process.env.ONETECH_MOD_NAME || "One Hour One Life";
     },
-    gameUrl () {
+    gameUrl() {
       return process.env.ONETECH_MOD_URL;
+    },
+    onEdge() {
+      return global.edge;
     }
   },
   methods: {
@@ -156,7 +172,15 @@ export default {
     }
   }
 
+  .edgeTitle {
+    text-align: center;
+    font-size: 20px;
+    color: #F63E3E;
+    margin-bottom: 6px;
+  }
+
   .subtitle {
+    color: #777;
     text-align: center;
     a {
       color: #ccc;

@@ -5,6 +5,10 @@ import App from './App.vue'
 import Tippy from 'vue-tippy'
 import './css/tippy.css'
 
+if (window.location.hostname.startsWith("edge")) {
+  global.edge = true;
+}
+
 Vue.use(Tippy, {
   animateFill: false,
   animation: 'scale',

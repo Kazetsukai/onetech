@@ -92,7 +92,8 @@ module.exports = {
   devServer: {
     historyApiFallback: {index: "/404.html"},
     noInfo: true,
-    overlay: true
+    overlay: true,
+    disableHostCheck: true
   },
   performance: {
     hints: false
