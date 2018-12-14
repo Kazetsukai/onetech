@@ -14,5 +14,7 @@ process/OneLifeData7-master/
 sprites/sprite_*.png
 sprite_*.png
 pretty-json
+static
+static-edge
 static-dev
 static-mod-dev
