@@ -16,27 +16,33 @@ const ObjectBadges = require('./ObjectBadges');
 const SitemapGenerator = require('./SitemapGenerator');
 
 class GameData {
-  constructor(processDir, dataDir) {
+  constructor(processDir, dataDir, staticDir) {
     this.processDir = processDir;
     this.dataDir = dataDir;
-    const mod = process.env.ONETECH_MOD_NAME ? "-mod" : "";
-    this.staticDir = processDir + `/../static${mod}`;
-    this.staticDevDir = processDir + `/../static${mod}-dev`;
+    this.staticDir = staticDir;
     this.objects = {};
     this.categories = [];
     this.biomes = [];
   }
 
   download(gitURL) {
-    if (fs.existsSync(this.dataDir))
+    if (fs.existsSync(this.dataDir)) {
+      spawnSync("git", ["checkout", "master"], {cwd: this.dataDir});
       spawnSync("git", ["pull"], {cwd: this.dataDir});
-    else
+    } else {
       spawnSync("git", ["clone", gitURL, this.dataDir]);
+    }
   }
 
   verifyDownloaded() {
-    if (!fs.existsSync(this.dataDir))
+    if (!fs.existsSync(this.dataDir)) {
       throw "OneLifeData7 not found, first run `node process dev download`"
+    }
+  }
+
+  checkoutVersion(version) {
+    this.releasedOnly = true;
+    spawnSync("git", ["checkout", version.tag()], {cwd: this.dataDir});
   }
 
   importObjects() {
@@ -91,7 +97,7 @@ class GameData {
   }
 
   populateVersions() {
-    this.changeLog = new ChangeLog(this.dataDir, this.objects);
+    this.changeLog = new ChangeLog(this.dataDir, this.objects, this.releasedOnly);
     this.changeLog.populateObjects();
   }
 
@@ -115,10 +121,10 @@ class GameData {
   }
 
   exportVersions() {
-    const versions = this.changeLog.versions.reverse();
+    const versions = this.changeLog.versions.slice().reverse();
     for (let version of versions) {
       const path = `versions/${version.id}.json`;
-      if (version.isUnreleased() || version.id > 0 && !fs.existsSync(this.staticDevDir + "/" + path)) {
+      if (version.isUnreleased() || version.id > 0 && !fs.existsSync(this.staticDir + "/" + path)) {
         this.saveJSON(path, version.jsonData());
       }
     }
@@ -131,18 +137,16 @@ class GameData {
   }
 
   prepareStaticDir() {
-    if (!fs.existsSync(this.staticDevDir) && fs.existsSync(this.staticDir))
-      spawnSync("cp", ["-R", this.staticDir, this.staticDevDir]);
-    this.makeDir(this.staticDevDir);
-    this.makeDir(this.staticDevDir + "/sprites");
-    this.makeDir(this.staticDevDir + "/ground");
-    this.makeDir(this.staticDevDir + "/objects");
-    this.makeDir(this.staticDevDir + "/versions");
-    this.makeDir(this.staticDevDir + "/biomes");
-    this.makeDir(this.staticDevDir + "/pretty-json");
-    this.makeDir(this.staticDevDir + "/pretty-json/objects");
-    this.makeDir(this.staticDevDir + "/pretty-json/versions");
-    this.makeDir(this.staticDevDir + "/pretty-json/biomes");
+    this.makeDir(this.staticDir);
+    this.makeDir(this.staticDir + "/sprites");
+    this.makeDir(this.staticDir + "/ground");
+    this.makeDir(this.staticDir + "/objects");
+    this.makeDir(this.staticDir + "/versions");
+    this.makeDir(this.staticDir + "/biomes");
+    this.makeDir(this.staticDir + "/pretty-json");
+    this.makeDir(this.staticDir + "/pretty-json/objects");
+    this.makeDir(this.staticDir + "/pretty-json/versions");
+    this.makeDir(this.staticDir + "/pretty-json/biomes");
   }
 
   makeDir(path) {
@@ -154,12 +158,11 @@ class GameData {
     // Only update timestamp if we have changed the process script
     if (spawnSync("git", ["status", "-s", this.processDir]).stdout != "")
       fs.writeFileSync(path, new Date().getTime());
-    spawnSync("cp", [path, this.staticDevDir + "/timestamp.txt"]);
   }
 
   saveJSON(path, data) {
-    const minPath = this.staticDevDir + "/" + path;
-    const prettyPath = this.staticDevDir + "/pretty-json/" + path;
+    const minPath = this.staticDir + "/" + path;
+    const prettyPath = this.staticDir + "/pretty-json/" + path;
     fs.writeFileSync(minPath, JSON.stringify(data));
     fs.writeFileSync(prettyPath, JSON.stringify(data, null, 2));
   }
@@ -186,7 +189,6 @@ class GameData {
       if (filename.endsWith(".tga")) {
         const id = filename.split('.')[0];
         const inPath = dir + "/" + filename;
-        const outPath = this.staticDevDir + "/sprites/sprite_" + id + ".png";
         spawnSync("convert", [inPath, outPath]);
       }
     }
@@ -198,14 +200,12 @@ class GameData {
       if (filename.endsWith(".tga")) {
         const name = filename.split('.')[0];
         const inPath = dir + "/" + filename;
-        const outPath = this.staticDevDir + "/ground/" + name + ".png";
         spawnSync("convert", [inPath, "-sigmoidal-contrast", "3,44%", "-level", "0%,108%,1.1", "-scale", "128x128", outPath]);
       }
     }
   }
 
   processSprites() {
-    const processor = new SpriteProcessor(this.dataDir + "/sprites", this.staticDevDir + "/sprites")
     processor.process(this.objects)
   }
 
@@ -224,13 +224,17 @@ class GameData {
     });
   }
 
-  syncStaticDir() {
-    spawnSync("rsync", ["-aq", this.staticDevDir + "/", this.staticDir]);
-  }
-
   generateSitemap() {
     var generator = new SitemapGenerator(this.processDir + "/../");
     generator.generate(Object.values(this.objects), this.biomes);
+  }
+
+  unprocessedVersion(staticDir) {
+    const version = this.changeLog.lastReleasedVersion();
+    const path = `versions/${version.id}.json`;
+    if (!fs.existsSync(staticDir + "/" + path)) {
+      return version;
+    }
   }
 }
 

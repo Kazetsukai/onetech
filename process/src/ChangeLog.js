@@ -4,13 +4,13 @@ const Git = require('./Git');
 const ChangeLogVersion = require('./ChangeLogVersion');
 
 class ChangeLog {
-  constructor(gitDir, objects) {
+  constructor(gitDir, objects, releasedOnly) {
     this.git = new Git(gitDir);
     this.objects = objects;
-    this.versions = this.fetchVersions();
+    this.versions = this.fetchVersions(releasedOnly);
   }
 
-  fetchVersions() {
+  fetchVersions(releasedOnly) {
     let previousVersion = null;
     const versions = this.fetchVersionNumbers().map(id => {
       const version = new ChangeLogVersion(
@@ -22,12 +22,14 @@ class ChangeLog {
       previousVersion = version;
       return version;
     });
-    versions.push(new ChangeLogVersion(
-      this.git,
-      this.objects,
-      "unreleased",
-      previousVersion
-    ));
+    if (!releasedOnly) {
+      versions.push(new ChangeLogVersion(
+        this.git,
+        this.objects,
+        "unreleased",
+        previousVersion
+      ));
+    }
     return versions;
   }
 
@@ -53,6 +55,11 @@ class ChangeLog {
 
   validVersions() {
     return this.versions.slice(1).reverse();
+  }
+
+  lastReleasedVersion() {
+    const versions = this.versions.filter(v => v.isReleased());
+    return versions[versions.length-1];
   }
 
   reportMissing() {

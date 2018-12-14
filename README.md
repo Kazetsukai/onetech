@@ -47,17 +47,16 @@ cd process
 # install dependencies
 npm install
 
+cd ..
+
 # run script including downloading latest data and processing sprites
-node process.js dev download
+node process download
 
-# after downloading once, you can run without the download argument
-node process.js dev
+# if you want to re-process the sprites without downloading data
+node process sprites
 
-# if you want to re-process the sprites
-node process.js dev sprites
-
-# remove the dev argument to process for production (before building)
-node process.js
+# or process without generating sprites
+node process
 ```
 
 

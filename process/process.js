@@ -2,55 +2,19 @@ if (!process.env.ONETECH_FOOD_BONUS) {
   process.env.ONETECH_FOOD_BONUS = 2;
 }
 
-const GameData = require('./src/GameData');
+const MainProcessor = require('./src/MainProcessor');
 
-const gitURL = process.env.ONETECH_PROCESS_GIT_URL || "https://github.com/jasonrohrer/OneLifeData7.git";
-const gitPath = process.env.ONETECH_PROCESS_GIT_PATH || (__dirname + "/OneLifeData7");
+const processor = new MainProcessor(__dirname);
 
-const gameData = new GameData(__dirname, gitPath);
+processor.doDownload = process.argv.includes('download');
+processor.doSprites = processor.doDownload || process.argv.includes('sprites');
 
-if (process.argv.includes('download')) {
-  console.log("Downloading data...");
-  gameData.download(gitURL);
-} else {
-  gameData.verifyDownloaded();
-}
+console.log("--- Processing static-edge ---");
+const unprocessedVersion = processor.process(null);
 
-console.log("Importing objects...");
-gameData.importObjects();
-gameData.importCategories();
-gameData.importTransitions();
-gameData.importBiomes();
-
-console.log("Populating versions...");
-gameData.populateVersions();
-
-console.log("Calculating object depth...");
-gameData.calculateObjectDepth();
-
-console.log("Exporting objects...");
-gameData.exportObjects();
-
-console.log("Exporting versions...");
-gameData.exportVersions();
-
-console.log("Exporting biomes...");
-gameData.exportBiomes();
-
-if (process.argv.includes('sprites') || process.argv.includes('download')) {
-  console.log("Converting sprite images...");
-  gameData.convertSpriteImages();
-  gameData.convertGroundImages();
-
-  console.log("Processing sprites...");
-  gameData.processSprites();
-}
-
-if (!process.argv.includes('dev')) {
-  const mod = process.env.ONETECH_MOD_NAME ? "-mod" : "";
-  console.log(`Copying static${mod}-dev to static${mod}...`);
-  gameData.syncStaticDir();
-
-  console.log("Generating sitemap...");
-  gameData.generateSitemap();
+if (unprocessedVersion) {
+  processor.doDownload = false;
+  processor.doSprites = true;
+  console.log(`--- Processing static for v${unprocessedVersion.id} ---`);
+  processor.process(unprocessedVersion);
 }
