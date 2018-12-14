@@ -1,1 +1,0 @@
-{"id":92,"date":"2018-05-04T01:35:46.000Z","commits":[{"sha":"09f811fe5cd3feaf4fef953645136dd0934393da","message":"Fixed names of Letter O and S.","date":"2018-05-04T01:31:06.000Z","objectChanges":[{"id":"953","attributes":{"name":{"from":"Letter 0","to":"Letter O"}}},{"id":"973","attributes":{"name":{"from":"Letter A","to":"Letter S"}}}]}]}

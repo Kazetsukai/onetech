@@ -1,1 +1,0 @@
-{"id":"791","name":"Monolith","transitionsToward":[],"transitionsAway":[{"actorID":"689","targetID":"791","newTargetUses":"-1","newTargetID":"791","targetRemains":true,"hand":true},{"actorID":"689","targetID":"791","targetUses":"last","newTargetID":"792","hand":true}],"transitionsTimed":[],"version":73,"numUses":3,"depth":0,"mapChance":0.001,"biomes":[5],"blocksWalking":true}

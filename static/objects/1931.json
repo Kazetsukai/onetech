@@ -1,1 +1,0 @@
-{"id":"1931","name":"Twenty Minute Barricade","transitionsToward":[{"targetID":"1930","newActorID":"1931","newTargetID":"876","hand":true}],"transitionsAway":[],"transitionsTimed":[],"version":162,"minPickupAge":35,"techTree":[{"id":"1930","nodes":null}]}

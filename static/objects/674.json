@@ -1,1 +1,0 @@
-{"id":"674","name":"Limestone","transitionsToward":[{"actorID":"675","newActorID":"235","newTargetID":"674","hand":true}],"transitionsAway":[{"actorID":"674","targetID":"235","newTargetID":"675","hand":true}],"transitionsTimed":[],"version":62,"depth":0,"mapChance":1,"biomes":[3],"size":1,"minPickupAge":3}

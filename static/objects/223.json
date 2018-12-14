@@ -1,1 +1,0 @@
-{"id":"223","name":"Wheat Seed Head","transitionsToward":[{"targetID":"242","newActorID":"223","newTargetID":"242","targetRemains":true,"hand":true}],"transitionsAway":[{"actorID":"223","targetID":"213","newTargetID":"228","hand":true}],"transitionsTimed":[{"targetID":"223","decay":"2m"}],"version":20,"depth":1,"size":1,"techTree":[{"id":"242","nodes":null}]}

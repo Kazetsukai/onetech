@@ -1,1 +1,0 @@
-{"id":114,"date":"2018-06-22T00:04:26.000Z","commits":[{"sha":"f85067202b77444e24b777df1970aaeb220b1a57","message":"Fixed so that attacking snake does not spawn naturally.\"","date":"2018-06-22T00:02:19.000Z","objectChanges":[{"id":"1385","attributes":{"mapChance":{"from":0.1,"to":0},"biomes":{"from":[5],"to":[0]}}}]}]}
