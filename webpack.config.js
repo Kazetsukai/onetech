@@ -3,12 +3,7 @@ var webpack = require('webpack')
 var fs = require('fs')
 
 var rootPath = "/";
-var mod = process.env.ONETECH_MOD_NAME ? "-mod" : "";
-
-if (process.env.NODE_ENV === 'development' && fs.existsSync(`static${mod}-dev`))
-  var staticPath = `static${mod}-dev`;
-else
-  var staticPath = `static${mod}`;
+var staticPath = "static";
 
 module.exports = {
   entry: './src/main.js',

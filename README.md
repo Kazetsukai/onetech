@@ -72,6 +72,4 @@ export ONETECH_PROCESS_GIT_PATH="/path/to/my/awesome-mod-data"
 export ONETECH_PROCESS_GIT_URL="https://github.com/my/awesome-mod-data"
 ```
 
-This will use the given name and URL in the header of each page. It will also use a separate `static-mod` directory to avoid conflicts.
-
-After you have run the process and build scripts, and pushed the changes up to your fork, you can go to the GitHub project settings and setup GitHub Pages to use the master branch. This will make the site publicly accessible.
+After you have run the process and build scripts, push the changes up to your own fork. If you want to use GitHub Pages, you will need to remove `static` from `.gitignore`, and then you can go to the GitHub project settings and setup GitHub Pages to use the master branch. This will make the site publicly accessible.
