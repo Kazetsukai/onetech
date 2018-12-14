@@ -41,14 +41,13 @@ class ChangeLogVersion {
   }
 
   jsonData() {
-    let commits = this.fetchCommits();
-    let date = commits[0] && commits[0].date;
-    commits = commits.filter(c => c.isRelavent());
-    return {
-      id: this.id,
-      date: date,
-      commits: commits.map(c => c.jsonData()),
-    };
+    const data = {id: this.id};
+    const commits = this.fetchCommits();
+    if (this.isReleased() && commits[0]) {
+      data.date = commits[0].date;
+    }
+    data.commits = commits.filter(c => c.isRelavent()).map(c => c.jsonData());
+    return data;
   }
 
   fetchCommits() {

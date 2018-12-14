@@ -52,7 +52,7 @@ class ChangeLog {
   }
 
   validVersions() {
-    return this.versions.slice(1).reverse().filter(v => v.isReleased() || v.fetchCommits().length > 0);
+    return this.versions.slice(1).reverse();
   }
 
   reportMissing() {

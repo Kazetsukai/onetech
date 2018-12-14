@@ -4,8 +4,11 @@
     <div v-if="!version.data" class="loading">
       Loading...
     </div>
+    <div v-else-if="isEmptyUnreleased">
+      <div class="empty">Currently no unreleased content</div>
+    </div>
     <div v-else>
-      <div class="date">{{date}}</div>
+      <div v-if="date" class="date">{{date}}</div>
       <ChangeLogCommit v-for="commit in version.data.commits" :commit="commit" :key="commit.sha" />
     </div>
   </div>
@@ -30,6 +33,7 @@ export default {
   },
   computed: {
     date() {
+      if (!this.version.data.date) return;
       const date = new Date(this.version.data.date);
       const months = [
         "January", "February", "March",
@@ -47,6 +51,9 @@ export default {
         return "Unreleased";
       }
       return "Version " + this.id;
+    },
+    isEmptyUnreleased() {
+      return this.id === "unreleased" && this.version.data.commits.length === 0;
     }
   }
 }
@@ -59,7 +66,8 @@ export default {
     padding: 0;
   }
 
-  .changeLogVersion .date {
+  .changeLogVersion .date,
+  .changeLogVersion .empty {
     color: #999;
     text-align: center;
     margin-bottom: 10px;
