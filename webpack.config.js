@@ -10,11 +10,6 @@ if (process.env.NODE_ENV === 'development' && fs.existsSync(`static${mod}-dev`))
 else
   var staticPath = `static${mod}`;
 
-var staticTimestamp = fs.readFileSync(staticPath + "/timestamp.txt", "utf8");
-var processTimestamp = fs.readFileSync("process/timestamp.txt", "utf8");
-if (staticTimestamp != processTimestamp)
-  throw "First run process.js to bring static up to date";
-
 module.exports = {
   entry: './src/main.js',
   output: {

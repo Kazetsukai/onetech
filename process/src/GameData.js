@@ -113,7 +113,6 @@ class GameData {
 
   exportObjects() {
     this.prepareStaticDir();
-    this.updateTimestamp();
     this.saveJSON("objects.json", this.objectsData());
     for (let id in this.objects) {
       this.saveJSON(`objects/${id}.json`, this.objects[id].jsonData());
@@ -151,13 +150,6 @@ class GameData {
 
   makeDir(path) {
     if (!fs.existsSync(path)) fs.mkdirSync(path);
-  }
-
-  updateTimestamp() {
-    const path = this.processDir + "/timestamp.txt";
-    // Only update timestamp if we have changed the process script
-    if (spawnSync("git", ["status", "-s", this.processDir]).stdout != "")
-      fs.writeFileSync(path, new Date().getTime());
   }
 
   saveJSON(path, data) {

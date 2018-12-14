@@ -1,5 +1,0 @@
-# This will auto-merge the timestamp preferring the non-current branch
-# This is not enabled by default, you can enable it with:
-#
-# git config --global merge.theirs.driver true
-process/timestamp.txt merge=theirs
