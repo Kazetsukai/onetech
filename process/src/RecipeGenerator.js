@@ -12,6 +12,7 @@ class RecipeGenerator {
   generate() {
     this.generateNode(this.object);
     const root = this.nodes.find(n => n.object == this.object);
+    root.trackMainBranch();
     root.collapseBranches();
   }
 
