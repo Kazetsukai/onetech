@@ -18,10 +18,12 @@ class RecipeGenerator {
 
   generateNode(object) {
     const node = new RecipeNode(object);
-    if (this.availableTools.includes(object))
-      node.makeTool();
-    if (!node.tool && !node.isIngredient())
+    if (this.availableTools.includes(object)) {
+      node.makeTool(this);
+    }
+    if (!node.tool && !node.isIngredient()) {
       this.generateTransitionNodes(object.transitionsToward[0], node);
+    }
     this.nodes.push(node);
     return node;
   }
@@ -53,13 +55,17 @@ class RecipeGenerator {
     node.addParent(parent);
   }
 
+  deleteNode(node) {
+    this.nodes = this.nodes.filter(n => n != node);
+  }
+
   addAvailableTool(object, parent, recursionCount) {
     if (!object || object == parent.object || this.availableTools.includes(object)) return;
 
     if (object.depth.compare(parent.object.depth) < 0) {
       this.availableTools.push(object);
       const node = this.nodes.find(n => n.object == object);
-      if (node) node.makeTool();
+      if (node) node.makeTool(this);
     }
 
     // Don't search too deep for tools

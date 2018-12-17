@@ -26,8 +26,6 @@ class RecipeNode {
 
   addParent(parent) {
     this.parents.push(parent);
-    if (parent.tool)
-      this.makeTool();
     parent.children.push(this);
   }
 
@@ -58,10 +56,20 @@ class RecipeNode {
     return this.depth();
   }
 
-  makeTool() {
+  makeTool(generator) {
     if (this.tool) return;
     this.tool = true;
-    this.children.forEach(child => child.makeTool());
+    this.children.forEach(child => child.deleteToolNode(generator));
+    this.children = [];
+  }
+
+  deleteToolNode(generator) {
+    this.parents = this.parents.filter(p => !p.tool);
+    if (this.parents.length === 0) {
+      this.tool = true; // So children will remove this node
+      this.children.forEach(child => child.deleteToolNode(generator));
+      generator.deleteNode(this);
+    }
   }
 
   showInStep(expand) {
