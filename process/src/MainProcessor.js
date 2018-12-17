@@ -79,7 +79,7 @@ class MainProcessor {
       return null;
     }
 
-    return gameData.unprocessedVersion(this.staticDir(false));
+    return gameData.unprocessedVersion(this.staticDir(false), !this.doDownload);
   }
 }
 

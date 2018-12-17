@@ -14,7 +14,6 @@ const unprocessedVersion = processor.process(null);
 
 if (unprocessedVersion) {
   processor.doDownload = false;
-  processor.doSprites = true;
   console.log(`--- Processing static for v${unprocessedVersion.id} ---`);
   processor.process(unprocessedVersion);
 }

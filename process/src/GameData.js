@@ -228,10 +228,10 @@ class GameData {
     generator.generate(Object.values(this.objects), this.biomes);
   }
 
-  unprocessedVersion(staticDir) {
+  unprocessedVersion(staticDir, force) {
     const version = this.changeLog.lastReleasedVersion();
     const path = `versions/${version.id}.json`;
-    if (!fs.existsSync(staticDir + "/" + path)) {
+    if (force || !fs.existsSync(staticDir + "/" + path)) {
       return version;
     }
   }
