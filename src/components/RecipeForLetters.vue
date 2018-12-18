@@ -12,12 +12,25 @@
 
     <h3 v-if="loading">Loading...</h3>
     <div v-else-if="objects.length" class="steps">
-      <RecipeIngredients :ingredients="ingredients" />
+      <RecipeIngredients :ingredients="ingredients" :rightClickObject="filterObject" />
+
+      <div class="filterHeadline" v-if="filteredObject">
+        <h4>Filter:</h4>
+        <ObjectImage
+          class="filteredObject"
+          hover="true"
+          clickable="true"
+          :object="filteredObject" />
+        <a href="#" @click.prevent="filterObject(null)">Clear Filter</a>
+      </div>
+
       <RecipeStep
         v-for="(transitions, index) in steps"
         :transitions="transitions"
         :number="index+1"
-        :key="index" />
+        :key="index"
+        :rightClickObject="filterObject"
+        :filteredObject="filteredObject" />
     </div>
   </div>
 </template>
@@ -27,17 +40,20 @@ import GameObject from '../models/GameObject';
 
 import RecipeIngredients from './RecipeIngredients';
 import RecipeStep from './RecipeStep';
+import ObjectImage from './ObjectImage';
 
 export default {
   components: {
     RecipeIngredients,
-    RecipeStep
+    RecipeStep,
+    ObjectImage
   },
   data() {
     return {
       small: true,
       objects: [],
       timer: null,
+      filteredObject: null,
     };
   },
   computed: {
@@ -139,6 +155,9 @@ export default {
       if (letter == "-")
         return GameObject.findAndLoadByName("Hyphen");
       return GameObject.findAndLoadByName(`Letter ${letter}`);
+    },
+    filterObject(object) {
+      this.filteredObject = object;
     }
   },
   metaInfo() {
@@ -147,7 +166,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .lettersRecipe {
     background-color: #222;
     margin-top: 10px;
@@ -210,5 +229,40 @@ export default {
   .lettersRecipe .steps {
     display: flex;
     flex-direction: column;
+  }
+
+  .filterHeadline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+
+    h4 {
+      text-align: center;
+      font-size: 16px;
+      margin: 0;
+    }
+
+    .filteredObject {
+      margin: 0 10px;
+      display: flex;
+      align-items: center;
+      z-index: 1;
+      position: relative;
+      display: block;
+      width: 50px;
+      height: 50px;
+      background-color: #444;
+      border: solid 1px transparent;
+      border-radius: 3px;
+      &:hover {
+        border-color: #aaa;
+        background-color: #666;
+      }
+    }
+  }
+
+  .clearFilter {
+    text-align: center;
   }
 </style>
