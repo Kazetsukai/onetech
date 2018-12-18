@@ -1,5 +1,5 @@
 <template>
-  <div class="stepWrapper">
+  <div class="stepWrapper" v-if="showStep">
     <div class="step">
       <div class="stepNumber">
         {{number}}
@@ -11,13 +11,13 @@
             :transition="transition"
             :key="transition.id"
             :rightClickObject="rightClickObject"
-            @expand="expand"
           />
           <RecipeTransition
             v-for="transition in expandableTransitions"
             :transition="transition"
             :key="transition.id"
             :rightClickObject="rightClickObject"
+            :expanded="transition == expandedTransition"
             @expand="expand"
           />
         </div>
@@ -29,6 +29,7 @@
         :transitions="transitions"
         :number="numberToLetter(index)"
         :rightClickObject="rightClickObject"
+        :filteredObject="filteredObject"
         :key="index"
       />
     </div>
@@ -41,23 +42,35 @@ import RecipeStep from './RecipeStep';
 
 export default {
   name: 'RecipeStep',
-  props: ['transitions', 'number', 'rightClickObject'],
+  props: ['transitions', 'number', 'rightClickObject', 'filteredObject'],
   components: {
     RecipeTransition,
     RecipeStep
   },
   data() {
     return {
-      expandedTransition: null,
+      manuallyExpandedTransition: null,
     };
   },
   computed: {
+    showStep() {
+      return this.filteredTransitions.length > 0;
+    },
+    filteredTransitions() {
+      if (this.filteredObject) {
+        return this.transitionsWithObject(this.transitions, this.filteredObject);
+      }
+      return this.transitions;
+    },
     unexpandableTransitions() {
-      return this.transitions.filter(t => !t.subSteps);
+      return this.filteredTransitions.filter(t => !t.subSteps);
     },
     expandableTransitions() {
-      return this.transitions.filter(t => t.subSteps);
+      return this.filteredTransitions.filter(t => t.subSteps);
     },
+    expandedTransition() {
+      return this.manuallyExpandedTransition || this.filteredObject && this.expandableTransitions[0];
+    }
   },
   methods: {
     numberToLetter(num) {
@@ -65,10 +78,29 @@ export default {
     },
 
     expand(transition) {
-      if (this.expandedTransition)
-        this.expandedTransition = null;
-      else
-        this.expandedTransition = transition;
+      if (this.expandedTransition == transition) {
+        this.manuallyExpandedTransition = null;
+      } else {
+        this.manuallyExpandedTransition = transition;
+      }
+    },
+
+    transitionsWithObject(transitions, object) {
+      return transitions.filter(t => this.transitionIncludesObject(t, object));
+    },
+
+    transitionIncludesObject(transition, object) {
+      if (transition.subSteps) {
+        for (var transitions of transition.subSteps) {
+          if (this.transitionsWithObject(transitions, object).length > 0) {
+            return true;
+          }
+        }
+        return false;
+      }
+      return transition.actorID == object.id ||
+             transition.targetID == object.id ||
+             transition.id == object.id;
     }
   }
 }

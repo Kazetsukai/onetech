@@ -5,7 +5,7 @@
       <div class="expandButton"
           :class="{active: expanded}"
           title="Expand Recipe" v-tippy
-          @click="expand()">
+          @click.prevent="$emit('expand', transition)">
         <img src="../assets/recipe.png" width="41" height="42" />
       </div>
     </div>
@@ -66,14 +66,9 @@ import GameObject from '../models/GameObject';
 import ObjectImage from './ObjectImage';
 
 export default {
-  props: ['transition', 'rightClickObject'],
+  props: ['transition', 'rightClickObject', 'expanded'],
   components: {
     ObjectImage
-  },
-  data() {
-    return {
-      expanded: false,
-    };
   },
   computed: {
     showPlus() {
@@ -91,12 +86,6 @@ export default {
     resultCount() {
       if (this.transition.count)
         return `x${this.transition.count}`;
-    }
-  },
-  methods: {
-    expand() {
-      this.expanded = !this.expanded;
-      this.$emit("expand", this.transition);
     }
   }
 }

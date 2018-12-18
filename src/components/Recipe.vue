@@ -15,20 +15,24 @@
     <h3 v-if="!object.data">Loading...</h3>
     <div v-else class="steps">
       <RecipeIngredients :ingredients="object.data.recipe.ingredients" :rightClickObject="filterObject" />
-      <template v-if="filteredObject">
-        <RecipeFilter
-          :object="object"
-          :filteredObject="filteredObject"
-          :rightClickObject="filterObject" />
-      </template>
-      <template v-else>
-        <RecipeStep
-          v-for="(transitions, index) in object.data.recipe.steps"
-          :transitions="transitions"
-          :number="index+1"
-          :key="index"
-          :rightClickObject="filterObject" />
-      </template>
+
+      <div class="filterHeadline" v-if="filteredObject">
+        <h4>Filter:</h4>
+        <ObjectImage
+          class="filteredObject"
+          hover="true"
+          clickable="true"
+          :object="filteredObject" />
+        <a href="#" @click.prevent="filterObject(null)">Clear Filter</a>
+      </div>
+
+      <RecipeStep
+        v-for="(transitions, index) in object.data.recipe.steps"
+        :transitions="transitions"
+        :number="index+1"
+        :key="index"
+        :rightClickObject="filterObject"
+        :filteredObject="filteredObject" />
     </div>
   </div>
 </template>
@@ -37,14 +41,12 @@
 import GameObject from '../models/GameObject';
 
 import RecipeIngredients from './RecipeIngredients';
-import RecipeFilter from './RecipeFilter';
 import RecipeStep from './RecipeStep';
 import ObjectImage from './ObjectImage';
 
 export default {
   components: {
     RecipeIngredients,
-    RecipeFilter,
     RecipeStep,
     ObjectImage
   },
@@ -135,6 +137,41 @@ export default {
   .recipe .steps {
     display: flex;
     flex-direction: column;
+  }
+
+  .filterHeadline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+
+    h4 {
+      text-align: center;
+      font-size: 16px;
+      margin: 0;
+    }
+
+    .filteredObject {
+      margin: 0 10px;
+      display: flex;
+      align-items: center;
+      z-index: 1;
+      position: relative;
+      display: block;
+      width: 50px;
+      height: 50px;
+      background-color: #444;
+      border: solid 1px transparent;
+      border-radius: 3px;
+      &:hover {
+        border-color: #aaa;
+        background-color: #666;
+      }
+    }
+  }
+
+  .clearFilter {
+    text-align: center;
   }
 
   @media only screen and (max-width: 768px) {
