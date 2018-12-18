@@ -3,7 +3,8 @@
       className="imgContainer"
       :clickable="clickable && !legacy"
       :title="title"
-      :object="object">
+      :object="object"
+      :rightClick="rightClick">
     <div v-if="hand" class="hand" :style="object ? {} : { width: '100%', height: '100%' }" />
     <div v-if="legacy" class="removed" />
     <div v-if="player" class="player" />
@@ -27,6 +28,7 @@ export default {
     'object',
     'extraObject',
     'clickable',
+    'rightClick',
     'hand',
     'hover',
     'decay',
@@ -97,7 +99,7 @@ export default {
     },
     weightPercent () {
       return Math.round(this.weight*1000)/10.0;
-    }
+    },
   }
 }
 </script>

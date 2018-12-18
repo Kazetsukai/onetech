@@ -1,6 +1,12 @@
 <template>
   <div class="ingredients">
     <h4>Ingredients</h4>
+    <div class="instructions desktop">
+      right click to filter recipe
+    </div>
+    <div class="instructions mobile">
+      tap and hold to filter recipe
+    </div>
     <div class="ingredientObjects">
       <ObjectImage
         v-for="object in objects"
@@ -9,7 +15,8 @@
         clickable="true"
         :object="object"
         :uses="ingredientUses(object)"
-        :key="object.id" />
+        :key="object.id"
+        :rightClick="rightClickObject" />
     </div>
   </div>
 </template>
@@ -20,7 +27,7 @@ import GameObject from '../models/GameObject';
 import ObjectImage from './ObjectImage';
 
 export default {
-  props: ['ingredients'],
+  props: ['ingredients', 'rightClickObject'],
   components: {
     ObjectImage
   },
@@ -40,7 +47,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .ingredients {
     background-color: #3c3c3c;
     margin: 10px;
@@ -80,5 +87,26 @@ export default {
   .ingredients .ingredientObject:hover {
     border-color: #aaa;
     background-color: #666;
+  }
+
+  .ingredients .instructions {
+    text-align: center;
+    color: #BBB;
+    font-size: 14px;
+
+    &.mobile {
+      display: none;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    .ingredients .instructions {
+      &.mobile {
+        display: block;
+      }
+      &.desktop {
+        display: none;
+      }
+    }
   }
 </style>

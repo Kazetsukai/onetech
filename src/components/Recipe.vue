@@ -5,12 +5,21 @@
 
     <h3 v-if="!object.data">Loading...</h3>
     <div v-else class="steps">
-      <RecipeIngredients :ingredients="object.data.recipe.ingredients" />
-      <RecipeStep
-        v-for="(transitions, index) in object.data.recipe.steps"
-        :transitions="transitions"
-        :number="index+1"
-        :key="index" />
+      <RecipeIngredients :ingredients="object.data.recipe.ingredients" :rightClickObject="filterObject" />
+      <template v-if="filteredObject">
+        <RecipeFilter
+          :object="object"
+          :filteredObject="filteredObject"
+          :rightClickObject="filterObject" />
+      </template>
+      <template v-else>
+        <RecipeStep
+          v-for="(transitions, index) in object.data.recipe.steps"
+          :transitions="transitions"
+          :number="index+1"
+          :key="index"
+          :rightClickObject="filterObject" />
+      </template>
     </div>
   </div>
 </template>
@@ -19,16 +28,19 @@
 import GameObject from '../models/GameObject';
 
 import RecipeIngredients from './RecipeIngredients';
+import RecipeFilter from './RecipeFilter';
 import RecipeStep from './RecipeStep';
 
 export default {
   components: {
     RecipeIngredients,
+    RecipeFilter,
     RecipeStep
   },
   data() {
     return {
       object: GameObject.findAndLoad(this.$route.params.id),
+      filteredObject: null,
     };
   },
   created() {
@@ -38,6 +50,11 @@ export default {
   watch: {
     '$route' (to, from) {
       this.object = GameObject.findAndLoad(this.$route.params.id);
+    }
+  },
+  methods: {
+    filterObject(object) {
+      this.filteredObject = object;
     }
   },
   metaInfo() {

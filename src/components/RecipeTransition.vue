@@ -20,7 +20,8 @@
                   :hand="transition.hand" hover="true"
                   :object="actor"
                   :uses="transition.actorUses"
-                  :clickable="transition.actorID" />
+                  :clickable="transition.actorID"
+                  :rightClick="rightClickObject" />
 
       <div class="plus" v-if="showPlus">+</div>
 
@@ -30,7 +31,8 @@
                   hover="true"
                   :object="target"
                   :uses="transition.targetUses"
-                  clickable="true" />
+                  clickable="true"
+                  :rightClick="rightClickObject" />
 
       <ObjectImage class="recipeTransitionObject"
                   v-else-if="transition.targetPlayer"
@@ -52,7 +54,8 @@
                   :object="result"
                   :uses="resultCount"
                   :weight="transition.weight"
-                  clickable="true" />
+                  clickable="true"
+                  :rightClick="rightClickObject" />
     </div>
   </div>
 </template>
@@ -63,7 +66,7 @@ import GameObject from '../models/GameObject';
 import ObjectImage from './ObjectImage';
 
 export default {
-  props: ['transition'],
+  props: ['transition', 'rightClickObject'],
   components: {
     ObjectImage
   },

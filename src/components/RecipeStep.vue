@@ -10,12 +10,14 @@
             v-for="transition in unexpandableTransitions"
             :transition="transition"
             :key="transition.id"
+            :rightClickObject="rightClickObject"
             @expand="expand"
           />
           <RecipeTransition
             v-for="transition in expandableTransitions"
             :transition="transition"
             :key="transition.id"
+            :rightClickObject="rightClickObject"
             @expand="expand"
           />
         </div>
@@ -26,6 +28,7 @@
         v-for="(transitions, index) in expandedTransition.subSteps"
         :transitions="transitions"
         :number="numberToLetter(index)"
+        :rightClickObject="rightClickObject"
         :key="index"
       />
     </div>
@@ -38,7 +41,7 @@ import RecipeStep from './RecipeStep';
 
 export default {
   name: 'RecipeStep',
-  props: ['transitions', 'number'],
+  props: ['transitions', 'number', 'rightClickObject'],
   components: {
     RecipeTransition,
     RecipeStep
