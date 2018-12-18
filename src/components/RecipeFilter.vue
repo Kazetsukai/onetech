@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="clearFilter">
-      <a href="#" @click="rightClickObject(null)">Clear Filter</a>
+      <a href="#" @click.prevent="rightClickObject(null)">Clear Filter</a>
     </div>
   </div>
 </template>
