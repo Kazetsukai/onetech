@@ -158,6 +158,12 @@ export default {
     },
     filterObject(object) {
       this.filteredObject = object;
+      if (object) {
+        setTimeout(function() {
+          var scrollingElement = (document.scrollingElement || document.body);
+          scrollingElement.scrollTop = scrollingElement.scrollHeight;
+        }, 100);
+      }
     }
   },
   metaInfo() {
