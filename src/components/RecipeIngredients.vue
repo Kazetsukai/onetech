@@ -1,11 +1,8 @@
 <template>
   <div class="ingredients">
     <h4>Ingredients</h4>
-    <div class="instructions desktop">
+    <div class="filterInstructions">
       right click to filter recipe
-    </div>
-    <div class="instructions mobile">
-      tap and hold to filter recipe
     </div>
     <div class="ingredientObjects">
       <ObjectImage
@@ -89,24 +86,15 @@ export default {
     background-color: #666;
   }
 
-  .ingredients .instructions {
+  .ingredients .filterInstructions {
     text-align: center;
     color: #BBB;
     font-size: 14px;
-
-    &.mobile {
-      display: none;
-    }
   }
 
   @media only screen and (max-width: 768px) {
-    .ingredients .instructions {
-      &.mobile {
-        display: block;
-      }
-      &.desktop {
-        display: none;
-      }
+    .ingredients .filterInstructions {
+      display: none;
     }
   }
 </style>
