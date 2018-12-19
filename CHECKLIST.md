@@ -37,8 +37,16 @@ This is a list of items and transitions to check to ensure everything is correct
 * [Thread](https://onetech.info/58-Thread)
 
 
-### Complex Transitions
+### Complex Recipes
 
 * [Wet Newcomen Pump](https://onetech.info/2234-Wet-Newcomen-Pump/recipe): it should collapse hot pistons
 * [Three Sisters Stew](https://onetech.info/1249-Three-Sister-s-Stew/recipe)
 * [Turkey Broth](https://onetech.info/2197-Turkey-Broth/recipe)
+
+
+### Use Count Recipes
+
+* [Adobe Kiln](https://onetech.info/238-Adobe-Kiln/recipe): 1 clay deposit
+* [Bell Tower](https://onetech.info/842-Bell-Tower-ready-to-ring/recipe): 12 rocks
+* [Hand Cart](https://onetech.info/484-Hand-Cart/recipe): 2 logs
+* [Running Crude Car](https://onetech.info/2396-Running-Crude-Car/recipe): 5 yew branches

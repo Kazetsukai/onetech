@@ -17,6 +17,7 @@ class RecipeNode {
 
   constructor(object) {
     this.object = object;
+    this.transition = this.object.transitionsToward[0];
     this.parents = [];
     this.children = [];
     this.decaySeconds = 0;
@@ -94,46 +95,48 @@ class RecipeNode {
   }
 
   countFor(child) {
-    if (this.applyUsesFor(child)) {
-      return this.count() / this.availableUsesFor(child);
+    if (this.count() == 1) {
+      return 1;
     }
-    return this.count();
-  }
-
-  applyUsesFor(child) {
-    const transition = this.transition();
-    if (!transition) return false;
-    // if (transition.tool && transition.actorRemains) {
-    //   // Don't apply use count if we aren't getting a new object
-    //   // This way we don't count tool durability
-    //   return false;
-    // }
-    return transition.actor === child.object && transition.applyActorUse() ||
-           transition.target === child.object && transition.applyTargetUse();
+    return this.count() / this.availableUsesFor(child);
   }
 
   availableUsesFor(child) {
-    // if (global.debug && child.object.id == 300) {
+    // if (global.debug && child.object.id == 132) {
     //   debugger;
     // }
-    const remainderUses = this.remainderUses(this.transition());
-    return (child.object.data.numUses || 1) + remainderUses;
+    let numUses = child.object.data.numUses || 1;
+    if (numUses > 1 && !this.applyUseFor(child)) {
+      numUses = 1;
+    }
+    return numUses + this.remainderUses(this.transition);
+  }
+
+  applyUseFor(child) {
+    const transition = this.transition;
+    if (transition.actor && transition.applyActorUse() && transition.target && transition.applyTargetUse()) {
+      // This is a special case where both sides look like tools
+      // So we don't want to consider them in the item count
+      return false;
+    }
+    return transition.actor == child.object && transition.applyActorUse() ||
+           transition.target == child.object && transition.applyTargetUse();
   }
 
   remainderUses(transition, depth = 0) {
     if (depth > 10) {
       console.log(`Detected infinite loop calculating remainder for ${this.object.name}`);
-      debugger;
+      // debugger;
       return 0;
     }
     const remainder = this.remainder(transition);
     if (remainder === this.object) {
-      return this.object.data.numUses;
+      return 1;
     }
-    if (remainder && remainder != this.object) {
+    if (remainder) {
       const remainderTransition = this.remainderUseTransition(remainder);
-      if (remainderTransition && remainderTransition != transition && remainderTransition != this.transition()) {
-        return remainder.data.numUses + this.remainderUses(remainderTransition, depth + 1);
+      if (remainderTransition && remainderTransition != transition && remainderTransition != this.transition) {
+        return (remainder.data.numUses || 1) + this.remainderUses(remainderTransition, depth + 1);
       }
     }
     return 0;
@@ -143,8 +146,12 @@ class RecipeNode {
   // Such as picking a charcoal out of a small charcoal pile
   remainderUseTransition(remainder) {
     for (let transition of remainder.transitionsAway) {
-      if (transition.newActor == this.object || transition.newTarget == this.object) {
-        return transition;
+      if (transition.newActor === this.object || transition.newTarget === this.object) {
+        // Make sure we are using the same actor or target so we don't count chisel being put on split rock again
+        if (transition.actor === remainder && (!transition.target || transition.targetRemains && transition.target != this.object) ||
+            transition.target === remainder && (!transition.actor || transition.tool && transition.actor != this.object)) {
+          return transition;
+        }
       }
     }
   }
@@ -155,10 +162,6 @@ class RecipeNode {
       return transition.newTarget;
     }
     return transition.newActor;
-  }
-
-  transition() {
-    return this.object.transitionsToward[0];
   }
 
   subNodes() {
@@ -260,7 +263,7 @@ class RecipeNode {
       return data;
     }
 
-    const transition = this.transition();
+    const transition = this.transition;
     if (transition.actor) {
       data.actorID = transition.actor.id;
       if (transition.lastUseActor && transition.actor.data.numUses > 1) {
