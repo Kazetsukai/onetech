@@ -127,6 +127,17 @@ class Transition {
     return !this.decay && (this.playerActor || !(this.actor && this.actor.canMove()));
   }
 
+  totalDepth() {
+    let total = 0;
+    if (this.actor) {
+      total += this.actor.depth.value;
+    }
+    if (this.target) {
+      total += this.target.depth.value;
+    }
+    return total;
+  }
+
   jsonData() {
     const result = {}
 

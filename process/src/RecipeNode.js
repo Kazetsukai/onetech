@@ -17,7 +17,6 @@ class RecipeNode {
 
   constructor(object) {
     this.object = object;
-    this.transition = this.object.transitionsToward[0];
     this.parents = [];
     this.children = [];
     this.decaySeconds = 0;
