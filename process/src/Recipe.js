@@ -9,6 +9,9 @@ class Recipe {
   }
 
   generate() {
+    // if (this.object.id == 1837) {
+    //   global.debug = true;
+    // }
     const generator = new RecipeGenerator(this.object);
     generator.generate();
     this.nodes = generator.nodes;

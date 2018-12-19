@@ -81,9 +81,84 @@ class RecipeNode {
   }
 
   count() {
+    if (!this.countCache) {
+      this.countCache = this.calculateCount();
+    }
+    return this.countCache;
+  }
+
+  calculateCount() {
     if (this.tool) return 1;
     if (this.parents.length == 0) return 1;
-    return this.parents.map(n => n.count()).reduce((t, c) => t + c, 0);
+    return Math.ceil(this.parents.map(n => n.countFor(this)).reduce((t, c) => t + c, 0));
+  }
+
+  countFor(child) {
+    if (this.applyUsesFor(child)) {
+      return this.count() / this.availableUsesFor(child);
+    }
+    return this.count();
+  }
+
+  applyUsesFor(child) {
+    const transition = this.transition();
+    if (!transition) return false;
+    // if (transition.tool && transition.actorRemains) {
+    //   // Don't apply use count if we aren't getting a new object
+    //   // This way we don't count tool durability
+    //   return false;
+    // }
+    return transition.actor === child.object && transition.applyActorUse() ||
+           transition.target === child.object && transition.applyTargetUse();
+  }
+
+  availableUsesFor(child) {
+    // if (global.debug && child.object.id == 300) {
+    //   debugger;
+    // }
+    const remainderUses = this.remainderUses(this.transition());
+    return (child.object.data.numUses || 1) + remainderUses;
+  }
+
+  remainderUses(transition, depth = 0) {
+    if (depth > 10) {
+      console.log(`Detected infinite loop calculating remainder for ${this.object.name}`);
+      debugger;
+      return 0;
+    }
+    const remainder = this.remainder(transition);
+    if (remainder === this.object) {
+      return this.object.data.numUses;
+    }
+    if (remainder && remainder != this.object) {
+      const remainderTransition = this.remainderUseTransition(remainder);
+      if (remainderTransition && remainderTransition != transition && remainderTransition != this.transition()) {
+        return remainder.data.numUses + this.remainderUses(remainderTransition, depth + 1);
+      }
+    }
+    return 0;
+  }
+
+  // This is to check for a similar transition which results in the same object
+  // Such as picking a charcoal out of a small charcoal pile
+  remainderUseTransition(remainder) {
+    for (let transition of remainder.transitionsAway) {
+      if (transition.newActor == this.object || transition.newTarget == this.object) {
+        return transition;
+      }
+    }
+  }
+
+  remainder(transition) {
+    if (!transition) return null;
+    if (transition.newActor === this.object) {
+      return transition.newTarget;
+    }
+    return transition.newActor;
+  }
+
+  transition() {
+    return this.object.transitionsToward[0];
   }
 
   subNodes() {
@@ -185,7 +260,7 @@ class RecipeNode {
       return data;
     }
 
-    const transition = this.object.transitionsToward[0];
+    const transition = this.transition();
     if (transition.actor) {
       data.actorID = transition.actor.id;
       if (transition.lastUseActor && transition.actor.data.numUses > 1) {
