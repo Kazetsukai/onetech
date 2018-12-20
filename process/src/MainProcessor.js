@@ -51,15 +51,6 @@ class MainProcessor {
     console.log("Calculating object depth...");
     gameData.calculateObjectDepth();
 
-    console.log("Exporting objects...");
-    gameData.exportObjects();
-
-    console.log("Exporting versions...");
-    gameData.exportVersions();
-
-    console.log("Exporting biomes...");
-    gameData.exportBiomes();
-
     if (this.doSprites) {
       console.log("Converting sprite images...");
       gameData.convertSpriteImages();
@@ -68,6 +59,15 @@ class MainProcessor {
       console.log("Processing sprites...");
       gameData.processSprites();
     }
+
+    console.log("Exporting objects...");
+    gameData.exportObjects();
+
+    console.log("Exporting versions...");
+    gameData.exportVersions();
+
+    console.log("Exporting biomes...");
+    gameData.exportBiomes();
 
     if (version) {
       console.log("Generating sitemap...");
