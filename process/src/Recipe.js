@@ -9,7 +9,7 @@ class Recipe {
   }
 
   generate() {
-    // if (this.object.id == 2396) {
+    // if (this.object.id == 2449) {
     //   global.debug = true;
     // }
     const generator = new RecipeGenerator(this.object);

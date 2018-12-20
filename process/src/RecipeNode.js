@@ -87,23 +87,95 @@ class RecipeNode {
     return this.countCache;
   }
 
+  maxUses() {
+    const numUses = this.object.data.numUses;
+    if (numUses && numUses > 1) {
+      for (let parent of this.parents) {
+        if (parent.maxUsesFor(this)) {
+          return numUses;
+        }
+      }
+    }
+    return 1;
+  }
+
+  maxUsesFor(child) {
+    if (!this.transition) return false;
+    if (this.transition.actor === child.object) {
+      return this.transition.actorMinUseFraction == 1;
+    }
+    return this.transition.targetMinUseFraction == 1;
+  }
+
   calculateCount() {
     if (this.tool) return 1;
     if (this.parents.length == 0) return 1;
-    return Math.ceil(this.parents.map(n => n.countFor(this)).reduce((t, c) => t + c, 0));
+    return Math.ceil(this.uniqueParents().map(n => n.countFor(this)).reduce((t, c) => t + c, 0));
   }
 
   countFor(child) {
-    if (this.count() == 1) {
+    // if (global.debug && child.object.id == 2448) {
+    //   debugger;
+    // }
+    if (this.count() == 1 && this.requiredUsesFor(child) == 1) {
       return 1;
     }
-    return this.count() / this.availableUsesFor(child);
+    return this.count() * this.requiredUsesFor(child) / this.availableUsesFor(child);
+  }
+
+  requiredUsesFor(child) {
+    let uses = 0;
+    if (this.transition.actor == child.object) {
+      uses += this.actorCount();
+    }
+    if (this.transition.target == child.object) {
+      uses += this.targetCount();
+    }
+    return uses;
+  }
+
+  isReverseUse() {
+    return this.object.data.numUses && this.object.data.numUses > 1 &&
+           (this.transition.newActor == this.object && this.transition.reverseUseActor ||
+            this.transition.newTarget == this.object && this.transition.reverseUseTarget);
+  }
+
+  actorCount() {
+    if (this.isReverseUse() && this.isObjectUsedToIncrement(this.transition.actor)) {
+      return this.maxUses();
+    }
+    return 1;
+  }
+
+  targetCount() {
+    if (this.transition.target != this.transition.actor) {
+      if (this.isReverseUse() && this.isObjectUsedToIncrement(this.transition.target)) {
+        return this.maxUses();
+      }
+    }
+    return 1;
+  }
+
+  isObjectUsedToIncrement(object) {
+    for (let transition of this.object.transitionsAway) {
+      if (transition != this.transition &&
+          !transition.lastUseTarget &&
+          transition.reverseUseTarget &&
+          this.transition.reverseUseTarget &&
+          transition.actor == object) {
+        return true;
+      }
+      if (transition != this.transition &&
+          !transition.lastUseActor &&
+          transition.reverseUseActor &&
+          this.transition.reverseUseActor &&
+          transition.target == object) {
+        return true;
+      }
+    }
   }
 
   availableUsesFor(child) {
-    // if (global.debug && child.object.id == 132) {
-    //   debugger;
-    // }
     let numUses = child.object.data.numUses || 1;
     if (numUses > 1 && !this.applyUseFor(child)) {
       numUses = 1;
@@ -206,6 +278,10 @@ class RecipeNode {
     return this.children.filter((c,i) => this.children.indexOf(c) == i);
   }
 
+  uniqueParents() {
+    return this.parents.filter((p,i) => this.parents.indexOf(p) == i);
+  }
+
   trackMainBranch() {
     this.mainBranch = true;
     const child = this.uniqueChildren().sort((a,b) => b.subNodes().length - a.subNodes().length)[0];
@@ -252,6 +328,9 @@ class RecipeNode {
     const data = {id: this.object.id};
     if (this.count() > 1) {
       data.count = this.count();
+      data.uses = "x" + data.count;
+    } else if (this.maxUses() > 1) {
+      data.uses = "max";
     }
 
     data.mainBranch = this.mainBranch;
@@ -265,14 +344,18 @@ class RecipeNode {
     const transition = this.transition;
     if (transition.actor) {
       data.actorID = transition.actor.id;
-      if (transition.lastUseActor && transition.actor.data.numUses > 1) {
-        data.actorUses = transition.reverseUseActor ? "max" : "last";
+      if (transition.actor.data.numUses > 1 && (transition.lastUseActor || transition.actorMinUseFraction == 1)) {
+        data.actorUses = transition.reverseUseActor || transition.actorMinUseFraction == 1 ? "max" : "last";
+      } else if (this.actorCount() > 1) {
+        data.actorUses = "x" + this.actorCount();
       }
     }
     if (transition.target) {
       data.targetID = transition.target.id;
-      if (transition.lastUseTarget && transition.target.data.numUses > 1) {
-        data.targetUses = transition.reverseUseTarget ? "max" : "last";
+      if (transition.target.data.numUses > 1 && (transition.lastUseTarget || transition.targetMinUseFraction == 1)) {
+        data.targetUses = transition.reverseUseTarget || transition.targetMinUseFraction == 1 ? "max" : "last";
+      } else if (this.targetCount() > 1) {
+        data.targetUses = "x" + this.targetCount();
       }
     }
     if (transition.newActor == this.object && transition.newActorWeight)

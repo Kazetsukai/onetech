@@ -52,7 +52,7 @@
       <ObjectImage class="recipeTransitionObject"
                   hover="true"
                   :object="result"
-                  :uses="resultCount"
+                  :uses="this.transition.uses"
                   :weight="transition.weight"
                   clickable="true"
                   :rightClick="rightClickObject" />
@@ -82,10 +82,6 @@ export default {
     },
     result() {
       return GameObject.find(this.transition.id);
-    },
-    resultCount() {
-      if (this.transition.count)
-        return `x${this.transition.count}`;
     }
   }
 }
