@@ -48,5 +48,6 @@ This is a list of items and transitions to check to ensure everything is correct
 
 * [Adobe Kiln](https://onetech.info/238-Adobe-Kiln/recipe): 1 clay deposit
 * [Bell Tower](https://onetech.info/842-Bell-Tower-ready-to-ring/recipe): 12 rocks
-* [Hand Cart](https://onetech.info/484-Hand-Cart/recipe): 2 logs
+* [Hand Cart](https://onetech.info/484-Hand-Cart/recipe): 1 log, wooden disks
 * [Running Crude Car](https://onetech.info/2396-Running-Crude-Car/recipe): 5 yew branches
+* [Cistern](https://onetech.info/672-Cistern/recipe): 10 stones
