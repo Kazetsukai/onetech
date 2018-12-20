@@ -3,7 +3,9 @@
 const fs = require('fs');
 
 class Sprite {
-  constructor(lines) {
+  constructor(lines, index, object) {
+    this.index = index;
+    this.object = object;
     this.id = lines[0].split('=')[1];
     const position = lines[1].split('=')[1].split(',');
     this.x = position[0];
@@ -23,6 +25,11 @@ class Sprite {
 
   beyondAge(age) {
     return (this.ageRange[0] > -1 || this.ageRange[1] > -1) && (this.ageRange[0] > age || this.ageRange[1] < age);
+  }
+
+  additiveBlend() {
+    const additiveIndexes = this.object.data.spritesAdditiveBlend;
+    return additiveIndexes && additiveIndexes.indexOf(this.index) > -1;
   }
 }
 

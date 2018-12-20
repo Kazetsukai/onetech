@@ -134,7 +134,7 @@ class SpriteProcessor {
     newContext.fillRect(0, 0, newCanvas.width, newCanvas.height);
 
     const previousOperation = this.context.globalCompositeOperation;
-    this.context.globalCompositeOperation = "multiply";
+    this.context.globalCompositeOperation = sprite.additiveBlend() ? "lighter" : "multiply";
 
     this.context.setTransform(1, 0, 0, 1, 0, 0);
     this.context.drawImage(

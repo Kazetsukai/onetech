@@ -67,7 +67,7 @@ class GameObject {
     if (attribute == "numUses") {
       this.data.numUses = values[0];
       this.data.useChance = parseFloat(values[1] || 1.0);
-    } else if (attribute == "biomes" || attribute == "useAppearIndex") {
+    } else if (attribute == "biomes" || attribute == "useAppearIndex" || attribute == "spritesAdditiveBlend") {
       this.data[attribute] = values;
     } else if (values.length == 1) {
       this.data[attribute] = values[0];
@@ -77,7 +77,7 @@ class GameObject {
   }
 
   parseSprite(lines) {
-    this.sprites.push(new Sprite(lines));
+    this.sprites.push(new Sprite(lines, this.sprites.length, this));
   }
 
   jsonData() {
