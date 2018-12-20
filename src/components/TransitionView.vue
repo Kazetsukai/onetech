@@ -107,7 +107,7 @@ export default {
       return GameObject.find(this.transition.newExtraTargetID);
     },
     showNewActor() {
-      return !this.transition.decay && (!this.transition.tool || this.transition.newActorUses);
+      return !this.transition.decay;
     },
     wildcard() {
       return this.showNewActor && (this.transition.targetID || 0) < 1 && (this.transition.newTargetID || 0) < 1;
