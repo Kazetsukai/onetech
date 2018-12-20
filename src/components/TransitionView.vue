@@ -56,7 +56,7 @@
 
       <!-- What does the target item become? -->
       <ObjectImage class="transitionObject"
-                  v-if="transition.newTargetID && (!transition.targetRemains || transition.newTargetUses || transition.move)"
+                  v-if="transition.newTargetID"
                   hover="true"
                   :weight="transition.newTargetWeight"
                   :uses="transition.newTargetUses"
