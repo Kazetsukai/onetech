@@ -52,7 +52,7 @@
                   :object="newActor"
                   :clickable="newActor && newActor != selectedObject" />
 
-      <div class="gap" v-if="twoOnRight"></div>
+      <div class="gap" v-if="showNewActor"></div>
 
       <!-- What does the target item become? -->
       <ObjectImage class="transitionObject"
@@ -87,9 +87,6 @@ export default {
   computed: {
     twoOnLeft() {
       return this.transition.actorID || this.transition.decay || this.transition.hand;
-    },
-    twoOnRight() {
-      return !this.transition.decay && (!this.transition.tool || this.transition.newActorUses);
     },
     actor () {
       return GameObject.find(this.transition.actorID);
