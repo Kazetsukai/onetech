@@ -127,7 +127,7 @@ class GameObject {
       result.deadlyDistance = this.data.deadlyDistance;
     }
 
-    if (this.data.useDistance > 1) {
+    if (this.data.useDistance > 1 && this.data.deadlyDistance > 1) {
       result.useDistance = this.data.useDistance;
     }
 
