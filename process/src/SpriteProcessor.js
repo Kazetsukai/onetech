@@ -91,10 +91,27 @@ class SpriteProcessor {
   }
 
   drawSprite(sprite) {
-    this.drawSpriteImage(sprite, this.context);
+    if (sprite.additiveBlend()) {
+      this.drawSpriteWithOperation(sprite, "screen");
+    } else {
+      this.drawSpriteDirectly(sprite, this.context);
+    }
+  }
 
-    if (sprite.color.find(c => c < 1.0))
-      this.overlayColor(sprite)
+  drawSpriteWithOperation(sprite, operation) {
+    const newCanvas = new Canvas(this.canvas.width, this.canvas.height);
+    const newContext = newCanvas.getContext('2d');
+
+    this.drawSpriteDirectly(sprite, newContext);
+    this.overlayCanvas(newCanvas, this.context, operation);
+  }
+
+  drawSpriteDirectly(sprite, context) {
+    this.drawSpriteImage(sprite, context);
+
+    if (sprite.color.find(c => c < 1.0)) {
+      this.overlayColor(sprite, context)
+    }
   }
 
   drawSpriteImage(sprite, context) {
@@ -111,6 +128,7 @@ class SpriteProcessor {
     context.translate(x + context.canvas.width / 2, -y + context.canvas.height / 2);
     context.rotate(angleRads);
     if (sprite.hFlip == 1) context.scale(-1, 1);
+
     context.drawImage(
       img,
       -img.width / 2 - sprite.centerAnchorXOffset,
@@ -120,11 +138,11 @@ class SpriteProcessor {
     );
   }
 
-  overlayColor(sprite) {
+  overlayColor(sprite, targetContext) {
     const newCanvas = new Canvas(this.canvas.width, this.canvas.height);
     const newContext = newCanvas.getContext('2d');
 
-    this.drawSpriteImage(sprite, newContext)
+    this.drawSpriteImage(sprite, newContext, false)
 
     const color = sprite.color.map(c => Math.round(c*255)).join(", ");
 
@@ -133,19 +151,23 @@ class SpriteProcessor {
     newContext.fillStyle = "rgb(" + color + ")";
     newContext.fillRect(0, 0, newCanvas.width, newCanvas.height);
 
-    const previousOperation = this.context.globalCompositeOperation;
-    this.context.globalCompositeOperation = sprite.additiveBlend() ? "lighter" : "multiply";
+    this.overlayCanvas(newCanvas, targetContext, "multiply")
+  }
 
-    this.context.setTransform(1, 0, 0, 1, 0, 0);
-    this.context.drawImage(
-      newCanvas,
+  overlayCanvas(sourceCanvas, targetContext, operation) {
+    const previousOperation = targetContext.globalCompositeOperation;
+    targetContext.globalCompositeOperation = operation;
+
+    targetContext.setTransform(1, 0, 0, 1, 0, 0);
+    targetContext.drawImage(
+      sourceCanvas,
       0,
       0,
-      newCanvas.width,
-      newCanvas.height
+      sourceCanvas.width,
+      sourceCanvas.height
     );
 
-    this.context.globalCompositeOperation = previousOperation;
+    targetContext.globalCompositeOperation = previousOperation;
   }
 
   spritesBounds(sprites) {
