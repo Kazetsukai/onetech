@@ -127,6 +127,10 @@ class GameObject {
       result.deadlyDistance = this.data.deadlyDistance;
     }
 
+    if (this.data.useDistance > 1) {
+      result.useDistance = this.data.useDistance;
+    }
+
     if (this.data.mapChance > 0) {
       result.mapChance = this.data.mapChance;
       result.biomes = this.data.biomes;

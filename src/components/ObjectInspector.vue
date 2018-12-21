@@ -15,8 +15,8 @@
         <li v-if="object.clothingPart()">Clothing: {{object.clothingPart()}}</li>
         <li v-if="object.hasInsulation()">Insulation: {{object.insulationPercent()}}%</li>
         <li v-if="object.data.groundHeat">Ground Heat: {{object.data.groundHeat}}</li>
-        <li v-if="moveDistanceText">Move distance: {{moveDistanceText}}</li>
-        <li v-if="moveType">Move behavior: {{moveType}}</li>
+        <li v-if="moveDistanceText">Move Distance: {{moveDistanceText}}</li>
+        <li v-if="moveType">Move Behavior: {{moveType}}</li>
         <li v-if="numUses">Number of {{useWord}}s: {{numUses}}</li>
         <li v-if="totalFood">Total Food: {{totalFood}}</li>
         <li v-if="object.data.useChance">
@@ -26,6 +26,7 @@
         </li>
         <li v-if="estimatedUses">Estimated {{useWord}}s: {{estimatedUses}}</li>
         <li v-if="pickupText">{{pickupText}}</li>
+        <li v-if="object.data.useDistance">Use Distance: {{object.data.useDistance}} tiles</li>
         <li v-if="speedPercent">Walking Speed: {{speedPercent}}%</li>
         <li v-if="sizeText">{{sizeText}}</li>
         <li v-if="containerText">{{containerText}}</li>
