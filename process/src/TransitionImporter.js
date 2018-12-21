@@ -165,22 +165,25 @@ class TransitionImporter {
     const lastUseTargetTransition = this.transitions.find(t => t != transition && t.actorID == transition.actorID && t.lastUseTarget);
 
     // Animal attack
-    if (!lastUseTargetTransition) {
+    if (!lastUseActorTransition && !lastUseTargetTransition) {
       if (transition.newTargetID === '0') {
         transition.newTargetID = '87'; // Fresh grave
+        transition.targetRemains = false;
       } else {
         transition.newExtraTargetID = '87'; // Fresh grave
       }
-      transition.targetRemains = false;
       return;
     }
 
-    // Murder attack
+    transition.newExtraTargetID = (lastUseTargetTransition || transition).newTargetID;
     transition.newActorID = (lastUseActorTransition || lastUseTargetTransition).newActorID;
-    transition.newExtraTargetID = lastUseTargetTransition.newTargetID;
-    transition.newTargetID = (lastUseActorTransition || transition).newTargetID;
-    transition.tool = lastUseTargetTransition.tool;
-    transition.targetRemains = lastUseTargetTransition.targetRemains;
+    transition.newTargetID = (lastUseActorTransition || lastUseTargetTransition).newTargetID;
+    transition.tool = transition.actorID >= 0 && transition.actorID == transition.newActorID;
+    transition.targetRemains = transition.targetID >= 0 && transition.targetID == transition.newTargetID;
+  }
+
+  newDecayTransition(targetID, newTargetID, decaySeconds) {
+    return new Transition(`0 ${newTargetID} ${decaySeconds}`, `-1_${targetID}.txt`);
   }
 
   addToObjects(objects) {

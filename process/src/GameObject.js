@@ -123,7 +123,7 @@ class GameObject {
       result.groundHeat = this.data.rValue;
     }
 
-    if (this.data.deadlyDistance) {
+    if (this.isDeadly()) {
       result.deadlyDistance = this.data.deadlyDistance;
     }
 
@@ -234,6 +234,19 @@ class GameObject {
 
   isCategory() {
     return this.category && !this.category.pattern || this.name && this.name.startsWith("@");
+  }
+
+  isDeadly() {
+    return this.data.deadlyDistance && !this.hasSickTransition();
+  }
+
+  hasSickTransition() {
+    for (let transition of this.transitionsAway) {
+      if (transition.targetID == "0" && transition.newTarget && transition.newTarget.name.includes(" sick")) {
+        return true;
+      }
+    }
+    return false;
   }
 
   techTreeNodes(depth) {
