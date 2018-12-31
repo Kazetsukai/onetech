@@ -15,7 +15,7 @@
             <router-link to="/versions">What's new in Unreleased</router-link>
             |
           </span>
-          <a href="https://onetech.info">
+          <a :href="releasedContentUrl()">
             See Released Content
           </a>
         </div>
@@ -28,7 +28,7 @@
           <router-link to="/versions">What's new in v{{latestVersion}}</router-link>
           |
         </span>
-        <a href="https://edge.onetech.info">
+        <a :href="unreleasedContentUrl()">
           See Unreleased Content
         </a>
       </div>
@@ -105,12 +105,18 @@ export default {
     }
   },
   methods: {
-    redirectOldHash () {
+    redirectOldHash() {
       if (!window.location.hash) return;
       const path = window.location.hash.substr(1).split("/");
       if (parseInt(path[0]) > 0) // Object ID route
         path.unshift([path.shift(), path.shift()].join("-"));
       this.$router.replace("/" + path.join("/"));
+    },
+    unreleasedContentUrl() {
+      return "https://edge.onetech.info" + window.location.pathname;
+    },
+    releasedContentUrl() {
+      return "https://onetech.info" + window.location.pathname;
     }
   },
   metaInfo: {
