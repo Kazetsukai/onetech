@@ -9,6 +9,7 @@
           <RecipeTransition
             v-for="transition in unexpandableTransitions"
             :transition="transition"
+            :highlight="highlightTransition(transition)"
             :key="transition.id"
             :rightClickObject="rightClickObject"
           />
@@ -18,6 +19,7 @@
             :key="transition.id"
             :rightClickObject="rightClickObject"
             :expanded="transition == expandedTransition"
+            :highlight="highlightTransition(transition)"
             @expand="expand"
           />
         </div>
@@ -30,6 +32,7 @@
         :number="numberToLetter(index)"
         :rightClickObject="rightClickObject"
         :filteredObject="filteredObject"
+        :highlightObjects="highlightObjects"
         :key="index"
       />
     </div>
@@ -42,7 +45,7 @@ import RecipeStep from './RecipeStep';
 
 export default {
   name: 'RecipeStep',
-  props: ['transitions', 'number', 'rightClickObject', 'filteredObject'],
+  props: ['transitions', 'number', 'rightClickObject', 'filteredObject', 'highlightObjects'],
   components: {
     RecipeTransition,
     RecipeStep
@@ -101,6 +104,16 @@ export default {
       return transition.actorID == object.id ||
              transition.targetID == object.id ||
              transition.id == object.id;
+    },
+
+    highlightTransition(transition) {
+      if (!this.highlightObjects) return;
+      for (var object of this.highlightObjects) {
+        if (object.id == transition.id) {
+          return true;
+        }
+      }
+      return false;
     }
   }
 }

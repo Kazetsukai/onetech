@@ -49,7 +49,7 @@
 
     <div class="rightSide">
       <!-- What is the resulting object? -->
-      <ObjectImage class="recipeTransitionObject"
+      <ObjectImage :class="{recipeTransitionObject: true, highlight: highlight}"
                   hover="true"
                   :object="result"
                   :uses="this.transition.uses"
@@ -66,7 +66,7 @@ import GameObject from '../models/GameObject';
 import ObjectImage from './ObjectImage';
 
 export default {
-  props: ['transition', 'rightClickObject', 'expanded'],
+  props: ['transition', 'rightClickObject', 'expanded', 'highlight'],
   components: {
     ObjectImage
   },
@@ -87,7 +87,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .recipeTransition {
     overflow: hidden;
 
@@ -124,7 +124,8 @@ export default {
     width: 70px;
     height: 70px;
   }
-  .recipeTransition .recipeTransitionObject:hover {
+  .recipeTransition .recipeTransitionObject:hover,
+  .recipeTransition .recipeTransitionObject.highlight {
     border: 1px solid #aaa;
     background-color: #666;
   }

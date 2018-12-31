@@ -30,7 +30,8 @@
         :number="index+1"
         :key="index"
         :rightClickObject="filterObject"
-        :filteredObject="filteredObject" />
+        :filteredObject="filteredObject"
+        :highlightObjects="objects" />
     </div>
   </div>
 </template>
