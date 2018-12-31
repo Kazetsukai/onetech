@@ -145,8 +145,10 @@ export default {
       let match = transitions.find(t => t.id == transition.id);
       if (match) {
         match.count += transition.count || 1;
-        if (match.stepIndex < stepIndex)
+        match.uses = "x" + match.count;
+        if (match.stepIndex < stepIndex) {
           match.stepIndex = stepIndex;
+        }
       } else {
         let clone = Object.assign({count: 1, stepIndex: stepIndex}, transition);
         transitions.push(clone);
