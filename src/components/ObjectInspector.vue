@@ -36,6 +36,9 @@
           Difficulty: {{difficultyText}}
           <span class="helpTip" v-tippy :title="difficultyTip">?</span>
         </li>
+        <li>
+          Object ID: {{object.id}}
+        </li>
         <li v-if="object.data.version">
           Added in
           <router-link :to="versionUrl">v{{object.data.version}}</router-link>
