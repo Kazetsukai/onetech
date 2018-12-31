@@ -11,6 +11,7 @@ export default class GameObject {
       this.date = new Date(data.date);
       this.versions = data.versions;
       this.foodBonus = data.foodBonus;
+      this.legacyObjectsMap = {};
       callback(data);
     });
   }
@@ -54,7 +55,7 @@ export default class GameObject {
 
   static find(id) {
     if (!id) return;
-    return this.objectsMap[id.split("-")[0]];
+    return this.objectsMap[id.split("-")[0]] || this.legacyObjectsMap[id.split("-")[0]];
   }
 
   static findByName(name) {
@@ -81,7 +82,7 @@ export default class GameObject {
   }
 
   static addLegacyObject(attributes) {
-    if (this.objectsMap[attributes.id])
+    if (this.legacyObjectsMap[attributes.id])
       return;
     const object = new GameObject(attributes.id, attributes.name, null);
     if (attributes.category) {
@@ -89,7 +90,7 @@ export default class GameObject {
     } else {
       object.legacy = true;
     }
-    this.objectsMap[object.id] = object;
+    this.legacyObjectsMap[object.id] = object;
   }
 
   constructor(id, name, difficulty) {
