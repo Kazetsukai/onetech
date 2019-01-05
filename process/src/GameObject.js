@@ -253,7 +253,8 @@ class GameObject {
 
   sounds() {
     if (!this.data.sounds) return [];
-    return this.data.sounds.map(sound => sound.split(":")[0]).filter(sound => sound > 0);
+    const sounds = this.data.sounds.map(sound => sound.split(":")[0]);
+    return sounds.filter((sound,index) => sound > 0 && sounds.indexOf(sound) === index);
   }
 
   hasSickTransition() {
