@@ -72,7 +72,7 @@ Make sure to setup onetech.info domain to point to the droplet.
 Run this to install [ImageMagick](https://www.imagemagick.org/script/index.php) and Cairo for the [node-canvas](https://github.com/Automattic/node-canvas/blob/v1.x/Readme.md).
 
 ```
-sudo apt-get install imagemagick libcairo2-dev libjpeg-dev libpango1.0-dev libgif-dev build-essential g++ sox
+sudo apt-get install imagemagick libcairo2-dev libjpeg-dev libpango1.0-dev libgif-dev build-essential g++ libsox-fmt-mp3 sox
 ```
 
 Then run it:
