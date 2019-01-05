@@ -119,7 +119,7 @@ class GameObject {
       result.insulation = this.insulation();
     } else if (this.data.rValue > 0) {
       if (this.data.floor) {
-        result.groundHeat = this.data.rValue;
+        result.floorInsulation = this.data.rValue;
       } else if (this.data.blocksWalking == 1) {
         result.wallInsulation = this.data.rValue;
       }
