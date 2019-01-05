@@ -6,6 +6,16 @@
       <ObjectImage :object="object" scaleUpTo="128" />
       <h3 v-if="!object.data">Loading...</h3>
 
+      <div class="sounds" v-if="object.data && object.data.sounds">
+        <div class="sound" v-for="sound in object.data.sounds" @click="playSound(sound)" title="Play Sound" v-tippy>
+          <audio :id="'sound' + sound">
+            <source :src="soundPath(sound, 'mp3')" type="audio/mp3">
+            <source :src="soundPath(sound, 'ogg')" type="audio/ogg">
+          </audio>
+          <img src="../assets/sound.svg" width="22" height="20" alt="Play Sound" />
+        </div>
+      </div>
+
       <ul v-if="object.data">
         <li v-if="foodWithBonus">
           Food: {{foodWithBonus}}
@@ -37,14 +47,6 @@
           Difficulty: {{difficultyText}}
           <span class="helpTip" v-tippy :title="difficultyTip">?</span>
         </li>
-        <li v-for="sound in object.data.sounds">
-          Sound:
-          <audio :id="'sound' + sound">
-            <source :src="soundPath(sound, 'mp3')" type="audio/mp3">
-            <source :src="soundPath(sound, 'ogg')" type="audio/ogg">
-          </audio>
-          <span @click="playSound(sound)" class="playSound">Play</span>
-        </li>
         <li>
           Object ID: {{object.id}}
         </li>
@@ -65,13 +67,13 @@
         <h3>How to get</h3>
         <div class="actions" v-if="object.data && (object.data.recipe || object.data.techTree)">
           <router-link :to="object.url('tech-tree')" v-if="object.data.techTree" title="Tech Tree" v-tippy>
-            <img src="../assets/techtree.png" width="38" height="36" />
+            <img src="../assets/techtree.png" width="38" height="36" alt="Tech Tree" />
           </router-link>
           <router-link :to="object.url('recipe')" v-if="object.data.recipe" title="Crafting Recipe" v-tippy>
-            <img src="../assets/recipe.png" width="41" height="42" />
+            <img src="../assets/recipe.png" width="41" height="42" alt="Crafting Recipe" />
           </router-link>
           <router-link to="/letters" v-if="isLetterOrSign" title="Letters Recipe" v-tippy>
-            <img src="../assets/sign.png" width="40" height="41" />
+            <img src="../assets/sign.png" width="40" height="41" alt="Letters Recipe"  />
           </router-link>
         </div>
         <div v-if="object.data.mapChance" class="spawn">
@@ -242,7 +244,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .objectInspector {
     display: flex;
     flex-direction: row;
@@ -273,6 +275,30 @@ export default {
     width: 100%;
     height: 256px;
   }
+
+  .objectInspector .sounds {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+
+  .objectInspector .sound {
+    margin: 0 8px;
+    cursor: pointer;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    border: solid 1px transparent;
+    background-color: #505050;
+    &:hover {
+      background-color: #666;
+      border: solid 1px #eee;
+    }
+  }
+
   .objectInspector .info > ul {
     padding: 0;
     margin: 0 30px;
