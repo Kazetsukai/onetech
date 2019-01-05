@@ -35,7 +35,7 @@ class SitemapGenerator {
       sitemap.add({url: `/biomes/${path}`});
     }
 
-    fs.writeFileSync(this.rootDir + "sitemap.xml", sitemap.toString());
+    fs.writeFileSync(this.rootDir + "public/sitemap.xml", sitemap.toString());
   }
 }
 

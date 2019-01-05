@@ -7,8 +7,8 @@ var rootPath = "/";
 module.exports = {
   entry: './src/main.js',
   output: {
-    path: path.resolve(__dirname, './dist'),
-    publicPath: rootPath + 'dist/',
+    path: path.resolve(__dirname, './public/dist'),
+    publicPath: rootPath + 'public/dist/',
     filename: 'build.js'
   },
   module: {
@@ -79,10 +79,11 @@ module.exports = {
     extensions: ['*', '.js', '.vue', '.json']
   },
   devServer: {
+    contentBase: path.join(__dirname, 'public'),
     historyApiFallback: {index: "/index.html"},
     noInfo: true,
     overlay: true,
-    disableHostCheck: true
+    disableHostCheck: true,
   },
   performance: {
     hints: false

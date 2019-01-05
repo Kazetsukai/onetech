@@ -9,9 +9,9 @@ class MainProcessor {
 
   staticDir(edge) {
     if (edge && !process.env.ONETECH_MOD_NAME) {
-      return this.processDir + "/../static-edge";
+      return this.processDir + "/../public/static-edge";
     }
-    return this.processDir + "/../static";
+    return this.processDir + "/../public/static";
   }
 
   dataDir() {

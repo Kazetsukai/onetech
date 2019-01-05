@@ -25,7 +25,7 @@ Setup the server config:
 
 ```
 server {
-  root /path/to/onetech;
+  root /path/to/onetech/public;
   index index.html;
 
   server_name onetech.info edge.onetech.info www.onetech.info;
