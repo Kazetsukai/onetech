@@ -146,6 +146,7 @@ class GameData {
     this.makeDir(this.staticDir + "/objects");
     this.makeDir(this.staticDir + "/versions");
     this.makeDir(this.staticDir + "/biomes");
+    this.makeDir(this.staticDir + "/sounds");
     this.makeDir(this.staticDir + "/pretty-json");
     this.makeDir(this.staticDir + "/pretty-json/objects");
     this.makeDir(this.staticDir + "/pretty-json/versions");
@@ -199,6 +200,19 @@ class GameData {
         const inPath = dir + "/" + filename;
         const outPath = this.staticDir + "/ground/" + name + ".png";
         spawnSync("convert", [inPath, "-sigmoidal-contrast", "3,44%", "-level", "0%,108%,1.1", "-scale", "128x128", outPath]);
+      }
+    }
+  }
+
+  convertSounds() {
+    const dir = this.dataDir + "/sounds";
+    for (var filename of fs.readdirSync(dir)) {
+      if (filename.endsWith(".aiff")) {
+        const id = filename.split('.')[0];
+        const inPath = dir + "/" + filename;
+        const outPath = this.staticDir + "/sounds/" + id;
+        spawnSync("sox", [inPath, outPath + ".mp3"]);
+        spawnSync("sox", [inPath, outPath + ".ogg"]);
       }
     }
   }

@@ -37,6 +37,14 @@
           Difficulty: {{difficultyText}}
           <span class="helpTip" v-tippy :title="difficultyTip">?</span>
         </li>
+        <li v-for="sound in object.data.sounds">
+          Sound:
+          <audio :id="'sound' + sound">
+            <source :src="soundPath(sound, 'mp3')" type="audio/mp3">
+            <source :src="soundPath(sound, 'ogg')" type="audio/ogg">
+          </audio>
+          <span @click="playSound(sound)" class="playSound">Play</span>
+        </li>
         <li>
           Object ID: {{object.id}}
         </li>
@@ -218,6 +226,14 @@ export default {
     biomes() {
       if (!this.object.data.biomes) return [];
       return this.object.data.biomes.map(id => Biome.find(id.toString()));
+    },
+  },
+  methods: {
+    soundPath(id, extension) {
+      return `${global.staticPath}/sounds/${id}.${extension}`;
+    },
+    playSound(id) {
+      document.getElementById(`sound${id}`).play();
     }
   },
   metaInfo() {
@@ -361,6 +377,11 @@ export default {
 
   .objectInspector .biomeImage:hover {
     border: solid 1px white;
+  }
+
+  .objectInspector .playSound {
+    text-decoration: underline;
+    cursor: pointer;
   }
 
   @media only screen and (max-width: 768px) {

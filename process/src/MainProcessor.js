@@ -60,6 +60,11 @@ class MainProcessor {
       gameData.processSprites();
     }
 
+    if (this.doSounds) {
+      console.log("Converting sound files...");
+      gameData.convertSounds();
+    }
+
     console.log("Exporting objects...");
     gameData.exportObjects();
 

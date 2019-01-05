@@ -159,6 +159,11 @@ class GameObject {
       result.blocksWalking = true;
     }
 
+    const sounds = this.sounds();
+    if (sounds.length > 0) {
+      result.sounds = sounds;
+    }
+
     const moveTransition = this.transitionsAway.find(t => t.move > 0);
     if (moveTransition) {
       result.moveType = moveTransition.move;
@@ -244,6 +249,11 @@ class GameObject {
 
   isDeadly() {
     return this.data.deadlyDistance && !this.hasSickTransition();
+  }
+
+  sounds() {
+    if (!this.data.sounds) return [];
+    return this.data.sounds.map(sound => sound.split(":")[0]).filter(sound => sound > 0);
   }
 
   hasSickTransition() {

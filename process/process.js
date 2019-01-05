@@ -8,6 +8,7 @@ const processor = new MainProcessor(__dirname);
 
 processor.doDownload = process.argv.includes('download');
 processor.doSprites = processor.doDownload || process.argv.includes('sprites');
+processor.doSounds = processor.doDownload || process.argv.includes('sounds');
 
 console.log("--- Processing static-edge ---");
 const unprocessedVersion = processor.process(null);
