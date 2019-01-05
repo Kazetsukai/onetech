@@ -236,9 +236,15 @@ export default {
     },
     playSound(id) {
       const sound = document.getElementById(`sound${id}`);
-      sound.load();
-      sound.play();
-      sound.parentElement.classList.add("playing");
+      if (sound.paused) {
+        sound.load();
+        sound.play();
+        sound.parentElement.classList.add("playing");
+      } else {
+        sound.pause();
+        sound.currentTime = 0;
+        sound.parentElement.classList.remove("playing");
+      }
     },
     finishSound(id) {
       const sound = document.getElementById(`sound${id}`);
