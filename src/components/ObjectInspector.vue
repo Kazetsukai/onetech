@@ -8,7 +8,7 @@
 
       <div class="sounds" v-if="object.data && object.data.sounds">
         <div class="sound" v-for="sound in object.data.sounds" @click="playSound(sound)" title="Play Sound" v-tippy>
-          <audio :id="'sound' + sound">
+          <audio :id="'sound' + sound" @ended="finishSound(sound)">
             <source :src="soundPath(sound, 'mp3')" type="audio/mp3">
             <source :src="soundPath(sound, 'ogg')" type="audio/ogg">
           </audio>
@@ -235,7 +235,14 @@ export default {
       return `${global.staticPath}/sounds/${id}.${extension}`;
     },
     playSound(id) {
-      document.getElementById(`sound${id}`).play();
+      const sound = document.getElementById(`sound${id}`);
+      sound.load();
+      sound.play();
+      sound.parentElement.classList.add("playing");
+    },
+    finishSound(id) {
+      const sound = document.getElementById(`sound${id}`);
+      sound.parentElement.classList.remove("playing");
     }
   },
   metaInfo() {
@@ -296,6 +303,9 @@ export default {
     &:hover {
       background-color: #666;
       border: solid 1px #eee;
+    }
+    &.playing {
+      background-color: #d00;
     }
   }
 
