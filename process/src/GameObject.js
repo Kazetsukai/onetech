@@ -117,12 +117,8 @@ class GameObject {
     if (this.data.clothing != "n") {
       result.clothing = this.data.clothing;
       result.insulation = this.insulation();
-    } else if (this.data.rValue > 0) {
-      if (this.data.floor) {
-        result.floorInsulation = this.data.rValue;
-      } else if (this.data.blocksWalking == 1) {
-        result.wallInsulation = this.data.rValue;
-      }
+    } else if (this.data.rValue > 0 && (this.data.floor == 1 || this.data.blocksWalking == 1)) {
+      result.insulation = this.data.rValue;
     }
 
     if (this.isDeadly()) {

@@ -24,8 +24,6 @@
         <li v-if="object.data.heatValue">Heat: {{object.data.heatValue}}</li>
         <li v-if="object.clothingPart()">Clothing: {{object.clothingPart()}}</li>
         <li v-if="object.hasInsulation()">Insulation: {{object.insulationPercent()}}%</li>
-        <li v-if="object.data.floorInsulation">Floor Insulation: {{object.data.floorInsulation}}</li>
-        <li v-if="object.data.wallInsulation">Wall Insulation: {{object.data.wallInsulation}}</li>
         <li v-if="moveDistanceText">Move Distance: {{moveDistanceText}}</li>
         <li v-if="moveType">Move Behavior: {{moveType}}</li>
         <li v-if="numUses">Number of {{useWord}}s: {{numUses}}</li>
