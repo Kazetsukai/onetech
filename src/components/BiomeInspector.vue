@@ -18,7 +18,7 @@
       </ul>
       <div class="objects">
         <div class="object" v-for="object in objects">
-          <ObjectView :object="object" :spawnInfo="true" />
+          <ObjectView :object="object" :spawnChance="biome.spawnChance(object)" />
         </div>
       </div>
     </div>

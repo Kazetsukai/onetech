@@ -9,8 +9,8 @@
         </div>
       </div>
       <ObjectImage :object="object" scaleUpTo="80" />
-      <div class="spawnInfo" v-if="spawnInfo">
-        {{object.spawnText()}}
+      <div class="spawnInfo" v-if="spawnChance">
+        Chance: {{object.toPercent(spawnChance, 2)}}%
       </div>
     </div>
   </router-link>
@@ -20,7 +20,7 @@
 import ObjectImage from './ObjectImage';
 
 export default {
-  props: ["object", "spawnInfo"],
+  props: ["object", "spawnChance"],
   components: {
     ObjectImage
   },

@@ -106,8 +106,8 @@ class GameData {
   }
 
   calculateObjectDepth() {
-    var calculator = new DepthCalculator();
-    calculator.calculate(Object.values(this.objects));
+    var calculator = new DepthCalculator(Object.values(this.objects));
+    calculator.calculate();
   }
 
   generateTechTree() {

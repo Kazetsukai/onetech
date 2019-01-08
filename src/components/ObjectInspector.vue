@@ -79,7 +79,7 @@
             Spawn Chance: {{spawnText}}
           </div>
           <div class="biomes">
-            <router-link v-for="biome in biomes" :to="biome.url()" :title="biome.name" v-tippy class="biome" :key="biome.id">
+            <router-link v-for="biome in biomes" :to="biome.url()" :title="biomeTitle(biome)" v-tippy class="biome" :key="biome.id">
               <BiomeImage :biome="biome" />
             </router-link>
           </div>
@@ -225,7 +225,7 @@ export default {
     },
     biomes() {
       if (!this.object.data.biomes) return [];
-      return this.object.data.biomes.map(id => Biome.find(id.toString()));
+      return this.object.data.biomes.map(biomeData => Biome.find(biomeData.id.toString()));
     },
   },
   methods: {
@@ -247,6 +247,10 @@ export default {
     finishSound(id) {
       const sound = document.getElementById(`sound${id}`);
       sound.parentElement.classList.remove("playing");
+    },
+    biomeTitle(biome) {
+      const biomeData = this.object.data.biomes.find(biomeData => biomeData.id == biome.id);
+      return `${biome.name} (${this.object.toPercent(biomeData.spawnChance, 2)}%)`;
     }
   },
   metaInfo() {

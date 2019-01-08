@@ -3,15 +3,24 @@
 const Depth = require('./Depth');
 
 class DepthCalculator {
+  constructor(objects) {
+    this.objects = objects;
+  }
+
+  calculate() {
+    this.calculateDepth();
+    this.sortObjectTransitions();
+    this.calculateDifficulty();
+    this.reportMissing();
+  }
+
   // Calculates the depth starting with natural objects.
-  calculate(objects) {
-    for (var object of objects) {
-      if (object.isNatural())
+  calculateDepth() {
+    for (let object of this.objects) {
+      if (object.isNatural()) {
         this.setObjectDepth(object, new Depth({value: 0}));
+      }
     }
-    this.sortObjectTransitions(objects);
-    this.calculateDifficulty(objects);
-    this.reportMissing(objects);
   }
 
   // Sets the object depth if it is lower than previously set
@@ -24,7 +33,7 @@ class DepthCalculator {
       // Favor transitions where the actor or target remains
       // Otherwise we get broken tools as the easiest transition
       // const transitions = object.transitionsAway.sort((a, b) => (a.tool || a.targetRemains) ? -1 : 1);
-      for (var transition of object.transitionsAway) {
+      for (let transition of object.transitionsAway) {
         this.calculateTransition(transition);
       }
     }
@@ -50,24 +59,24 @@ class DepthCalculator {
       this.setObjectDepth(transition.newExtraTarget, depth);
   }
 
-  sortObjectTransitions(objects) {
-    for (let object of objects) {
+  sortObjectTransitions() {
+    for (let object of this.objects) {
       object.transitionsToward.sort((a,b) => a.depth.compare(b.depth));
       object.transitionsAway.sort((a,b) => a.depth.compare(b.depth));
     }
   }
 
-  calculateDifficulty(objects) {
-    const depths = objects.map(o => o.depth).filter(c => c.difficulty > 0).sort((a,b) => a.difficulty - b.difficulty);
+  calculateDifficulty() {
+    const depths = this.objects.map(o => o.depth).filter(c => c.difficulty > 0).sort((a,b) => a.difficulty - b.difficulty);
     for (let i in depths) {
       depths[i].difficulty = parseFloat(i) / depths.length;
     }
   }
 
-  reportMissing(allObjects) {
-    const objects = allObjects.filter(o => !o.depth.hasValue() && o.isVisible());
+  reportMissing() {
+    const objects = this.objects.filter(o => !o.depth.hasValue() && o.isVisible());
     console.log(objects.length + " objects are missing depth");
-    // for (var object of objects) {
+    // for (let object of objects) {
     //   console.log(object.id, object.name, "unable to calculate depth");
     // }
   }

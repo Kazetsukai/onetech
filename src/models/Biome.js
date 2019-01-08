@@ -55,10 +55,11 @@ export default class Biome {
 
   objects() {
     if (!this.data) return [];
-    return this.data.objects.map(o => {
-      const object = GameObject.find(o.id);
-      object.mapChance = o.mapChance
-      return object;
-    });
+    return this.data.objects.map(o => GameObject.find(o.id));
+  }
+
+  spawnChance(object) {
+    if (!this.data) return;
+    return this.data.objects.find(o => o.id == object.id).spawnChance;
   }
 }

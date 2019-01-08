@@ -30,8 +30,19 @@ class Biome {
     for (let object of objects) {
       if (object.data.biomes && object.data.biomes.includes(parseInt(this.id))) {
         this.objects.push(object);
+        object.biomes.push(this);
       }
     }
+  }
+
+  totalMapChance() {
+    return this.objects.map(o => o.data.mapChance).reduce((a,b) => a + b);
+  }
+
+  spawnChance(object) {
+    const total = this.totalMapChance();
+    if (!total) return 0;
+    return object.data.mapChance / total;
   }
 
   jsonData() {
@@ -41,7 +52,7 @@ class Biome {
       name: this.name(),
     };
     result.objects = this.objects.map(object => {
-      return {id: object.id, mapChance: object.data.mapChance};
+      return {id: object.id, spawnChance: this.spawnChance(object)};
     });
     return result;
   }

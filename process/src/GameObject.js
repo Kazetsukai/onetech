@@ -11,6 +11,7 @@ class GameObject {
     this.transitionsToward = [];
     this.transitionsAway = [];
     this.categories = [];
+    this.biomes = [];
     this.depth = new Depth({});
     this.parseData(dataText);
     if (!this.data.id)
@@ -131,7 +132,7 @@ class GameObject {
 
     if (this.data.mapChance > 0) {
       result.mapChance = this.data.mapChance;
-      result.biomes = this.data.biomes;
+      result.biomes = this.biomesData();
     }
 
     if (this.data.numSlots > 0) {
@@ -178,6 +179,12 @@ class GameObject {
     }
 
     return result;
+  }
+
+  biomesData() {
+    return this.biomes.map(biome => {
+      return {id: biome.id, spawnChance: biome.spawnChance(this)};
+    });
   }
 
   canPickup() {
