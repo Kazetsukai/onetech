@@ -85,6 +85,7 @@ const ObjectBadges = {
     Natural,
   ],
   jsonData(allObjects) {
+    allObjects = allObjects.filter(o => o.depth.craftable);
     const badgesData = {};
     for (let badge of this.badges) {
       const objects = badge.filter(allObjects);
