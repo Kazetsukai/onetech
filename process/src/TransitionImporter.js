@@ -198,9 +198,9 @@ class TransitionImporter {
   // "towards" transition. This looks for a transmitter which
   // has "*global1" in the name and adds this as an extra object
   addGlobalTriggers(objects) {
-    const triggers = Object.values(objects).filter(o => o.name.startsWith(">"));
+    const triggers = Object.values(objects).filter(o => o.isGlobalTrigger());
     for (let trigger of triggers) {
-      const transmitterName = trigger.name.replace(">", "*");
+      const transmitterName = trigger.transmitterName();
       const transmitters = Object.values(objects).filter(o => o.name.includes(transmitterName));
       for (let transmitter of transmitters) {
         for (let transition of transmitter.transitionsToward) {

@@ -66,7 +66,7 @@ const ObjectFilters = {
     Natural,
   ],
   jsonData(objects) {
-    objects = objects.filter(o => o.depth.craftable);
+    objects = objects.filter(o => o.canFilter());
     return this.filters.map(f => {
       return {
         key: f.key,

@@ -255,6 +255,18 @@ class GameObject {
     return this.data.deadlyDistance && !this.hasSickTransition();
   }
 
+  isGlobalTrigger() {
+    return this.name.startsWith(">");
+  }
+
+  transmitterName() {
+    return this.name.replace(">", "*");
+  }
+
+  canFilter() {
+    return this.depth.craftable && !this.isGlobalTrigger();
+  }
+
   sounds() {
     if (!this.data.sounds) return [];
     const sounds = this.data.sounds.map(sound => sound.split(":")[0]);
