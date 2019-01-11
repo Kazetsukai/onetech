@@ -191,6 +191,29 @@ class TransitionImporter {
       transition.addToObjects(objects);
     }
   }
+
+  // Global triggers have a name like ">global1" and will
+  // cause a transition somewhere else on the map.
+  // They have an "away" transition for the receiver, but no
+  // "towards" transition. This looks for a transmitter which
+  // has "*global1" in the name and adds this as an extra object
+  addGlobalTriggers(objects) {
+    const triggers = Object.values(objects).filter(o => o.name.startsWith(">"));
+    for (let trigger of triggers) {
+      const transmitterName = trigger.name.replace(">", "*");
+      const transmitters = Object.values(objects).filter(o => o.name.includes(transmitterName));
+      for (let transmitter of transmitters) {
+        for (let transition of transmitter.transitionsToward) {
+          if (transition.newActorID == 0) {
+            transition.newActorID = trigger.id;
+          } else {
+            transition.newExtraTargetID = trigger.id;
+          }
+          transition.addToObjects(objects);
+        }
+      }
+    }
+  }
 }
 
 module.exports = TransitionImporter;
