@@ -1,12 +1,13 @@
 "use strict";
 
-// Depth is the number of steps needed to craft an object
-// Natural objects have a depth of 0
-// Uncraftable objects have null depth
+// Depth is the deepest number of steps needed to craft an object
+// Natural and uncraftable objects have a depth of 0
 class Depth {
-  constructor({ value, difficulty }) {
-    this.value = value;
-    this.difficulty = difficulty || value;
+  constructor({ value, difficulty, craftable }) {
+    this.calculated = !isNaN(value);
+    this.value = value || 0;
+    this.difficulty = difficulty || 0;
+    this.craftable = craftable;
   }
 
   addTransition(transition) {
@@ -25,8 +26,8 @@ class Depth {
 
   addObject(object) {
     if (!object) return;
-    if (!this.hasValue() || !object.depth.hasValue())
-      throw "Unable to add null object depths together";
+    this.calculated = this.calculated && object.depth.calculated;
+    this.craftable = this.craftable && object.depth.craftable;
     this.value = Math.max(this.value, object.depth.value);
     this.difficulty += object.depth.difficulty;
   }
@@ -35,24 +36,28 @@ class Depth {
     return new Depth({
       value: this.value,
       difficulty: this.difficulty,
+      craftable: this.craftable,
     });
   }
 
-  hasValue() {
-    return this.value > 0 || this.value === 0;
-  }
-
-  // For use in an array sort function, returns 1, -1 or 0 depending
-  // on the value comparison
+  // Sorts based on priority: calculated, craftable, value, difficulty
   compare(depth) {
-    if (this.hasValue() && depth.hasValue()) {
-      if (this.value == depth.value)
-        return this.difficulty - depth.difficulty;
-      return this.value - depth.value;
+    if (this.calculated == depth.calculated) {
+      if (this.craftable == depth.craftable) {
+        if (this.value == depth.value) {
+          return this.difficulty - depth.difficulty;
+        }
+        return this.value - depth.value;
+      }
+      if (this.craftable)
+        return -1;
+      if (depth.craftable)
+        return 1;
+      return 0;
     }
-    if (this.hasValue())
+    if (this.calculated)
       return -1;
-    if (depth.hasValue())
+    if (depth.calculated)
       return 1;
     return 0;
   }

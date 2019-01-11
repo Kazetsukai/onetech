@@ -14,7 +14,9 @@
 
     <h3 v-if="!object.data">Loading...</h3>
     <div v-else class="steps">
-      <RecipeIngredients :ingredients="object.data.recipe.ingredients" :rightClickObject="filterObject" />
+      <RecipeIngredients v-if="object.data.recipe.ingredients" :ingredients="object.data.recipe.ingredients" :rightClickObject="filterObject" />
+
+      <RecipeIngredients v-if="object.data.recipe.uncraftables" title="UNCRAFTABLE Ingredients" :ingredients="object.data.recipe.uncraftables" :rightClickObject="filterObject" />
 
       <div class="filterHeadline" v-if="filteredObject">
         <h4>Filter:</h4>

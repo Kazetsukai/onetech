@@ -20,7 +20,7 @@ class RecipeGenerator {
     if (this.availableTools.includes(object)) {
       node.makeTool(this);
     }
-    if (!node.tool && !node.isIngredient()) {
+    if (!node.isLast()) {
       node.transition = this.lookupTransition(node);
       this.generateTransitionNodes(node);
     }
@@ -32,7 +32,7 @@ class RecipeGenerator {
     let transition = node.object.transitionsToward[0];
     if (!transition) return;
 
-    transition = this.collapseDecayTransition(node, transition);
+    transition = this.collapseDecayTransition(node, transition, 0);
 
     // Look for an alternative to last use transitions
     // This way we don't use the last item of the stack if we can just grab an item
@@ -47,12 +47,18 @@ class RecipeGenerator {
     return transition;
   }
 
-  collapseDecayTransition(node, transition) {
-    if (transition.totalDecaySeconds() > 0) {
+  collapseDecayTransition(node, transition, depth) {
+    if (depth > 10) {
+      console.log(`Detected infinite loop collapsing decay transitions for ${this.object.name}`);
+      // debugger;
+      return transition;
+    }
+
+    if (transition.totalDecaySeconds() > 0 && transition.target.depth.value) {
       node.decaySeconds += parseInt(transition.totalDecaySeconds());
       const nextTransition = transition.target.transitionsToward[0];
       if (nextTransition.totalDecaySeconds() > 0) {
-        return this.collapseDecayTransition(node, nextTransition);
+        return this.collapseDecayTransition(node, nextTransition, depth+1);
       }
     }
     return transition;

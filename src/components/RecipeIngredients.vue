@@ -1,6 +1,6 @@
 <template>
   <div class="ingredients">
-    <h4>Ingredients</h4>
+    <h4>{{titleWithDefault}}</h4>
     <div class="filterInstructions">
       right click to filter recipe
     </div>
@@ -24,7 +24,7 @@ import GameObject from '../models/GameObject';
 import ObjectImage from './ObjectImage';
 
 export default {
-  props: ['ingredients', 'rightClickObject'],
+  props: ['ingredients', 'title', 'rightClickObject'],
   components: {
     ObjectImage
   },
@@ -32,6 +32,9 @@ export default {
     objects() {
       const uniqueIDs = this.ingredients.filter((id, i) => this.ingredients.indexOf(id) == i);
       return uniqueIDs.map(id => GameObject.find(id))
+    },
+    titleWithDefault() {
+      return this.title || "Ingredients";
     }
   },
   methods: {

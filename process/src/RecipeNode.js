@@ -73,11 +73,19 @@ class RecipeNode {
   }
 
   showInStep(expand) {
-    return !this.tool && !this.isIngredient() && (!this.isCollapsed() || expand);
+    return !this.isLast() && (!this.isCollapsed() || expand);
   }
 
   isIngredient() {
-    return !this.tool && (!this.object.depth.hasValue() || this.object.depth.difficulty == 0);
+    return !this.tool && this.object.isNatural();
+  }
+
+  isUncraftable() {
+    return !this.tool && !this.isIngredient() && !this.object.depth.value;
+  }
+
+  isLast() {
+    return this.tool || this.isIngredient() || this.isUncraftable();
   }
 
   count() {
@@ -248,16 +256,12 @@ class RecipeNode {
   calculateSubNodes() {
     let subNodes = [];
     for (let child of this.uniqueChildren()) {
-      if (child.canBeSubNode()) {
+      if (!child.isLast()) {
         subNodes.push(child);
         subNodes = subNodes.concat(child.subNodes());
       }
     }
     return subNodes.filter((s,i) => subNodes.indexOf(s) == i);
-  }
-
-  canBeSubNode() {
-    return !this.tool && !this.isIngredient();
   }
 
   isExpandable() {

@@ -111,7 +111,7 @@ class GameObject {
         result.useChance = this.data.useChance;
     }
 
-    if (this.depth.hasValue()) {
+    if (this.depth.craftable) {
       result.depth = this.depth.value;
     }
 
@@ -205,7 +205,7 @@ class GameObject {
 
   // See ObjectInspector.vue for difficulty levels
   difficulty() {
-    if (!this.depth.difficulty) return;
+    if (!this.depth.craftable || !this.depth.difficulty) return;
     return Number.parseFloat(this.depth.difficulty).toPrecision(3);
   }
 

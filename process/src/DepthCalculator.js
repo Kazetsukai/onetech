@@ -11,14 +11,14 @@ class DepthCalculator {
     this.calculateDepth();
     this.sortObjectTransitions();
     this.calculateDifficulty();
-    this.reportMissing();
+    this.reportUncraftable();
   }
 
-  // Calculates the depth starting with natural objects.
+  // Calculates the depth starting with natural and uncraftable objects.
   calculateDepth() {
     for (let object of this.objects) {
-      if (object.isNatural()) {
-        this.setObjectDepth(object, new Depth({value: 0}));
+      if (object.isNatural() || object.transitionsToward.length === 0) {
+        this.setObjectDepth(object, new Depth({value: 0, craftable: object.isNatural()}));
       }
     }
   }
@@ -26,12 +26,13 @@ class DepthCalculator {
   // Sets the object depth if it is lower than previously set
   // It then calculates the depth for each "away" transition
   setObjectDepth(object, depth) {
-    if (!object.depth.hasValue() || depth.compare(object.depth) < 0) {
+    if (depth.compare(object.depth) < 0) {
       // console.log("Depth set for", object.id, object.name, "to", depth.value);
       object.depth = depth;
 
       // Favor transitions where the actor or target remains
       // Otherwise we get broken tools as the easiest transition
+      // I don't think this is necessary because of the difficulty sorting
       // const transitions = object.transitionsAway.sort((a, b) => (a.tool || a.targetRemains) ? -1 : 1);
       for (let transition of object.transitionsAway) {
         this.calculateTransition(transition);
@@ -42,12 +43,8 @@ class DepthCalculator {
   // Calculates the transition depth by finding max of actor and target depths
   // If the depth was calculated, it sets it to the resulting object
   calculateTransition(transition) {
-    if (transition.actor && !transition.actor.depth.hasValue())
-      return;
-    if (transition.target && !transition.target.depth.hasValue())
-      return;
-
-    const depth = new Depth({value: 0})
+    // Start in true state so adding transition can make to uncraftable
+    const depth = new Depth({value: 0, craftable: true});
     depth.addTransition(transition);
     transition.depth = depth;
 
@@ -73,9 +70,9 @@ class DepthCalculator {
     }
   }
 
-  reportMissing() {
-    const objects = this.objects.filter(o => !o.depth.hasValue() && o.isVisible());
-    console.log(objects.length + " objects are missing depth");
+  reportUncraftable() {
+    const objects = this.objects.filter(o => !o.depth.craftable && o.isVisible());
+    console.log(objects.length + " objects are uncraftable");
     // for (let object of objects) {
     //   console.log(object.id, object.name, "unable to calculate depth");
     // }

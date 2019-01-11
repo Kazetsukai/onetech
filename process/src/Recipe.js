@@ -9,8 +9,8 @@ class Recipe {
   }
 
   generate() {
-    // if (this.object.id == 2449) {
-    //   global.debug = true;
+    // if (this.object.id == 2620) {
+      // global.debug = true;
     // }
     const generator = new RecipeGenerator(this.object);
     generator.generate();
@@ -22,13 +22,21 @@ class Recipe {
   }
 
   jsonData() {
+    const data = {steps: RecipeNode.steps(this.nodes)};
+
     // For now let's just merge tools and ingredients together when displaying
     // We may eventually split them up for the user
     const ingredients = this.tools().concat(this.ingredients());
-    return {
-      steps: RecipeNode.steps(this.nodes),
-      ingredients: ingredients.sort((a,b) => a.depth.compare(b.depth)).reverse().map(o => o.id),
+    if (ingredients.length > 0) {
+      data.ingredients = ingredients.sort((a,b) => b.depth.compare(a.depth)).map(o => o.id);
     }
+
+    const uncraftables = this.nodes.filter(n => n.isUncraftable());
+    if (uncraftables.length > 0) {
+      data.uncraftables = uncraftables.map(n => n.object.id);
+    }
+
+    return data;
   }
 
   tools() {
