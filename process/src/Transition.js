@@ -124,7 +124,7 @@ class Transition {
   }
 
   hand() {
-    return !this.decay && (this.playerActor || !(this.actor && this.actor.canMove()));
+    return !this.decay && (this.playerActor || !(this.actor && (this.actor.canMove() || this.actor.isGlobalTrigger())));
   }
 
   totalDepth() {

@@ -204,11 +204,7 @@ class TransitionImporter {
       const transmitters = Object.values(objects).filter(o => o.name.includes(transmitterName));
       for (let transmitter of transmitters) {
         for (let transition of transmitter.transitionsToward) {
-          if (transition.newActorID == 0) {
-            transition.newActorID = trigger.id;
-          } else {
-            transition.newExtraTargetID = trigger.id;
-          }
+          transition.newExtraTargetID = trigger.id;
           transition.addToObjects(objects);
         }
       }
