@@ -45,7 +45,7 @@
           Difficulty: {{difficultyText}}
           <span class="helpTip" v-tippy :title="difficultyTip">?</span>
         </li>
-        <li v-if="!object.data.depth">UNCRAFTABLE</li>
+        <li v-if="!object.data.craftable">UNCRAFTABLE</li>
         <li>
           Object ID: {{object.id}}
         </li>

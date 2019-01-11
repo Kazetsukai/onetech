@@ -111,6 +111,7 @@ class GameObject {
         result.useChance = this.data.useChance;
     }
 
+    result.craftable = this.depth.craftable;
     if (this.depth.craftable) {
       result.depth = this.depth.value;
     }
