@@ -64,7 +64,10 @@
     <div class="transitionsPanels" v-if="object.data">
       <div class="transitionsPanel" v-if="object.data.transitionsToward.length > 0 || object.data.mapChance">
         <h3>How to get</h3>
-        <div class="actions" v-if="object.data && (object.data.recipe || object.data.techTree)">
+        <div class="actions" v-if="object.data">
+          <router-link :to="'/board' + object.url()" title="Crafting Board" v-tippy>
+            <img src="../assets/recipe.png" width="41" height="42" alt="Crafting Board" />
+          </router-link>
           <router-link :to="object.url('tech-tree')" v-if="object.data.techTree" title="Tech Tree" v-tippy>
             <img src="../assets/techtree.png" width="38" height="36" alt="Tech Tree" />
           </router-link>

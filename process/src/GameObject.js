@@ -3,6 +3,7 @@
 const Sprite = require('./Sprite');
 const Depth = require('./Depth');
 const Recipe = require('./Recipe');
+const BoardRecipe = require('./BoardRecipe');
 
 class GameObject {
   constructor(dataText) {
@@ -177,6 +178,12 @@ class GameObject {
     recipe.generate();
     if (recipe.hasData()) {
       result.recipe = recipe.jsonData();
+    }
+
+    const boardRecipe = new BoardRecipe(this);
+    boardRecipe.generate();
+    if (boardRecipe.hasData()) {
+      result.boardRecipe = boardRecipe.jsonData();
     }
 
     return result;

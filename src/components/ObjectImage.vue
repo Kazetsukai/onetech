@@ -4,6 +4,7 @@
       :clickable="clickable && !legacy"
       :title="title"
       :object="object"
+      :leftClick="leftClick"
       :rightClick="rightClick">
     <div v-if="hand" class="hand" :style="object ? {} : { width: '100%', height: '100%' }" />
     <div v-if="legacy" class="removed" />
@@ -28,6 +29,7 @@ export default {
     'object',
     'extraObject',
     'clickable',
+    'leftClick',
     'rightClick',
     'hand',
     'hover',

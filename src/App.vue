@@ -50,6 +50,7 @@ import ObjectInspector from './components/ObjectInspector';
 import TechTree from './components/TechTree';
 import Recipe from './components/Recipe';
 import RecipeForLetters from './components/RecipeForLetters';
+import Board from './components/Board';
 import BiomeInspector from './components/BiomeInspector';
 import ChangeLog from './components/ChangeLog';
 import NotFound from './components/NotFound';
@@ -131,6 +132,7 @@ export default {
     {path: "/versions", component: ChangeLog},
     {path: "/versions/:id", component: ChangeLog},
     {path: "/biomes/:id", component: BiomeInspector},
+    {path: "/board/:id", component: Board},
     {path: "/:id/tech-tree", component: TechTree},
     {path: "/:id/recipe", component: Recipe},
     {path: "/:id", component: ObjectInspector},
