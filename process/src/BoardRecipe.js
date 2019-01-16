@@ -1,7 +1,5 @@
 "use strict";
 
-const BoardStep = require('./BoardStep');
-
 class BoardRecipe {
   constructor(recipe) {
     this.recipe = recipe;
@@ -28,20 +26,20 @@ class BoardRecipe {
     }
     this.addedNodes.push(node);
 
+    if (node.object.isNatural()) {
+      return this.addObject(node, this.naturalObjects);
+    }
+    if (!node.object.depth.value) {
+      return this.addObject(node, this.uncraftableObjects);
+    }
     if (node.tool) {
       return this.addObject(node, this.usedObjects);
     }
-    if (node.isIngredient()) {
-      return this.addObject(node, this.naturalObjects);
-    }
-    if (node.isUncraftable()) {
-      return this.addObject(node, this.uncraftableObjects);
-    }
 
     // Find a good breaking spot for common objects
-    if (depth > 3) {
-      let commonality = Math.ceil(node.object.transitionsAway.length / 3);
-      if (commonality + depth >= 10) {
+    if (depth > 1) {
+      let commonality = node.object.transitionsAway.length;
+      if (commonality + depth >= 12) {
         return this.addObject(node, this.usedObjects);
       }
     }
