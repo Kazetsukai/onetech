@@ -13,6 +13,7 @@ class RecipeGenerator {
     const root = this.generateNode(this.object);
     root.trackMainBranch();
     root.collapseBranches();
+    return root;
   }
 
   generateNode(object) {

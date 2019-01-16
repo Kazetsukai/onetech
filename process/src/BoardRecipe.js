@@ -3,29 +3,65 @@
 const BoardStep = require('./BoardStep');
 
 class BoardRecipe {
-  constructor(object) {
-    this.object = object;
+  constructor(recipe) {
+    this.recipe = recipe;
     this.steps = [];
+    this.addedNodes = [];
     this.naturalObjects = [];
+    this.uncraftableObjects = [];
     this.usedObjects = [];
+    this.relevantObjects = [];
   }
 
   generate() {
-    let object = this.object;
-    for (let i = 0; i < 10; i++) {
-      const step = new BoardStep(object);
-      if (!step.transition) {
-        return;
+    if (this.recipe.hasData()) {
+      this.addNode(this.recipe.rootNode, 0);
+    }
+  }
+
+  addNode(node, depth) {
+    if (this.recipe.object.id == 82 && node.object.id == 75) {
+      debugger;
+    }
+    if (this.addedNodes.includes(node)) {
+      return;
+    }
+    this.addedNodes.push(node);
+
+    if (node.tool) {
+      return this.addObject(node, this.usedObjects);
+    }
+    if (node.isIngredient()) {
+      return this.addObject(node, this.naturalObjects);
+    }
+    if (node.isUncraftable()) {
+      return this.addObject(node, this.uncraftableObjects);
+    }
+
+    // Find a good breaking spot for common objects
+    if (depth > 3) {
+      let commonality = Math.ceil(node.object.transitionsAway.length / 3);
+      if (commonality + depth >= 10) {
+        return this.addObject(node, this.usedObjects);
       }
-      this.naturalObjects = this.naturalObjects.concat(step.naturalObjects);
-      if (step.usedObject) {
-        this.usedObjects.push(step.usedObject);
-      }
-      this.steps.push(step);
-      object = step.nextObject;
-      if (!object) {
-        return;
-      }
+    }
+
+    if (!node.mainBranch) {
+      this.relevantObjects.push(node.object);
+      this.addObject(node, this.usedObjects);
+      return;
+    }
+
+    this.steps.push(node);
+    for (let child of node.children) {
+      this.addNode(child, depth+1);
+    }
+  }
+
+  addObject(node, objects) {
+    const count = node.count();
+    for (let i=0; i < count; i++) {
+      objects.push(node.object);
     }
   }
 
@@ -37,15 +73,23 @@ class BoardRecipe {
     const data = {};
 
     if (this.steps.length > 0) {
-      data.steps = this.steps.map(s => s.jsonData()).reverse();
+      data.steps = this.steps.map(node => node.jsonData(true)).reverse();
     }
 
     if (this.naturalObjects.length > 0) {
       data.naturalObjects = this.naturalObjects.map(o => o.id);
     }
 
+    if (this.uncraftableObjects.length > 0) {
+      data.uncraftableObjects = this.uncraftableObjects.map(o => o.id);
+    }
+
     if (this.usedObjects.length > 0) {
       data.usedObjects = this.usedObjects.map(o => o.id);
+    }
+
+    if (this.relevantObjects.length > 0) {
+      data.relevantObjects = this.relevantObjects.map(o => o.id);
     }
 
     return data;

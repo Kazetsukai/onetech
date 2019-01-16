@@ -1,18 +1,34 @@
 <template>
   <div class="board">
-    <BoardIngredients v-if="naturalObjects.length" title="Natural Resources" :objectIds="naturalObjects" :clickObject="addObject" />
-
-    <BoardIngredients v-if="usedObjects.length" title="Used Objects" :objectIds="usedObjects" :clickObject="addObject" />
-
     <div v-if="objects.length == 0" class="empty">
       Search for an object to add to the board.
     </div>
-    <div v-else class="boardPanels">
-      <BoardPanel
-        v-for="(object, index) in objects"
-        :object="object"
-        :key="index"
+    <div v-else>
+      <BoardIngredients
+        v-if="naturalObjects.length"
+        title="Natural Resources"
+        :objectIds="naturalObjects"
         :clickObject="addObject" />
+
+      <BoardIngredients
+        v-if="uncraftableObjects.length"
+        title="Uncraftable Objects"
+        :objectIds="uncraftableObjects"
+        :clickObject="addObject" />
+
+      <BoardIngredients
+        v-if="usedObjects.length"
+        title="Used Objects"
+        :objectIds="usedObjects"
+        :clickObject="addObject" />
+
+      <div class="boardPanels">
+        <BoardPanel
+          v-for="(object, index) in objects"
+          :object="object"
+          :key="index"
+          :clickObject="addObject" />
+      </div>
     </div>
   </div>
 </template>
@@ -40,30 +56,29 @@ export default {
   },
   computed: {
     naturalObjects() {
-      let naturalObjects = [];
-      for (let object of this.objects) {
-        if (object.data && object.data.boardRecipe && object.data.boardRecipe.naturalObjects) {
-          naturalObjects = naturalObjects.concat(object.data.boardRecipe.naturalObjects);
-        }
-      }
-      naturalObjects = naturalObjects.filter(id => !this.objects.map(o => o.id).includes(id));
-      return naturalObjects;
+      return this.gatherObjects("naturalObjects");
     },
     usedObjects() {
-      let usedObjects = [];
-      for (let object of this.objects) {
-        if (object.data && object.data.boardRecipe && object.data.boardRecipe.usedObjects) {
-          usedObjects = usedObjects.concat(object.data.boardRecipe.usedObjects);
-        }
-      }
-      usedObjects = usedObjects.filter(id => !this.objects.map(o => o.id).includes(id));
-      return usedObjects;
+      return this.gatherObjects("usedObjects");
+    },
+    uncraftableObjects() {
+      return this.gatherObjects("craftableObjects");
     }
   },
   methods: {
-    addObject(object) {
+    addObject(object, relevant = false) {
       object.loadData();
       this.objects.push(object);
+    },
+    gatherObjects(name) {
+      let objects = [];
+      for (let object of this.objects) {
+        if (object.data && object.data.boardRecipe && object.data.boardRecipe[name]) {
+          objects = objects.concat(object.data.boardRecipe[name]);
+        }
+      }
+      objects = objects.filter(id => !this.objects.map(o => o.id).includes(id));
+      return objects;
     }
   },
   metaInfo() {

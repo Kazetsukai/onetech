@@ -254,12 +254,13 @@ class RecipeNode {
   }
 
   calculateSubNodes() {
+    if (this.isLast()) {
+      return [];
+    }
     let subNodes = [];
     for (let child of this.uniqueChildren()) {
-      if (!child.isLast()) {
-        subNodes.push(child);
-        subNodes = subNodes.concat(child.subNodes());
-      }
+      subNodes.push(child);
+      subNodes = subNodes.concat(child.subNodes());
     }
     return subNodes.filter((s,i) => subNodes.indexOf(s) == i);
   }

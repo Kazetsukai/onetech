@@ -13,7 +13,7 @@ class Recipe {
       // global.debug = true;
     // }
     const generator = new RecipeGenerator(this.object);
-    generator.generate();
+    this.rootNode = generator.generate();
     this.nodes = generator.nodes;
   }
 
