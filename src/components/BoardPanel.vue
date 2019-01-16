@@ -1,5 +1,13 @@
 <template>
   <div class="boardPanel">
+    <div class="panelClose" @click="close(object)">
+      x
+    </div>
+    <ObjectImage
+      class="panelObject"
+      hover="true"
+      clickable="true"
+      :object="object" />
     <div class="panelName">
       {{object.name}}
     </div>
@@ -19,7 +27,7 @@ import BoardTransition from "./BoardTransition";
 import ObjectImage from "./ObjectImage";
 
 export default {
-  props: ["object", "clickObject"],
+  props: ["object", "clickObject", "close"],
   components: {
     BoardTransition,
     ObjectImage
@@ -41,11 +49,49 @@ export default {
     border-radius: 5px;
     width: 310px;
     margin: 10px;
+    margin-bottom: 0;
+    padding-top: 5px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .panelClose {
+    position: absolute;
+    top: 0;
+    right: 7px;
+    padding: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    &:hover {
+      color: white;
+    }
+  }
+
+  .panelObject {
+    display: flex;
+    align-items: center;
+    margin: 5px;
+    z-index: 1;
+    position: relative;
+    display: block;
+    background-color: #555;
+    width: 80px;
+    height: 80px;
+    border: solid 2px #333;
+    border-radius: 5px;
+    &:hover {
+      border-color: #aaa;
+      background-color: #666;
+    }
   }
 
   .panelName {
-    margin: 10px;
-    text-align: center;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 14px;
   }
 
   .panelSteps {

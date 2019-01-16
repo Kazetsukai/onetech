@@ -1,5 +1,5 @@
 <template>
-  <div v-if="leftClick"
+  <div v-if="clickable && leftClick"
       :class="className"
       :title="title" v-tippy
       @contextmenu.native="handleRightClick"

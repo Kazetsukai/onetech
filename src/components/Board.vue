@@ -27,7 +27,8 @@
           v-for="(object, index) in objects"
           :object="object"
           :key="index"
-          :clickObject="addObject" />
+          :clickObject="addObject"
+          :close="removeObject" />
       </div>
     </div>
   </div>
@@ -67,8 +68,13 @@ export default {
   },
   methods: {
     addObject(object, relevant = false) {
-      object.loadData();
-      this.objects.push(object);
+      if (!this.objects.includes(object)) {
+        object.loadData();
+        this.objects.unshift(object);
+      }
+    },
+    removeObject(object) {
+      this.objects = this.objects.filter(o => o != object);
     },
     gatherObjects(name) {
       let objects = [];
@@ -94,10 +100,12 @@ export default {
     border-radius: 5px;
     padding-top: 1px;
     padding-bottom: 20px;
+    margin-bottom: 20px;
   }
 
   .boardPanels {
     display: flex;
     flex-wrap: wrap;
+    align-items: flex-start;
   }
 </style>
