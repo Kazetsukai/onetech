@@ -1,8 +1,11 @@
 "use strict";
 
+const BoardStep = require('./BoardStep');
+
 class BoardRecipe {
   constructor(recipe) {
     this.recipe = recipe;
+    this.maxDepth = 14;
     this.steps = [];
     this.addedNodes = [];
     this.naturalObjects = [];
@@ -13,50 +16,67 @@ class BoardRecipe {
 
   generate() {
     if (this.recipe.hasData()) {
-      this.addNode(this.recipe.rootNode, 0);
+      this.generateSteps(this.recipe.rootNode, 0);
+      this.limitSteps();
+      this.addObjects();
     }
   }
 
-  addNode(node, depth) {
-    if (this.recipe.object.id == 82 && node.object.id == 75) {
-      debugger;
+  generateSteps(node, depth) {
+    const step = new BoardStep(node, depth);
+    step.generate(this.maxDepth);
+    this.steps.push(step);
+    if (step.nextNode) {
+      this.generateSteps(step.nextNode, depth+1);
     }
+  }
+
+  // Break the list of steps where the weight is highest
+  limitSteps(node, depth) {
+    if (this.steps.length <= this.maxDepth/2) {
+      return; // Don't limit smaller recipes
+    }
+    const weights = this.steps.map(s => s.weight).slice(0, this.maxDepth);
+    let maxDepth = weights.indexOf(Math.max(...weights));
+    if (maxDepth < 0 || maxDepth > this.maxDepth) {
+      maxDepth = this.maxDepth;
+    }
+    // Don't limit if it is close to the max steps
+    if (maxDepth < this.steps.length - 2) {
+      this.steps = this.steps.slice(0, maxDepth+1);
+      this.steps[this.steps.length-1].nextNode = null;
+    }
+  }
+
+  addObjects() {
+    for (let step of this.steps) {
+      for (let node of step.otherNodes()) {
+        this.addNodeObjects(node);
+      }
+    }
+  }
+
+  addNodeObjects(node, depth) {
     if (this.addedNodes.includes(node)) {
       return;
     }
     this.addedNodes.push(node);
 
     if (node.object.isNatural()) {
-      return this.addObject(node, this.naturalObjects);
+      return this.addNodeObject(node, this.naturalObjects);
     }
     if (!node.object.depth.value) {
-      return this.addObject(node, this.uncraftableObjects);
+      return this.addNodeObject(node, this.uncraftableObjects);
     }
     if (node.tool) {
-      return this.addObject(node, this.usedObjects);
+      return this.addNodeObject(node, this.usedObjects);
     }
 
-    // Find a good breaking spot for common objects
-    if (depth > 1) {
-      let commonality = node.object.transitionsAway.length;
-      if (commonality + depth >= 12) {
-        return this.addObject(node, this.usedObjects);
-      }
-    }
-
-    if (!node.mainBranch) {
-      this.relevantObjects.push(node.object);
-      this.addObject(node, this.usedObjects);
-      return;
-    }
-
-    this.steps.push(node);
-    for (let child of node.children) {
-      this.addNode(child, depth+1);
-    }
+    this.relevantObjects.push(node.object);
+    this.addNodeObject(node, this.usedObjects);
   }
 
-  addObject(node, objects) {
+  addNodeObject(node, objects) {
     const count = node.count();
     for (let i=0; i < count; i++) {
       objects.push(node.object);
@@ -71,7 +91,7 @@ class BoardRecipe {
     const data = {};
 
     if (this.steps.length > 0) {
-      data.steps = this.steps.map(node => node.jsonData(true)).reverse();
+      data.steps = this.steps.map(step => step.jsonData()).reverse();
     }
 
     if (this.naturalObjects.length > 0) {
