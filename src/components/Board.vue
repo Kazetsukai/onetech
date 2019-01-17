@@ -1,7 +1,7 @@
 <template>
   <div class="board">
-    <div v-if="objects.length == 0" class="empty">
-      Search for an object to add to the board.
+    <div v-if="objects.length == 0" class="boardEmpty">
+      Search for an object to add it.
     </div>
     <div v-else>
       <BoardIngredients
@@ -107,5 +107,12 @@ export default {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
+  }
+
+  .boardEmpty {
+    font-size: 24px;
+    text-align: center;
+    padding-top: 30px;
+    padding-bottom: 20px;
   }
 </style>

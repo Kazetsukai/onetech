@@ -1,6 +1,6 @@
 <template>
   <div class="objectSearch">
-    <VueSelect label="name" :options="objects" v-model="selectedObject" :on-change="selectObject" placeholder="Search">
+    <VueSelect ref="vueSelect" label="name" :options="objects" v-model="selectedObject" :on-change="selectObject" placeholder="Search">
       <template slot="option" slot-scope="option">
         <ObjectImage :object="option" />
         {{option.name}}
@@ -23,13 +23,27 @@ export default {
     ObjectImage
   },
   data() {
+    // TODO: Remove duplication with watch
+    if (this.$route.path.startsWith("/board/")) {
+      return {
+        onBoard: true,
+        selectedObject: null
+      };
+    }
     return {
-      selectedObject: GameObject.find(this.$route.params.id),
+      onBoard: false,
+      selectedObject: GameObject.find(this.$route.params.id)
     };
   },
   watch: {
     '$route' (to, from) {
-      this.selectedObject = GameObject.find(this.$route.params.id);
+      if (this.$route.path.startsWith("/board/")) {
+        this.onBoard = true;
+        this.selectedObject = null;
+      } else {
+        this.onBoard = false;
+        this.selectedObject = GameObject.find(this.$route.params.id);
+      }
     }
   },
   computed: {
@@ -40,7 +54,13 @@ export default {
   methods: {
     selectObject (object) {
       if (object == this.selectedObject) return;
-      this.$router.push(object ? object.url() : "/");
+      // It may be better to use a global event bus instead of hacking through route instances
+      if (this.onBoard && this.$route.matched[0] && this.$route.matched[0].instances.default) {
+        this.$route.matched[0].instances.default.addObject(object);
+        this.$refs.vueSelect.clearSelection();
+      } else {
+        this.$router.push(object ? object.url() : "/");
+      }
     }
   }
 }
