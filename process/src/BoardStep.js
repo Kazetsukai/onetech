@@ -4,18 +4,114 @@ class BoardStep {
   constructor(node, depth) {
     this.node = node;
     this.depth = depth;
-  }
-
-  generate(maxDepth) {
-    this.nextNode = this.findNextNode();
-    this.weight = this.generateWeight(maxDepth);
-  }
-
-  findNextNode() {
-    const node = this.node.uniqueChildren().sort((a,b) => b.subNodes().length - a.subNodes().length)[0];
-    if (!node.isLast()) {
-      return node;
+    this.children = [];
+    for (let childNode of node.immediateUniqueChildren().filter(n => !n.isLast())) {
+      this.children.push(new BoardStep(childNode, this.depth+1));
     }
+  }
+
+  generateChildren() {
+    return this.node.immediateUniqueChildren().
+      filter(node => !node.isLast()).
+      map(node => new BoardStep(node, this.depth + 1));
+  }
+
+  simpleChainLength(length) {
+    if (this.children.length !== 1) {
+      return length;
+    }
+    return this.children[0].simpleChainLength(length + 1);
+  }
+
+  nextStep(maxDepth) {
+    if (this.children.length === 0) {
+      return;
+    }
+
+    if (this.children.length === 1) {
+      return this.nextSimpleStep(rootStep, maxDepth);
+    }
+
+    return this.nextComplexStep(rootStep, maxDepth);
+  }
+
+  nextSimpleStep(rootStep, maxDepth) {
+    const step = this.children[0];
+
+    // Always show more than one step
+    if (this.depth === 0) {
+      return step;
+    }
+
+    if (step.weight(rootStep, maxDepth) < 1.5) {
+      return step;
+    }
+  }
+
+  // Higher weight means more likely to be last step
+  weight(rootStep, maxDepth) {
+    let weight = 0;
+    weight += this.depth/maxDepth;
+
+    // Break at objects with a lot of transitions
+    weight += 10/Math.min(this.node.object.transitionsAway.length, 10);
+
+    // Break based on depth from root step
+    weight += 1.0 - this.node.object.depth.value/rootStep.node.object.depth.value;
+
+    return weight;
+  }
+
+  nextComplexStep(rootStep, maxDepth) {
+    const steps = this.sortedChildren(maxDepth);
+    const step = steps[0];
+
+    // Always show more than one step
+    if (this.depth === 0) {
+      return step;
+    }
+
+    // See if we can go through the simple chain
+    if (this.depth + step.simpleChainLength(0) > maxDepth) {
+      return;
+    }
+
+
+
+    let weight = 0;
+    weight += this.depth/maxDepth;
+
+    // Break at commonly used objects
+    weight += Math.min(...children.map(c => c.weight(rootStep, maxDepth)));
+
+    // Break at commonly used objects
+    weight += Math.max(...children.map(c => c.commonality()));
+
+    // Break at commonly used objects
+    let commonality = step.node.object.transitionsAway.length;
+    if (this.depth + commonality*2 > maxDepth) {
+      return;
+    }
+
+    return step;
+  }
+
+  preferredChild(maxDepth) {
+    if (this.depth > maxDepth/2) {
+      return this.children.sort((a,b) => a.object.transitionsAway.length - b.object.transitionsAway.length);
+    }
+    return this.node.immediateUniqueChildren().filter(n => !n.isLast()).
+      sort((a,b) => a.object.transitionsAway.length - b.object.transitionsAway.length).
+      sort((a,b) => b.subNodes().length - a.subNodes().length)[0];
+  }
+
+  sortedChildren(maxDepth) {
+    // Prefer children with fewer transitions when we are closer to max depth
+    if (this.depth > maxDepth/2) {
+      return this.children.sort((a,b) => b.commonality() - a.commonality());
+    }
+    // Otherwise prefer more complex children
+    return this.children.sort((a,b) => b.subNodes().length - a.subNodes().length);
   }
 
   // Weight determines where the recipe should stop

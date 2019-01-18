@@ -6,6 +6,7 @@ class BoardRecipe {
   constructor(recipe) {
     this.recipe = recipe;
     this.maxDepth = 14;
+    this.rootStep = null;
     this.steps = [];
     this.addedNodes = [];
     this.naturalObjects = [];
@@ -16,19 +17,14 @@ class BoardRecipe {
 
   generate() {
     if (this.recipe.hasData()) {
-      this.generateSteps(this.recipe.rootNode, 0);
-      this.limitSteps();
+      this.rootStep = new BoardStep(this.recipe.rootNode, 0);
+      this.gatherSteps();
       this.addObjects();
     }
   }
 
-  generateSteps(node, depth) {
-    const step = new BoardStep(node, depth);
-    step.generate(this.maxDepth);
-    this.steps.push(step);
-    if (step.nextNode) {
-      this.generateSteps(step.nextNode, depth+1);
-    }
+  gatherSteps() {
+
   }
 
   // Break the list of steps where the weight is highest

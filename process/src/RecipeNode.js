@@ -49,6 +49,20 @@ class RecipeNode {
     return depths.sort((a,b) => b - a)[0] + 1;
   }
 
+  uncollapsedDepth() {
+    if (!this.cachedUncollapsedDepth) {
+      this.cachedUncollapsedDepth = this.calculateUncollapsedDepth();
+    }
+    return this.cachedUncollapsedDepth;
+  }
+
+  calculateUncollapsedDepth() {
+    if (this.parents.length === 0) {
+      return 0;
+    }
+    return this.parents.map(p => p.uncollapsedDepth()).sort((a,b) => b - a)[0] + 1;
+  }
+
   collapsedDepth() {
     if (this.collapsedParent) {
       return this.collapsedParent.depth();
@@ -281,6 +295,10 @@ class RecipeNode {
 
   uniqueChildren() {
     return this.children.filter((c,i) => this.children.indexOf(c) == i);
+  }
+
+  immediateUniqueChildren() {
+    return this.uniqueChildren().filter(c => c.uncollapsedDepth() == this.uncollapsedDepth()+1);
   }
 
   uniqueParents() {
