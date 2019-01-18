@@ -1,6 +1,6 @@
 <template>
   <div class="boardIngredients">
-    <h4>{{title}}</h4>
+    <h4>Ingredients</h4>
     <div class="ingredientObjects">
       <ObjectImage
         v-for="object in objects"
@@ -21,7 +21,7 @@ import GameObject from "../models/GameObject";
 import ObjectImage from "./ObjectImage";
 
 export default {
-  props: ["objectIds", "title", "clickObject"],
+  props: ["objectIds", "clickObject"],
   components: {
     ObjectImage
   },

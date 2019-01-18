@@ -1,34 +1,21 @@
 <template>
   <div class="board">
-    <div v-if="objects.length == 0" class="boardEmpty">
+    <div v-if="isEmpty" class="boardEmpty">
       Search for an object to add it.
     </div>
     <div v-else>
       <BoardIngredients
-        v-if="naturalObjects.length"
-        title="Natural Resources"
-        :objectIds="naturalObjects"
-        :clickObject="addObject" />
-
-      <BoardIngredients
-        v-if="uncraftableObjects.length"
-        title="Uncraftable Objects"
-        :objectIds="uncraftableObjects"
-        :clickObject="addObject" />
-
-      <BoardIngredients
-        v-if="usedObjects.length"
-        title="Used Objects"
-        :objectIds="usedObjects"
+        v-if="ingredientIds.length"
+        :objectIds="ingredientIds"
         :clickObject="addObject" />
 
       <div class="boardPanels">
         <BoardPanel
-          v-for="(object, index) in objects"
-          :object="object"
+          v-for="(panel, index) in board.panels"
+          :panel="panel"
           :key="index"
           :clickObject="addObject"
-          :close="removeObject" />
+          :close="closePanel" />
       </div>
     </div>
   </div>
@@ -36,6 +23,7 @@
 
 <script>
 import GameObject from '../models/GameObject';
+import Board from '../models/Board';
 
 import BoardIngredients from './BoardIngredients';
 import BoardPanel from './BoardPanel';
@@ -47,44 +35,28 @@ export default {
   },
   data() {
     return {
-      objects: [GameObject.findAndLoad(this.$route.params.id)],
+      board: new Board([GameObject.find(this.$route.params.id)]),
     };
   },
   watch: {
     '$route' (to, from) {
-      this.objects = [GameObject.findAndLoad(this.$route.params.id)];
+      this.board = new Board([GameObject.find(this.$route.params.id)]);
     }
   },
   computed: {
-    naturalObjects() {
-      return this.gatherObjects("naturalObjects");
+    isEmpty() {
+      return this.board.panels.length === 0;
     },
-    usedObjects() {
-      return this.gatherObjects("usedObjects");
-    },
-    uncraftableObjects() {
-      return this.gatherObjects("craftableObjects");
+    ingredientIds() {
+      return this.board.ingredientIds();
     }
   },
   methods: {
-    addObject(object, relevant = false) {
-      if (!this.objects.includes(object)) {
-        object.loadData();
-        this.objects.unshift(object);
-      }
+    addObject(object) {
+      this.board.addObject(object);
     },
-    removeObject(object) {
-      this.objects = this.objects.filter(o => o != object);
-    },
-    gatherObjects(name) {
-      let objects = [];
-      for (let object of this.objects) {
-        if (object.data && object.data.boardRecipe && object.data.boardRecipe[name]) {
-          objects = objects.concat(object.data.boardRecipe[name]);
-        }
-      }
-      objects = objects.filter(id => !this.objects.map(o => o.id).includes(id));
-      return objects;
+    closePanel(panel) {
+      this.board.removePanel(panel);
     }
   },
   metaInfo() {

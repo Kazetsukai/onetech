@@ -8,18 +8,18 @@
                   :decay="transition.decay" />
 
       <ObjectImage class="boardTransitionObject"
-                  v-else-if="transition.actorID || transition.hand"
+                  v-else-if="transition.actor || transition.hand"
                   :hand="transition.hand" hover="true"
                   :object="actor"
                   :uses="transition.actorUses"
-                  :clickable="transition.actorID"
+                  :clickable="transition.actor"
                   :leftClick="clickObject" />
 
       <div class="plus" v-if="showPlus">+</div>
 
       <!-- What object is the target -->
       <ObjectImage class="boardTransitionObject"
-                  v-if="transition.targetID"
+                  v-if="transition.target"
                   hover="true"
                   :object="target"
                   :uses="transition.targetUses"
@@ -64,13 +64,13 @@ export default {
   },
   computed: {
     showPlus() {
-      return this.transition.actorID || this.transition.decay || this.transition.hand;
+      return this.transition.actor || this.transition.decay || this.transition.hand;
     },
     actor() {
-      return GameObject.find(this.transition.actorID);
+      return this.transition.actor && GameObject.find(this.transition.actor.id);
     },
     target() {
-      return GameObject.find(this.transition.targetID);
+      return this.transition.target && GameObject.find(this.transition.target.id);
     },
     result() {
       return GameObject.find(this.transition.id);

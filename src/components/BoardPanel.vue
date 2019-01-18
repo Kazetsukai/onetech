@@ -1,6 +1,6 @@
 <template>
   <div class="boardPanel">
-    <div class="panelClose" @click="close(object)">
+    <div class="panelClose" @click="close(panel)">
       x
     </div>
     <ObjectImage
@@ -27,17 +27,20 @@ import BoardTransition from "./BoardTransition";
 import ObjectImage from "./ObjectImage";
 
 export default {
-  props: ["object", "clickObject", "close"],
+  props: ["panel", "clickObject", "close"],
   components: {
     BoardTransition,
     ObjectImage
   },
   computed: {
+    object() {
+      return this.panel.object;
+    },
     loading() {
-      return !this.object.data;
+      return this.panel.loading();
     },
     steps() {
-      return this.object.data.boardRecipe && this.object.data.boardRecipe.steps;
+      return this.panel.steps();
     }
   }
 }

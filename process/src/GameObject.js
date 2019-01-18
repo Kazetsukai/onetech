@@ -181,7 +181,6 @@ class GameObject {
     }
 
     const boardRecipe = new BoardRecipe(recipe);
-    boardRecipe.generate();
     if (boardRecipe.hasData()) {
       result.boardRecipe = boardRecipe.jsonData();
     }
