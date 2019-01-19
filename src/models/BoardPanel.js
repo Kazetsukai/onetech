@@ -1,42 +1,55 @@
 export default class BoardPanel {
-  constructor(object) {
+  constructor(object, board) {
     this.object = object;
+    this.board = board;
+    this.steps = [];
   }
 
   loading() {
     return !this.object.data;
   }
 
-  steps() {
+  generateSteps() {
     if (!this.object.data || !this.object.data.boardRecipe) {
       return [];
     }
     const steps = [];
+    const otherIds = this.otherObjectIds();
+    const sharedIds = [];
+
     let checkChain = false;
 
     let step = this.object.data.boardRecipe.rootStep;
     while (step) {
       steps.push(step);
-      step = this.nextStep(step);
+      for (var id of this.stepObjectIds(step)) {
+        if (otherIds.includes(id)) {
+          sharedIds.push(id);
+        }
+      }
+      step = this.nextStep(step, sharedIds);
       if (step) {
         if (step.last) {
           step = null;
         } else if (this.stepChainLength(step) === 0) {
           checkChain = true; // Check the chain length next time
-        } else if (checkChain && steps.length + this.stepChainLength(step) > 8) {
+        } else if (checkChain && steps.length + this.stepChainLength(step) > 6) {
           step = null;
         }
       }
     }
-    return steps.reverse();
+    this.steps = steps.reverse();
+    this.broadcastSharedIds(sharedIds);
+    return this.steps;
   }
 
-  nextStep(step) {
-    let next;
-    if (step.actor && step.actor.id === step.nextId) {
+  nextStep(step, sharedIds) {
+    if (step.actor && step.actor.id === step.nextId && !sharedIds.includes(step.actor.id)) {
       return step.actor;
     }
-    return step.target;
+    if (!sharedIds.includes(step.target.id)) {
+      return step.target;
+    }
   }
 
   // This returns how many steps only have one child in a chain
@@ -51,16 +64,58 @@ export default class BoardPanel {
 
   ingredientIds() {
     const ingredientIds = [];
-    const steps = this.steps();
-    const stepIds = steps.map(s => s.id);
-    for (let step of steps) {
-      if (step.actor && !stepIds.includes(step.actor.id)) {
+    const stepIds = this.steps.map(s => s.id);
+    const otherIds = this.otherPanels().map(p => p.object.id);
+    for (let step of this.steps) {
+      if (step.actor && !stepIds.includes(step.actor.id) && !otherIds.includes(step.actor.id)) {
         ingredientIds.push(step.actor.id);
       }
-      if (step.target && !stepIds.includes(step.target.id)) {
+      if (step.target && !stepIds.includes(step.target.id) && !otherIds.includes(step.target.id)) {
         ingredientIds.push(step.target.id);
       }
     }
     return ingredientIds;
+  }
+
+  otherPanels() {
+    return this.board.panels.filter(p => p != this);
+  }
+
+  otherObjectIds() {
+    return this.otherPanels().map(p => p.objectIds()).flat();
+  }
+
+  objectIds() {
+    return this.steps.map(s => this.stepObjectIds(s)).flat();
+  }
+
+  stepObjectIds(step) {
+    const ids = [];
+    if (step.actor) {
+      ids.push(step.actor.id);
+    }
+    if (step.target) {
+      ids.push(step.target.id);
+    }
+    return ids;
+  }
+
+  broadcastSharedIds(sharedIds) {
+    if (sharedIds.length === 0) {
+      return;
+    }
+    for (let panel of this.otherPanels()) {
+      panel.updateSharedIds(sharedIds);
+    }
+  }
+
+  updateSharedIds(sharedIds) {
+    const stepIds = this.steps.map(s => s.id);
+    for (let sharedId of sharedIds) {
+      if (stepIds.includes(sharedId)) {
+        this.generateSteps();
+        return;
+      }
+    }
   }
 }

@@ -40,7 +40,7 @@ export default {
       return this.panel.loading();
     },
     steps() {
-      return this.panel.steps();
+      return this.panel.steps;
     }
   }
 }

@@ -10,8 +10,9 @@ export default class Board {
 
   addObject(object) {
     if (!this.hasObject(object)) {
-      object.loadData();
-      this.panels.unshift(new BoardPanel(object));
+      let panel = new BoardPanel(object, this);
+      this.panels.unshift(panel);
+      object.loadData(() => panel.generateSteps());
     }
   }
 
@@ -26,6 +27,8 @@ export default class Board {
 
   removePanel(panel) {
     this.panels = this.panels.filter(p => p != panel);
+    // TODO: Perhaps only generate if they have shared ids
+    this.panels.forEach(p => p.generateSteps());
   }
 
   ingredientIds() {

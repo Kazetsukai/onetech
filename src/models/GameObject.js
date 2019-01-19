@@ -147,12 +147,16 @@ export default class GameObject {
     return +(num*100).toFixed(places);
   }
 
-  loadData() {
-    if (this.data || this.loading) return;
+  loadData(callback = null) {
+    if (this.data || this.loading) {
+      if (callback) callback();
+      return;
+    }
     this.loading = true;
     this.fetchData(data => {
       this.loading = false;
       this.data = data;
+      if (callback) callback();
     });
   }
 
