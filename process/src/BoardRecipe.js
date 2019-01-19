@@ -1,11 +1,9 @@
 "use strict";
 
-const BoardStep = require('./BoardStep');
-
 class BoardRecipe {
   constructor(recipe) {
     this.recipe = recipe;
-    this.rootStep = new BoardStep(this.recipe.rootNode, 0, 14);
+    this.nodes = recipe.nodes.filter(n => n.minDepth() < 14);
     // this.addedNodes = [];
     // this.naturalObjects = [];
     // this.uncraftableObjects = [];
@@ -84,7 +82,7 @@ class BoardRecipe {
   jsonData() {
     const data = {};
 
-    data.rootStep = this.rootStep.jsonData();
+    data.nodes = this.nodes.map(n => n.jsonDataForBoard());
 
     // if (this.steps.length > 0) {
     //   data.steps = this.steps.map(step => step.jsonData()).reverse();

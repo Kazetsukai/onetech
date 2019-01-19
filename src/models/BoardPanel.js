@@ -17,25 +17,26 @@ export default class BoardPanel {
     const otherIds = this.otherObjectIds();
     const sharedIds = [];
 
-    let checkChain = false;
+    // let checkChain = false;
 
-    let step = this.object.data.boardRecipe.rootStep;
+    let step = this.node(this.object.id);
     while (step) {
       steps.push(step);
-      for (var id of this.stepObjectIds(step)) {
+      for (let id of this.stepObjectIds(step)) {
         if (otherIds.includes(id)) {
           sharedIds.push(id);
         }
       }
       step = this.nextStep(step, sharedIds);
       if (step) {
-        if (step.last) {
-          step = null;
-        } else if (this.stepChainLength(step) === 0) {
-          checkChain = true; // Check the chain length next time
-        } else if (checkChain && steps.length + this.stepChainLength(step) > 6) {
+        if (!step.actorID && !step.targetID) {
           step = null;
         }
+        // } else if (this.stepChainLength(step) === 0) {
+        //   checkChain = true; // Check the chain length next time
+        // } else if (checkChain && steps.length + this.stepChainLength(step) > 6) {
+        //   step = null;
+        // }
       }
     }
     this.steps = steps.reverse();
@@ -43,35 +44,45 @@ export default class BoardPanel {
     return this.steps;
   }
 
-  nextStep(step, sharedIds) {
-    if (step.actor && step.actor.id === step.nextId && !sharedIds.includes(step.actor.id)) {
-      return step.actor;
+  node(id) {
+    if (!this.object.data || !this.object.data.boardRecipe) {
+      return null;
     }
-    if (!sharedIds.includes(step.target.id)) {
-      return step.target;
+    return this.object.data.boardRecipe.nodes.find(n => n.id == id);
+  }
+
+  nextStep(node, sharedIds) {
+    if (node.nextID && !sharedIds.includes(node.nextID)) {
+      return this.node(node.nextID);
+    }
+    if (node.actorID && !sharedIds.includes(node.actorID)) {
+      return this.node(node.actorID);
+    }
+    if (node.targetID && !sharedIds.includes(node.targetID)) {
+      return this.node(node.targetID);
     }
   }
 
   // This returns how many steps only have one child in a chain
-  stepChainLength(step, length = 0) {
-    // Find the step's children which are either relevant or not last
-    let children = [step.actor, step.target].filter(s => s && (s.relevant || !s.last));
-    if (children.length === 1) {
-      return this.stepChainLength(children[0], length + 1);
-    }
-    return length;
-  }
+  // stepChainLength(step, length = 0) {
+  //   // Find the step's children which are either relevant or not last
+  //   let children = [step.actorID, step.targetID].filter(s => s && (s.relevant || !s.last));
+  //   if (children.length === 1) {
+  //     return this.stepChainLength(children[0], length + 1);
+  //   }
+  //   return length;
+  // }
 
   ingredientIds() {
     const ingredientIds = [];
     const stepIds = this.steps.map(s => s.id);
     const otherIds = this.otherPanels().map(p => p.object.id);
     for (let step of this.steps) {
-      if (step.actor && !stepIds.includes(step.actor.id) && !otherIds.includes(step.actor.id)) {
-        ingredientIds.push(step.actor.id);
+      if (step.actorID && !stepIds.includes(step.actorID) && !otherIds.includes(step.actorID)) {
+        ingredientIds.push(step.actorID);
       }
-      if (step.target && !stepIds.includes(step.target.id) && !otherIds.includes(step.target.id)) {
-        ingredientIds.push(step.target.id);
+      if (step.targetID && !stepIds.includes(step.targetID) && !otherIds.includes(step.targetID)) {
+        ingredientIds.push(step.targetID);
       }
     }
     return ingredientIds;
@@ -91,11 +102,11 @@ export default class BoardPanel {
 
   stepObjectIds(step) {
     const ids = [];
-    if (step.actor) {
-      ids.push(step.actor.id);
+    if (step.actorID) {
+      ids.push(step.actorID);
     }
-    if (step.target) {
-      ids.push(step.target.id);
+    if (step.targetID) {
+      ids.push(step.targetID);
     }
     return ids;
   }

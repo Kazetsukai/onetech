@@ -49,18 +49,18 @@ class RecipeNode {
     return depths.sort((a,b) => b - a)[0] + 1;
   }
 
-  uncollapsedDepth() {
-    if (!this.cachedUncollapsedDepth) {
-      this.cachedUncollapsedDepth = this.calculateUncollapsedDepth();
+  minDepth() {
+    if (!this.cachedMinDepth) {
+      this.cachedMinDepth = this.calculateMinDepth();
     }
-    return this.cachedUncollapsedDepth;
+    return this.cachedMinDepth;
   }
 
-  calculateUncollapsedDepth() {
+  calculateMinDepth() {
     if (this.parents.length === 0) {
       return 0;
     }
-    return this.parents.map(p => p.uncollapsedDepth()).sort((a,b) => b - a)[0] + 1;
+    return this.parents.map(p => p.minDepth()).sort((a,b) => a - b)[0] + 1;
   }
 
   collapsedDepth() {
@@ -297,10 +297,6 @@ class RecipeNode {
     return this.children.filter((c,i) => this.children.indexOf(c) == i);
   }
 
-  immediateUniqueChildren() {
-    return this.uniqueChildren().filter(c => c.uncollapsedDepth() == this.uncollapsedDepth()+1);
-  }
-
   uniqueParents() {
     return this.parents.filter((p,i) => this.parents.indexOf(p) == i);
   }
@@ -393,6 +389,39 @@ class RecipeNode {
       data.hand = true;
     if (transition.targetsPlayer())
       data.targetPlayer = true;
+
+    return data;
+  }
+
+  jsonDataForBoard() {
+    const data = {id: this.object.id};
+
+    if (this.isLast() || !this.transition || this.children.length === 0) {
+      return data;
+    }
+
+    const transition = this.transition;
+    if (transition.actorID > 0) {
+      data.actorID = transition.actorID;
+    }
+    if (transition.targetID > 0) {
+      data.targetID = transition.targetID;
+    }
+    if (data.actorID && data.targetID) {
+      const next = this.uniqueChildren().sort((a,b) => b.subNodes().length - a.subNodes().length)[0];
+      data.nextID = next.object.id;
+    }
+    if (this.decaySeconds) {
+      data.decay = transition.calculateDecay(this.decaySeconds);
+    } else if (transition.decay) {
+      data.decay = transition.decay;
+    }
+    if (transition.hand()) {
+      data.hand = true;
+    }
+    if (transition.targetsPlayer()) {
+      data.targetPlayer = true;
+    }
 
     return data;
   }
