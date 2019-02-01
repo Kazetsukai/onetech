@@ -36,10 +36,12 @@ class RecipeGenerator {
 
     // Look for an alternative to last use transitions
     // This way we don't use the last item of the stack if we can just grab an item
+    // For example, pick up a wooden disk instead of drilling last one in pile
     if (transition.lastUseActor && !transition.reverseUseActor ||
         transition.lastUseTarget && !transition.reverseUseTarget) {
       const altTransition = node.object.transitionsToward[1];
-      if (altTransition && altTransition.totalDepth() <= transition.totalDepth()+1) {
+      if (altTransition && altTransition.depth.value <= transition.depth.value+1 &&
+          altTransition.totalDepth() <= transition.totalDepth()+1) {
         transition = altTransition;
       }
     }
