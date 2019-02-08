@@ -1,37 +1,37 @@
 <template>
-  <div class="boardTransition">
+  <div class="boardStep">
     <!-- What object is being used -->
     <div class="leftSide">
-      <ObjectImage class="boardTransitionObject"
-                  v-if="transition.decay"
+      <ObjectImage class="boardStepObject"
+                  v-if="node.decay"
                   hover="true"
-                  :decay="transition.decay" />
+                  :decay="node.decay" />
 
-      <ObjectImage class="boardTransitionObject"
-                  v-else-if="actor || transition.hand"
-                  :hand="transition.hand" hover="true"
+      <ObjectImage class="boardStepObject"
+                  v-else-if="actor || node.hand"
+                  :hand="node.hand" hover="true"
                   :object="actor"
-                  :uses="transition.actorUses"
+                  :uses="node.actorUses"
                   :clickable="actor"
                   :leftClick="clickObject" />
 
       <div class="plus" v-if="showPlus">+</div>
 
       <!-- What object is the target -->
-      <ObjectImage class="boardTransitionObject"
+      <ObjectImage class="boardStepObject"
                   v-if="target"
                   hover="true"
                   :object="target"
-                  :uses="transition.targetUses"
+                  :uses="node.targetUses"
                   clickable="true"
                   :leftClick="clickObject" />
 
-      <ObjectImage class="boardTransitionObject"
-                  v-else-if="transition.targetPlayer"
+      <ObjectImage class="boardStepObject"
+                  v-else-if="node.targetPlayer"
                   hover="true"
                   player="true" />
 
-      <ObjectImage class="boardTransitionObject"
+      <ObjectImage class="boardStepObject"
                   v-else
                   ground="true"
                   hover="true" />
@@ -41,11 +41,11 @@
 
     <div class="rightSide">
       <!-- What is the resulting object? -->
-      <ObjectImage class="boardTransitionObject"
+      <ObjectImage class="boardStepObject"
                   hover="true"
                   :object="result"
-                  :uses="transition.uses"
-                  :weight="transition.weight"
+                  :uses="node.uses"
+                  :weight="node.weight"
                   clickable="true"
                   :leftClick="clickObject" />
     </div>
@@ -58,29 +58,32 @@ import GameObject from "../models/GameObject";
 import ObjectImage from "./ObjectImage";
 
 export default {
-  props: ["transition", "clickObject"],
+  props: ["step", "clickObject"],
   components: {
     ObjectImage
   },
   computed: {
+    node() {
+      return this.step.node;
+    },
     showPlus() {
-      return this.transition.actor || this.transition.decay || this.transition.hand;
+      return this.node.actorID || this.node.decay || this.node.hand;
     },
     actor() {
-      return GameObject.find(this.transition.actorID);
+      return GameObject.find(this.node.actorID);
     },
     target() {
-      return GameObject.find(this.transition.targetID);
+      return GameObject.find(this.node.targetID);
     },
     result() {
-      return GameObject.find(this.transition.id);
+      return GameObject.find(this.node.id);
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .boardTransition {
+  .boardStep {
     overflow: hidden;
 
     display: flex;
@@ -91,7 +94,7 @@ export default {
     margin-bottom: 10px;
   }
 
-  .boardTransition .leftSide {
+  .boardStep .leftSide {
     display: flex;
     align-items: center;
     padding: 10px;
@@ -99,14 +102,14 @@ export default {
     background-color: #2c2c2c;
   }
 
-  .boardTransition .rightSide {
+  .boardStep .rightSide {
     display: flex;
     align-items: center;
     padding: 10px;
     padding-left: 8px;
   }
 
-  .boardTransition .boardTransitionObject {
+  .boardStep .boardStepObject {
     z-index: 1;
     position: relative;
     display: block;
@@ -115,26 +118,26 @@ export default {
     width: 70px;
     height: 70px;
   }
-  .boardTransition .boardTransitionObject:hover,
-  .boardTransition .boardTransitionObject.highlight {
+  .boardStep .boardStepObject:hover,
+  .boardStep .boardStepObject.highlight {
     border: 1px solid #aaa;
     background-color: #666;
   }
 
-  .boardTransition .boardTransitionObject.current {
+  .boardStep .boardStepObject.current {
     background-color: #444;
   }
-  .boardTransition .boardTransitionObject.current:hover {
+  .boardStep .boardStepObject.current:hover {
     border: 1px solid transparent;
   }
 
-  .boardTransition .plus {
+  .boardStep .plus {
     z-index: 1;
     font-size: 16pt;
     margin: 0 2px;
   }
 
-  .boardTransition .arrow {
+  .boardStep .arrow {
     z-index: 0;
     height: 0;
     width: 0;

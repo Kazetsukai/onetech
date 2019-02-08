@@ -16,20 +16,20 @@
     </div>
     <div v-else>
       <div v-if="steps" class="panelSteps">
-        <BoardTransition v-for="(transition, index) in steps" :key="index" :transition="transition" :clickObject="clickObject" />
+        <BoardStep v-for="(step, index) in steps" :key="index" :step="step" :clickObject="clickObject" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import BoardTransition from "./BoardTransition";
+import BoardStep from "./BoardStep";
 import ObjectImage from "./ObjectImage";
 
 export default {
   props: ["panel", "clickObject", "close"],
   components: {
-    BoardTransition,
+    BoardStep,
     ObjectImage
   },
   computed: {

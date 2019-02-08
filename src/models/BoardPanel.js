@@ -1,7 +1,10 @@
+import BoardStep from './BoardStep';
+
 export default class BoardPanel {
-  constructor(object, board) {
+  constructor(object, board, count) {
     this.object = object;
     this.board = board;
+    this.count = count;
     this.steps = [];
   }
 
@@ -19,7 +22,7 @@ export default class BoardPanel {
 
     // let checkChain = false;
 
-    let step = this.node(this.object.id);
+    let step = this.newStep(this.object.id, this.count);
     while (step) {
       steps.push(step);
       for (let id of this.stepObjectIds(step)) {
@@ -29,7 +32,7 @@ export default class BoardPanel {
       }
       step = this.nextStep(step, sharedIds);
       if (step) {
-        if (!step.actorID && !step.targetID) {
+        if (!step.node.actorID && !step.node.targetID) {
           step = null;
         }
         // } else if (this.stepChainLength(step) === 0) {
@@ -44,22 +47,32 @@ export default class BoardPanel {
     return this.steps;
   }
 
-  node(id) {
+  newStep(id, count) {
     if (!this.object.data || !this.object.data.boardRecipe) {
       return null;
     }
-    return this.object.data.boardRecipe.nodes.find(n => n.id == id);
+    const node = this.object.data.boardRecipe.nodes.find(n => n.id == id);
+    if (node) {
+      return new BoardStep(node, count);
+    }
   }
 
-  nextStep(node, sharedIds) {
+  nextStep(step, sharedIds) {
+    const nextId = this.nextId(step.node, sharedIds);
+    if (nextId) {
+      return this.newStep(nextId, 1);
+    }
+  }
+
+  nextId(node, sharedIds) {
     if (node.nextID && !sharedIds.includes(node.nextID)) {
-      return this.node(node.nextID);
+      return node.nextID;
     }
     if (node.actorID && !sharedIds.includes(node.actorID)) {
-      return this.node(node.actorID);
+      return node.actorID;
     }
     if (node.targetID && !sharedIds.includes(node.targetID)) {
-      return this.node(node.targetID);
+      return node.targetID;
     }
   }
 
