@@ -400,16 +400,15 @@ class RecipeNode {
       return data;
     }
 
+    data.branchSize = this.subNodes().length;
+    data.transitionsAwayCount = this.object.transitionsAway.length;
+
     const transition = this.transition;
     if (transition.actorID > 0) {
       data.actorID = transition.actorID;
     }
     if (transition.targetID > 0) {
       data.targetID = transition.targetID;
-    }
-    if (data.actorID && data.targetID) {
-      const next = this.uniqueChildren().sort((a,b) => b.subNodes().length - a.subNodes().length)[0];
-      data.nextID = next.object.id;
     }
     if (this.decaySeconds) {
       data.decay = transition.calculateDecay(this.decaySeconds);

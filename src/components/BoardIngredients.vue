@@ -3,13 +3,13 @@
     <h4>Ingredients</h4>
     <div class="ingredientObjects">
       <ObjectImage
-        v-for="object in objects"
+        v-for="step in steps"
         class="ingredientObject"
         hover="true"
         clickable="true"
-        :object="object"
-        :uses="ingredientUses(object)"
-        :key="object.id"
+        :object="object(step)"
+        :uses="uses(step)"
+        :key="step.id"
         :leftClick="clickObject" />
     </div>
   </div>
@@ -21,7 +21,7 @@ import GameObject from "../models/GameObject";
 import ObjectImage from "./ObjectImage";
 
 export default {
-  props: ["objectIds", "clickObject"],
+  props: ["steps", "clickObject"],
   components: {
     ObjectImage
   },
@@ -32,11 +32,13 @@ export default {
     }
   },
   methods: {
-    ingredientUses(object) {
-      const count = this.objectIds.filter(id => id == object.id).length;
-      if (count > 1) {
-        return `x${count}`;
+    uses(step) {
+      if (step.count > 1) {
+        return `x${step.count}`;
       }
+    },
+    object(step) {
+      return GameObject.find(step.id)
     }
   }
 }

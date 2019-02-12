@@ -5,8 +5,8 @@
     </div>
     <div v-else>
       <BoardIngredients
-        v-if="ingredientIds.length"
-        :objectIds="ingredientIds"
+        v-if="ingredientSteps.length"
+        :steps="ingredientSteps"
         :clickObject="addObject" />
 
       <div class="boardPanels">
@@ -47,8 +47,8 @@ export default {
     isEmpty() {
       return this.board.panels.length === 0;
     },
-    ingredientIds() {
-      return this.board.ingredientIds();
+    ingredientSteps() {
+      return this.board.ingredientSteps();
     }
   },
   methods: {
