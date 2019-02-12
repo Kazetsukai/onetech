@@ -32,8 +32,17 @@ export default class Board {
   }
 
   ingredientSteps() {
+    const stepsMap = {};
     const panelObjectIds = this.panels.map(panel => panel.object.id);
-    const steps = this.panels.map(panel => panel.ingredientSteps).flat();
-    return steps.filter(step => !panelObjectIds.includes(step.id));
+    const steps = this.panels.map(panel => panel.ingredientSteps).flat().
+      filter(step => !panelObjectIds.includes(step.id));
+    for (let step of steps) {
+      if (stepsMap[step.id]) {
+        stepsMap[step.id] = step.merge(stepsMap[step.id]);
+      } else {
+        stepsMap[step.id] = step;
+      }
+    }
+    return Object.values(stepsMap).sort((a,b) => a.compareIngredient(b));
   }
 }

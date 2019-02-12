@@ -100,4 +100,15 @@ export default class BoardStep {
     return this.actorStep && this.targetStep &&
       this.actorStep.branchSize() >  2 && this.targetStep.branchSize() > 2;
   }
+
+  merge(other) {
+    const node = this.branchSize() > other.branchSize() ? this.node : other.node;
+    const count = this.count + other.count;
+    const depth = Math.max(this.depth, other.depth);
+    return new BoardStep(node, count, depth);
+  }
+
+  compareIngredient(other) {
+    return other.branchSize() - this.branchSize();
+  }
 }
