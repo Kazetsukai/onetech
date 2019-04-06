@@ -26,7 +26,7 @@ class GameObject {
       if (i == 1) {
         this.parseName(lines[i]);
       } else if (lines[i].includes('spriteID')) {
-        this.parseSprite(lines.slice(i, i+7));
+        this.parseSprite(lines.slice(i, i+8));
         i += 7;
       } else {
         this.parseLine(lines[i]);

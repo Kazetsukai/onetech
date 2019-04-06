@@ -27,10 +27,20 @@ class SpriteProcessor {
   }
 
   visibleSprites(object) {
-    const hideIndexes = object.data.useVanishIndex == -1 && object.data.numUses > 1
-      ? object.data.useAppearIndex : [];
     // Draw sprites as if they were 20 years old
-    return object.sprites.filter((s,i) => !s.beyondAge(20) && !hideIndexes.includes(i))
+    let sprites = object.sprites.filter(sprite => !sprite.beyondAge(20));
+
+    // Remove multiple use sprites
+    if (object.data.useVanishIndex == -1 && object.data.numUses > 1) {
+      sprites = sprites.filter((_s,i) => !object.data.useAppearIndex.includes(i));
+    }
+
+    // Remove clothing sprites that aren't worn
+    if (object.isClothing()) {
+      sprites = sprites.filter(sprite => sprite.invisWorn != 1)
+    }
+
+    return sprites;
   }
 
   lastSprites(object) {
