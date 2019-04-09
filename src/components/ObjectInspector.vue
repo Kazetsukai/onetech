@@ -100,7 +100,7 @@
       <div class="transitionsPanel" v-if="object.data.transitionsAway.length > 0">
         <h3>How to use</h3>
         <TransitionsList
-          limit="3"
+          limit="10"
           :transitions="object.data.transitionsAway"
           :selectedObject="object" />
       </div>
