@@ -274,7 +274,7 @@ class GameObject {
   }
 
   hasSickTransition() {
-    for (let transition of this.transitionsAway) {
+    for (let transition of this.transitionsAway.concat(this.transitionsToward)) {
       if (transition.targetID == "0" && transition.newTarget && transition.newTarget.name.includes(" sick")) {
         return true;
       }
