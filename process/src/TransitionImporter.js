@@ -79,6 +79,15 @@ class TransitionImporter {
         this.transitions.push(newTransition);
       }
     }
+    // Remove this transition if the pattern category parent is an actual category object
+    for (let category of categories) {
+      if (category && category.parent && category.parent.isCategory()) {
+        const index = this.transitions.indexOf(transition);
+        if (index !== -1) {
+          this.transitions.splice(index, 1);
+        }
+      }
+    }
   }
 
   findDuplicate(newTransition) {
