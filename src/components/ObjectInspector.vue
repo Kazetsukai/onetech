@@ -24,9 +24,15 @@
         <li v-if="object.data.heatValue">Heat: {{object.data.heatValue}}</li>
         <li v-if="object.clothingPart()">Clothing: {{object.clothingPart()}}</li>
         <li v-if="object.hasInsulation()">Insulation: {{object.insulationPercent()}}%</li>
-        <li v-if="moveDistanceText">Move Distance: {{moveDistanceText}}</li>
+        <li v-if="moveDistanceText">
+          Move Distance: {{moveDistanceText}}
+          <span class="helpTip" v-tippy :title="moveDistanceTip" v-if="moveDistanceTip">?</span>
+        </li>
         <li v-if="moveType">Move Behavior: {{moveType}}</li>
-        <li v-if="numUses">Number of {{useWord}}s: {{numUses}}</li>
+        <li v-if="numUses">
+          Number of {{useWord}}s: {{numUses}}
+          <span class="helpTip" v-tippy :title="numMovesTip" v-if="numMovesTip">?</span>
+        </li>
         <li v-if="totalFood">Total Food: {{totalFood}}</li>
         <li v-if="object.data.useChance">
           Chance to use:
@@ -164,6 +170,10 @@ export default {
       const tiles = this.object.data.moveDistance > 1 ? "tiles" : "tile";
       return this.object.data.moveDistance + " " + tiles;
     },
+    moveDistanceTip() {
+      if (!this.object.data.moveDistance) return;
+      return "Up to +4 tiles when walking over objects";
+    },
     moveType() {
       if (!this.object.data.moveType) return;
       const types = ["None", "Chase", "Flee", "Random", "North", "South", "East", "West"];
@@ -180,6 +190,14 @@ export default {
     useWord() {
       if (this.object.data.moveDistance) return "move";
       return "use";
+    },
+    moveTip() {
+      if (!this.object.data.moveDistance) return;
+      return 'See "last" transition under "Changes over time"';
+    },
+    numMovesTip() {
+      if (!this.object.data.moveDistance) return;
+      return 'See "last" transition under "Changes over time"';
     },
     sizeText() {
       if (!this.object.data.size) {
