@@ -92,8 +92,7 @@ class TransitionImporter {
 
   findDuplicate(newTransition) {
     return this.transitions.find(transition => {
-      if (transition.newActorWeight || transition.newTargetWeight ||
-          newTransition.newActorWeight || newTransition.newTargetWeight) {
+      if (newTransition.newActorWeight || newTransition.newTargetWeight) {
         return transition.actorID == newTransition.actorID &&
           transition.targetID == newTransition.targetID &&
           transition.newActorID == newTransition.newActorID &&

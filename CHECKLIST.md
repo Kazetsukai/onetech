@@ -13,6 +13,8 @@ This is a list of items and transitions to check to ensure everything is correct
 * [Bowl of Indian Yellow Pigment](https://onetech.info/1897-Bowl-of-Indian-Yellow-Pigment): no lapis transition
 * [Dead Poodle Puppy](https://onetech.info/1742-Dead-Poodle-Puppy): decay transition
 * [Marked Grave](https://onetech.info/1012-Marked-Grave-origGrave)
+* [Firing Oil Drilling Rig](https://onetech.info/2303-Firing-Oil-Drilling-Rig): no pattern decay
+* [Simmering Dye Mordant](https://onetech.info/731-Simmering-Dye-Mordant): no blank transition
 
 ### Probability Transitions
 
