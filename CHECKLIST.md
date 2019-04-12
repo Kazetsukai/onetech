@@ -15,6 +15,7 @@ This is a list of items and transitions to check to ensure everything is correct
 * [Marked Grave](https://onetech.info/1012-Marked-Grave-origGrave)
 * [Firing Oil Drilling Rig](https://onetech.info/2303-Firing-Oil-Drilling-Rig): no pattern decay
 * [Simmering Dye Mordant](https://onetech.info/731-Simmering-Dye-Mordant): no blank transition
+* [Simmering Indigo Dye](https://onetech.info/733-Simmering-Indigo-Dye): no blank transition
 
 ### Probability Transitions
 

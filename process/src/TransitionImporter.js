@@ -22,6 +22,7 @@ class TransitionImporter {
     for (let transition of this.transitions) {
       this.splitPatternCategories(transition, patternCategories);
     }
+    this.cleanUpPatternCategories(patternCategories);
   }
 
   splitCategory(category, attr, newAttr, weightAttr) {
@@ -57,7 +58,7 @@ class TransitionImporter {
   // 3. For each objectID, a new transition is created which maps
   //    each other pattern category objectID to the new object
   splitPatternCategories(transition, patternCategories) {
-    // if (transition.actorID == 2092 && transition.targetID == 1055)
+    // if (transition.actorID == 2900 && transition.targetID == 733)
     //   debugger;
     const attrs = ["actorID", "targetID", "newActorID", "newTargetID"];
     let categories = attrs.map(attr => {
@@ -79,14 +80,18 @@ class TransitionImporter {
         this.transitions.push(newTransition);
       }
     }
-    // Remove this transition if the pattern category parent is an actual category object
+  }
+
+  // Remove transitions where pattern category parent is an actual category object
+  cleanUpPatternCategories(patternCategories) {
+    const categories = patternCategories.filter(c => c.parent && c.parent.isCategory());
     for (let category of categories) {
-      if (category && category.parent && category.parent.isCategory()) {
-        const index = this.transitions.indexOf(transition);
-        if (index !== -1) {
-          this.transitions.splice(index, 1);
-        }
-      }
+      this.transitions = this.transitions.filter(transition => {
+        return transition.actorID != category.parentID
+          && transition.targetID != category.parentID
+          && transition.newActorID != category.parentID
+          && transition.newTargetID != category.parentID;
+      });
     }
   }
 
