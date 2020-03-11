@@ -19,7 +19,8 @@
       <ul v-if="object.data">
         <li v-if="foodWithBonus">
           Food: {{foodWithBonus}}
-          <span class="details">({{foodBase}}+{{foodBonus}} bonus)</span>
+          <span class="details" v-if="hasFoodBonus">({{foodBase}}+{{foodBonus}} bonus)</span>
+          <span class="details" v-else>(without bonus)</span>
         </li>
         <li v-if="object.data.heatValue">Heat: {{object.data.heatValue}}</li>
         <li v-if="object.clothingPart()">Clothing: {{object.clothingPart()}}</li>
@@ -222,6 +223,9 @@ export default {
     },
     modName() {
       return process.env.ONETECH_MOD_NAME;
+    },
+    hasFoodBonus() {
+      return parseInt(GameObject.foodBonus) > 0;
     },
     foodBonus() {
       return GameObject.foodBonus;
