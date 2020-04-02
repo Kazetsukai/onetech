@@ -21,6 +21,7 @@ class RecipeNode {
     this.children = [];
     this.decaySeconds = 0;
     this.tool = false;
+    this.uncraftable = false;
     this.collapsedParent = null;
   }
 
@@ -81,7 +82,7 @@ class RecipeNode {
   }
 
   isUncraftable() {
-    return !this.tool && !this.isIngredient() && !this.object.depth.value;
+    return this.uncraftable || !this.tool && !this.isIngredient() && !this.object.depth.value;
   }
 
   isLast() {

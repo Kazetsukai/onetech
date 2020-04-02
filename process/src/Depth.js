@@ -14,14 +14,16 @@ class Depth {
     this.addObject(transition.actor);
     this.addObject(transition.target);
     this.value++;
-    if (transition.decay)
+    if (transition.decay) {
       return; // Don't add difficulty on decay transitions
-    if (!transition.actor || !transition.target)
+    }
+    if (!transition.actor || !transition.target) {
       this.difficulty += transition.playerActor ? 1 : 0;
-    else if (transition.tool || transition.targetRemains)
+    } else if (transition.tool || transition.targetRemains) {
       this.difficulty += transition.isLastUse() ? 3 : 2;
-    else
+    } else {
       this.difficulty += 4;
+    }
   }
 
   addObject(object) {

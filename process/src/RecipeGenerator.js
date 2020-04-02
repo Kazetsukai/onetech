@@ -30,7 +30,15 @@ class RecipeGenerator {
 
   lookupTransition(node) {
     let transition = node.object.transitionsToward[0];
-    if (!transition) return;
+    if (!transition) {
+      return;
+    }
+    if (transition.depth.compare(node.object.depth) > 0 && transition.depth.value > node.object.depth.value) {
+      console.log(`Unable to complete recipe for ${this.object.debugName()}: transition has greater depth for node ${node.object.debugName()}.`)
+      // debugger;
+      node.uncraftable = true;
+      return;
+    }
 
     transition = this.collapseDecayTransition(node, transition, 0);
 

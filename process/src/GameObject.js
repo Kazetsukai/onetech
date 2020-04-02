@@ -20,6 +20,10 @@ class GameObject {
     this.name = this.data.name;
   }
 
+  debugName() {
+    return `${this.id} ${this.name}`;
+  }
+
   parseData(dataText) {
     const lines = dataText.split('\n');
     for (var i = 0; i < lines.length; i++) {

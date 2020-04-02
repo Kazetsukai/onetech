@@ -24,6 +24,7 @@ class DepthCalculator {
   }
 
   // Sets the object depth if it is lower than previously set
+  // If one depth is uncalculated it favors the calculated depth
   // It then calculates the depth for each "away" transition
   setObjectDepth(object, depth) {
     if (depth.compare(object.depth) < 0) {
@@ -48,12 +49,15 @@ class DepthCalculator {
     depth.addTransition(transition);
     transition.depth = depth;
 
-    if (transition.newActor)
+    if (transition.newActor) {
       this.setObjectDepth(transition.newActor, depth);
-    if (transition.newTarget)
+    }
+    if (transition.newTarget) {
       this.setObjectDepth(transition.newTarget, depth);
-    if (transition.newExtraTarget)
+    }
+    if (transition.newExtraTarget) {
       this.setObjectDepth(transition.newExtraTarget, depth);
+    }
   }
 
   sortObjectTransitions() {
