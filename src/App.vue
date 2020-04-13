@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="subtitle" v-else-if="gameUrl">
-        <a :href="gameUrl">Visit "{{gameName}}</a>
+        <a :href="gameUrl">Visit {{gameName}}</a>
       </div>
       <div class="subtitle" v-else>
         <span v-if="showWhatsNew">
