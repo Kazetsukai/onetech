@@ -17,9 +17,11 @@ const Food = {
     return objects.filter(o => o.data.foodValue > 0);
   },
   value(object) {
-    if (object.data.numUses > 1)
-      return `${object.data.foodValue + parseInt(process.env.ONETECH_FOOD_BONUS)} x ${object.data.numUses}`;
-    return object.data.foodValue + parseInt(process.env.ONETECH_FOOD_BONUS);
+    const foodValue = Math.ceil(object.data.foodValue * parseFloat(process.env.ONETECH_FOOD_SCALE)) + parseInt(process.env.ONETECH_FOOD_BONUS);
+    if (object.data.numUses > 1) {
+      return `${foodValue} x ${object.data.numUses}`;
+    }
+    return foodValue;
   }
 }
 

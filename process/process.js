@@ -1,6 +1,9 @@
 if (!process.env.ONETECH_FOOD_BONUS) {
   process.env.ONETECH_FOOD_BONUS = 0;
 }
+if (!process.env.ONETECH_FOOD_SCALE) {
+  process.env.ONETECH_FOOD_SCALE = 0.5;
+}
 
 const MainProcessor = require('./src/MainProcessor');
 
