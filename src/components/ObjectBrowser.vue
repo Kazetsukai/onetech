@@ -1,8 +1,13 @@
 <template>
   <div class="objectBrowser">
-    <div class="filterList">
+    <div v-if="selectedFilter" class="filterSelection">
+      <router-link to="/" class="filterSelectionBack">Back</router-link>
+      <div class="filterSelectionName">{{selectedFilter.name}}</div>
+    </div>
+
+    <div v-else class="filterList">
       <div class="filter" v-for="filter in filters" >
-        <ObjectFilter :filter="filter" :selected="filter == selectedFilter" />
+        <ObjectFilter :filter="filter" />
       </div>
     </div>
 
@@ -104,6 +109,28 @@ export default {
 </script>
 
 <style lang="scss">
+  .objectBrowser .filterSelection {
+    background-color: #222;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    box-sizing: border-box;
+    text-align: center;
+    position: relative;
+  }
+
+  .objectBrowser .filterSelection .filterSelectionBack {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 15px 20px;
+  }
+
+  .objectBrowser .filterSelectionName {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
   .objectBrowser .filterList {
     background-color: #222;
     border-radius: 5px;
