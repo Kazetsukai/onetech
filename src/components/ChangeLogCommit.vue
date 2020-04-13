@@ -1,7 +1,7 @@
 <template>
   <div class="changeLogCommit">
     <div class="message">
-      <div class="messageContent">{{commit.message}}</div>
+      <div class="messageContent" v-html="commitMessageHtml"></div>
       <div class="messageDate">{{date}}</div>
       <div v-if="hasChanges" class="collapse" @click="toggleCollapse">
         <span v-if="collapsed">&#x25C0;</span>
@@ -154,6 +154,16 @@ export default {
       var year = date.getFullYear();
       return `${months[month]} ${day}, ${year}`;
     },
+    commitMessageHtml() {
+      let messageHtml = this.escapeHtml(this.commit.message);
+      let regex = /([^\s]*)\#([0-9]+)/g; // Mathes #123 or foo/bar#123
+      return messageHtml.replace(regex, function(match, project, issue, offset, string) {
+        if (!project) {
+          project = "jasonrohrer/OneLifeData7";
+        }
+        return `<a href="https://github.com/${project}/issues/${issue}">${match}</a>`;
+      });
+    },
   },
   methods: {
     showMoreObjects() {
@@ -167,6 +177,11 @@ export default {
     },
     toggleCollapse() {
       this.collapsed = !this.collapsed;
+    },
+    escapeHtml(html) {
+      let element = document.createElement("textarea");
+      element.innerHTML = html;
+      return element.value;
     }
   }
 }
