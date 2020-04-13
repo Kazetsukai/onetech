@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "jade": "^1.11.0",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.13",
     "vue": "^2.5.11",
     "vue-meta": "^1.5.0",
     "vue-router": "^3.0.1",
