@@ -76,6 +76,7 @@ class GameData {
     importer.splitCategories(this.categories);
     importer.mergeGenericTransitions();
     importer.mergeAttackTransitions();
+    importer.addDirectionalTransitions(this.objects);
     importer.addToObjects(this.objects);
     importer.addGlobalTriggers(this.objects);
     console.log("Transition Count: " + importer.transitions.length);

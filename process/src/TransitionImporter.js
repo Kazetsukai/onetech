@@ -199,6 +199,44 @@ class TransitionImporter {
     return new Transition(`0 ${newTargetID} ${decaySeconds}`, `-1_${targetID}.txt`);
   }
 
+  // The proposed property fence needs transitions added for all directions.
+  // Only "+horizontalA" transition is included so we should duplicate this
+  // for the other directions.
+  addDirectionalTransitions(objects) {
+    const directions = ["+cornerA", "+verticalA"];
+    const horizontalObjects = Object.values(objects).filter(o => o.name.match(/\+horizontalA\b/));
+    for (let horizontalObject of horizontalObjects) {
+      for (let direction of directions) {
+        const otherName = horizontalObject.name.replace("+horizontalA", direction);
+        const otherObject = Object.values(objects).find(o => o.name === otherName);
+        if (otherObject) {
+          // console.log(`Copying transitions from ${horizontalObject.name} to ${otherObject.name}`);
+          this.copyTransitionsToward(horizontalObject.id, otherObject.id);
+        } else {
+          console.log(`Unable to find object with name ${otherName} in addDirectionalTransitions`);
+        }
+      }
+    }
+  }
+
+  // Since this only sets the ID it should be done before addToObjects
+  copyTransitionsToward(oldObjectID, newObjectID) {
+    const transitions = this.transitions.filter(t => t.newActorID == oldObjectID || t.newTargetID == oldObjectID || t.newExtraTargetID == oldObjectID);
+    for (let transition of transitions) {
+      const newTransition = transition.clone();
+      if (newTransition.newActorID == oldObjectID) {
+        newTransition.newActorID = newObjectID;
+      }
+      if (newTransition.newTargetID == oldObjectID) {
+        newTransition.newTargetID = newObjectID;
+      }
+      if (newTransition.newExtraTargetID == oldObjectID) {
+        newTransition.newExtraTargetID = newObjectID;
+      }
+      this.transitions.push(newTransition);
+    }
+  }
+
   addToObjects(objects) {
     for (let transition of this.transitions) {
       transition.addToObjects(objects);
