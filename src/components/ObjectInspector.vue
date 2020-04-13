@@ -17,10 +17,9 @@
       </div>
 
       <ul v-if="object.data">
-        <li v-if="foodWithBonus">
-          Food: {{foodWithBonus}}
-          <span class="details" v-if="hasFoodBonus">({{foodBase}}+{{foodBonus}} bonus)</span>
-          <span class="details" v-else>(without bonus)</span>
+        <li v-if="foodValue">
+          Food: {{foodValue}}
+          <span class="helpTip" v-tippy :title="foodValueTip">?</span>
         </li>
         <li v-if="object.data.heatValue">Heat: {{object.data.heatValue}}</li>
         <li v-if="object.clothingPart()">Clothing: {{object.clothingPart()}}</li>
@@ -224,19 +223,21 @@ export default {
     modName() {
       return process.env.ONETECH_MOD_NAME;
     },
-    hasFoodBonus() {
-      return parseInt(GameObject.foodBonus) > 0;
+    foodValue() {
+      let foodValue = this.object.data.foodValue;
+      if (!foodValue) {
+        return null;
+      }
+      if (GameObject.foodScale) {
+        foodValue = Math.ceil(foodValue * parseFloat(GameObject.foodScale));
+      }
+      if (GameObject.foodBonus) {
+        foodValue += parseInt(GameObject.foodBonus);
+      }
+      return foodValue;
     },
-    foodBonus() {
-      return GameObject.foodBonus;
-    },
-    foodBase() {
-      if (!this.object.data.foodValue) return;
-      return this.object.data.foodValue;
-    },
-    foodWithBonus() {
-      if (!this.foodBase) return;
-      return this.foodBase + this.foodBonus;
+    foodValueTip() {
+      return `${this.object.data.foodValue} (food) x ${GameObject.foodScale} (scale) + ${GameObject.foodBonus} (bonus)`;
     },
     totalFood() {
       if (!this.foodValue || !this.numUses) return;

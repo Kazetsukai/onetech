@@ -179,7 +179,7 @@ class GameData {
       biomeIds: this.biomes.map(b => b.id),
       biomeNames: this.biomes.map(b => b.name()),
       foodBonus: parseInt(process.env.ONETECH_FOOD_BONUS),
-      foodScale: parseInt(process.env.ONETECH_FOOD_SCALE),
+      foodScale: parseFloat(process.env.ONETECH_FOOD_SCALE),
     };
   }
 

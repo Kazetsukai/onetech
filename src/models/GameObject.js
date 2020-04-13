@@ -11,6 +11,7 @@ export default class GameObject {
       this.date = new Date(data.date);
       this.versions = data.versions;
       this.foodBonus = data.foodBonus;
+      this.foodScale = data.foodScale;
       this.legacyObjectsMap = {};
       callback(data);
     });
