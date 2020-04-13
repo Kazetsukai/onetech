@@ -215,10 +215,7 @@ class GameObject {
   }
 
   isTool() {
-    for (var transition of this.transitionsAway) {
-      if (transition.actor == this && transition.target && transition.tool) return true;
-    }
-    return false;
+    return this.name.includes("+tool");
   }
 
   isCraftableContainer() {
