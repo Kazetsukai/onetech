@@ -1,5 +1,9 @@
 <template>
   <div class="biomeInspector">
+    <div class="filterSelection">
+      <router-link to="/" class="filterSelectionBack">Back</router-link>
+      <div class="filterSelectionName">Natural</div>
+    </div>
     <div class="biomes">
       <div class="biomesTitle">Biomes</div>
       <BiomeList :selectedBiome="biome" />
@@ -76,6 +80,28 @@ export default {
 
 <style lang="scss">
 .biomeInspector {
+  .filterSelection {
+    background-color: #222;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    box-sizing: border-box;
+    text-align: center;
+    position: relative;
+  }
+
+  .filterSelectionBack {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 15px 20px;
+  }
+
+  .filterSelectionName {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
   .biomes {
     background-color: #222;
     border-radius: 5px;

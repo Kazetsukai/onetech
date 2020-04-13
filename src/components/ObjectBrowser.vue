@@ -119,7 +119,7 @@ export default {
     position: relative;
   }
 
-  .objectBrowser .filterSelection .filterSelectionBack {
+  .objectBrowser .filterSelectionBack {
     position: absolute;
     top: 0;
     left: 0;
