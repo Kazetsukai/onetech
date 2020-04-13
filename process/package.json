@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "canvas": "^1.6.9",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.13",
     "node-fetch": "^2.1.1",
     "sitemap": "^1.13.0"
   }
