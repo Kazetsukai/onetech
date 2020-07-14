@@ -4,7 +4,7 @@ class Category {
   constructor(dataText) {
     this.objectIDs = [];
     this.objectWeights = [];
-    const lines = dataText.split('\n');
+    const lines = dataText.split(/[\r\n]+/);
     let headers = true;
     for (let line of lines) {
       if (headers) {
