@@ -11,7 +11,7 @@
   "dependencies": {
     "canvas": "^1.6.9",
     "lodash": "^4.17.13",
-    "node-fetch": "^2.1.1",
+    "node-fetch": "^2.6.1",
     "sitemap": "^1.13.0"
   }
 }
