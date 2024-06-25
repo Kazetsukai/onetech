@@ -119,7 +119,7 @@ class SpriteProcessor {
   drawSpriteDirectly(sprite, context) {
     this.drawSpriteImage(sprite, context);
 
-    if (sprite.color.find(c => c < 1.0)) {
+    if (sprite.color.find(c => c < 1.0) !== undefined) {
       this.overlayColor(sprite, context)
     }
   }
