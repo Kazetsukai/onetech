@@ -54,3 +54,10 @@ This is a list of items and transitions to check to ensure everything is correct
 * [Hand Cart](https://onetech.info/484-Hand-Cart/recipe): 1 log, wooden disks
 * [Running Crude Car](https://onetech.info/2396-Running-Crude-Car/recipe): 5 yew branches
 * [Cistern](https://onetech.info/672-Cistern/recipe): 10 stones
+
+
+### Tinted sprites
+
+* [Glass Bottle](https://onetech.info/3338-Glass-Bottle): it should not be flat and white
+* [Smoldering Tinder](https://onetech.info/78-Smoldering-Tinder): orange centre, no white
+* [Burnt Launch Pad](https://onetech.info/4997-Burnt-Launch-Pad): burns should be black, not appearing as the original shrimp
